@@ -2,11 +2,11 @@ import React from 'react'
 import Message from './message'
 
 var Messages = React.createClass({
-  getInitialState: function() {
-      return {
-        messages: [],
-      }
-  },
+  // getInitialState: function() {
+  //     return {
+  //       messages: [],
+  //     }
+  // },
   componentWillMount: function() {
     // Init localstorage
 
@@ -39,7 +39,7 @@ var Messages = React.createClass({
       <div className="mdl-grid">
 
         {
-          this.state.messages.map(function(message, index) {
+          this.props.data.map(function(message, index) {
             return <Message key={index} data={message} />;
           })
         }

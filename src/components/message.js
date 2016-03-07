@@ -7,7 +7,7 @@ var Message = React.createClass({
         <div className="mdl-card__media mdl-card__title mdl-card--expand mdl-color--teal-300">
         </div>
         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-          { this.props.data.summary }
+          { this.props.data.content }
         </div>
         <div className="mdl-card__actions mdl-card--border">
           <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">La suite</a>
