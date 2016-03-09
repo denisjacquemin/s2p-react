@@ -32570,22 +32570,45 @@ var _componentsMessages2 = _interopRequireDefault(_componentsMessages);
 
 var _reactRouter = require('react-router');
 
-//var ls = new DSLocalStorageAdapter();
+var store = new _jsData2['default'].DS({});
+var httpAdapter = new _jsDataHttp2['default']({});
+var localAdapter = new _jsDataLocalstorage2['default']();
+httpAdapter.defaults.basePath = 'http://s2p-api-demo.herokuapp.com/';
+store.registerAdapter('ls', localAdapter, { 'default': true });
+store.registerAdapter('http', httpAdapter);
 
-//store.registerAdapter('ls', ls);
+// define model
+var Message = store.defineResource({
+  name: 'message',
+  // Add a new message in store
+  // Update a new message in store
+  // TODO: handle destroy message
+  afterInject: function afterInject(resource, data) {
+    // sync to localstorage, created by http
+    console.log('1.2 ou 2.5: afterInject Ressource Message afterInject: ' + JSON.stringify(data));
+    Message.emit('change'); // triggers an update of React's state
+
+    return data;
+  },
+  afterCreate: function afterCreate(resource, data) {
+    console.log('Ressource Message afterCreate: ' + JSON.stringify(data));
+  }
+});
 
 var App = _react2['default'].createClass({
   displayName: 'App',
 
   getInitialState: function getInitialState() {
-
     return { messages: [] };
   },
   componentWillMount: function componentWillMount() {
-    var store = new _jsData2['default'].DS({});
-    var httpAdapter = new _jsDataHttp2['default']({});
-    httpAdapter.defaults.basePath = 'http://s2p-api-demo.herokuapp.com/';
-    store.registerAdapter('http', httpAdapter, { 'default': true });
+    // Fill the store with localstorage
+    console.log('1.1: findAll from localstorage start');
+    Message.findAll().then(function (messages) {
+      console.log('1.3: back from findAll from localstorage: ' + messages.length + ' items in store');
+    });
+
+    // build params from localstorage
     var params = {
       id: [{
         'codes': 'N7ljVx',
@@ -32597,19 +32620,32 @@ var App = _react2['default'].createClass({
     };
     var messages = [];
     var this2 = this;
+    console.log('2.1: check server now');
     httpAdapter.POST('http://s2p-api-demo.herokuapp.com/latest', params).then(function (res) {
-      res.data; // { id: 1, ... }
-      res.headers; // {...}
-      res.status; // 200
-      res.config;
-      console.log(JSON.stringify(this2.state.messages));
-      console.log(JSON.stringify(res.data));
-      this2.setState({ messages: res.data });
-      console.log(JSON.stringify(this2.state.messages));
+      // DS#inject res.data
+      console.log('2.2: back from server');
+      res.data.forEach(function (m) {
+        console.log('2.3: Message#Inject: ' + JSON.stringify(m));
+        Message.inject(m);
+
+        console.log('2.4: saving to localstore: ' + JSON.stringify(m));
+        localAdapter.create(Message, m); // save data to localstorage
+      });
+      // save params in localstore
+      params.id.forEach(function (id) {
+        console.log('3: save params to localstore: ' + JSON.stringify(id));
+        localStorage.setItem(id.codes, id.updated_at);
+      });
+
+      //this2.setState({messages: res.data});
     });
   },
-
-  componentDidMount: function componentDidMount() {},
+  onChange: function onChange() {
+    this.setState({ messages: Message.getAll() });
+  },
+  componentDidMount: function componentDidMount() {
+    Message.on('change', this.onChange);
+  },
 
   render: function render() {
     return _react2['default'].createElement(
