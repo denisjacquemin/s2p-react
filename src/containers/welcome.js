@@ -1,5 +1,25 @@
 import React from 'react'
 import CodeForm from './code-form'
+import { addCode } from '../actions'
+
+
+const mapStateToProps = (state) => {
+  return {
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddCode: (code) => {
+      dispatch(addCode(code))
+    }
+  };
+};
+
+const ToggleImportant = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CodeForm);
 
 var Welcome = React.createClass({
   render: function() {

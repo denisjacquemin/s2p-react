@@ -1,9 +1,10 @@
 {
-  "name": "clientform-react-app",
+  "name": "s2p-react-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "devDependencies": {
+    "babel-polyfill": "^6.7.2",
     "babelify": "^6.1.0",
     "firebase": "^2.4.1",
     "grunt": "^0.4.5",
@@ -12,14 +13,16 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-env": "^0.4.4",
     "is-online": "^5.1.1",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.1",
-    "js-data": "^2.9.0",
-    "js-data-firebase": "^2.1.1",
-    "js-data-http": "^2.2.0",
-    "js-data-localstorage": "^2.3.2",
     "react": "~0.14.0",
     "react-dom": "~0.14.0",
-    "react-router": "^2.0.0"
+    "react-redux": "^4.4.1",
+    "redux": "^3.3.1",
+    "redux-logger": "^2.6.1",
+    "redux-storage": "^4.0.0",
+    "redux-storage-engine-localstorage": "^1.0.1",
+    "redux-thunk": "^2.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

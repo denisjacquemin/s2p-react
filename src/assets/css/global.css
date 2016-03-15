@@ -1,9 +1,5 @@
 
 .mdl-layout__header-row {
-  -webkit-align-self: flex-start;
-  -ms-flex-item-align: start;
-  align-self: flex-start;
-  padding: 0 16px 0 0px;
 }
 
 .mdl-layout__header-big {
@@ -45,4 +41,8 @@
   top: calc(30% - 30px);
   left: calc(100% - 90px);
   z-index: 20;
+}
+
+.mdl-switch.is-checked.mdl-switch--accent .mdl-switch__thumb {
+  background-color: #ff4082;
 }
