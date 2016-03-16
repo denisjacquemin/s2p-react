@@ -10,7 +10,7 @@ const reducer = storage.reducer(messageApp);
 const engine = createEngine('s2p');
 const storageMiddleware = storage.createMiddleware(engine);
 const loggerMiddleware = createLogger()
-const createStoreWithMiddleware = applyMiddleware(storageMiddleware, thunkMiddleware, loggerMiddleware)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, storageMiddleware, loggerMiddleware)(createStore);
 
 
 export const store = createStoreWithMiddleware(reducer);

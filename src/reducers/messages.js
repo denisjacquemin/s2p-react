@@ -1,8 +1,20 @@
-import {
-  FETCH_LATEST_MESSAGES,
-  RECEIVE_MESSAGES
-} from '../actions'
-
+// messages: {
+//   isFetching: false,
+//   didInvalidate: false,
+//   lastUpdated: 1439478405547,
+//   items: [
+//     {
+//       id: 42,
+//       title: 'Confusion about Flux and Relay'
+//       content: 'the content'
+//     },
+//     {
+//       id: 500,
+//       title: 'Creating a Simple Application Using React JS and Flux Architecture'
+//       content: 'the content'
+//     }
+//   ]
+// }
 
 const messageInitialState = {}
 
@@ -48,11 +60,12 @@ const messages = (state = messagesInitialState, action) => {
         didInvalidate: false
       });
     case 'RECEIVE_MESSAGES':
+      console.log('In RECEIVE_MESSAGES: ' + JSON.stringify(action.json))
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         items: action.messages,
-        lastUpdated: action.receivedAt
+        lastUpdate: action.receivedAt
       });
     default:
       return state;

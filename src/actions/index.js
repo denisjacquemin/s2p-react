@@ -1,4 +1,12 @@
 import fetch from 'isomorphic-fetch'
+import moment from 'moment'
+
+const serializeJSON = (data) => {
+  return Object.keys(data).map(function (keyName) {
+    return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
+  }).join('&');
+}
+
 
 export const showFullMessage = (id) => {
   return {
@@ -23,33 +31,45 @@ export const toggleImportant = () => {
 
 export const requestMessages = (params = {}) => {
   return {
-    type: 'REQUEST_MESSAGES',
-    params: params
+    type: 'REQUEST_MESSAGES'
   }
 }
 
 
 export const receiveMessages = (json) => {
+  console.log('receiveMessages: ' + JSON.stringify(json))
   return {
     type: 'RECEIVE_MESSAGES',
     messages: json,
-    receivedAt: Date.now()
+    receivedAt: moment().format('YYYY-MM-DD') // now
   }
 }
 
-export const fetchMessages = (params) => {
-  return function (dispatch) {
-    dispatch(requestMessages(params))
-    return fetch('https://s2p-api-demo.herokuapp.com/latest', {
-      method: 'POST',
+export const fetchMessages = () => {
+  return function (dispatch, getState) {
+    dispatch(requestMessages())
+
+    const { codes, messages } = getState()
+
+    let lastUpdate = messages.lastUpdate
+    if (lastUpdate === undefined) {
+      lastUpdate = moment().format('YYYY-MM-DD') // now
+    }
+
+    let params = '?last_update=' + lastUpdate
+    for(let c of codes) {
+      params += '&codes[]=' + c.code
+    }
+
+    //https://s2p-api-demo.herokuapp.com/
+    return fetch('https://s2p-api-demo.herokuapp.com/messages' + params, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      },
-      body: params
+      }
     }).then(response => response.json())
       .then(json =>
-        dispatch(receiveMessages(subreddit, json))
+        dispatch(receiveMessages(json))
       )
   }
 }

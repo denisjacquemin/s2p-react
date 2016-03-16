@@ -1,6 +1,6 @@
 const currentScreenInitialState = 'addcode'
 
-// MESSAGES REDUCER
+
 const currentScreen = (state = currentScreenInitialState, action) => {
   switch (action.type) {
     case 'SHOW_MESSAGES_SCREEN':

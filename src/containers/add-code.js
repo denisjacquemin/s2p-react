@@ -15,6 +15,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())
+      // refresh messages from server
     }
   };
 };

@@ -14,8 +14,7 @@ const code = (state = codeInitialState, action) => {
   switch (action.type) {
     case 'ADD_CODE':
       return {
-          code: action.code,
-          last_update: action.last_update
+          code: action.code
       };
     default:
       return state;

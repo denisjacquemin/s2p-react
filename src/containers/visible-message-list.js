@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showFullMessage } from '../actions'
+import { showFullMessage, fetchMessages } from '../actions'
 import MessageList from '../components/message-list'
 
-const getVisibleMessages = (messages, showOnlyImportant) => {
-  if (showOnlyImportant && messages != undefined) {
+const getVisibleMessages = (messages = [], showOnlyImportant) => {
+  if (showOnlyImportant) {
     return messages.filter(m => m.important)
   }
   return messages
@@ -13,7 +13,7 @@ const getVisibleMessages = (messages, showOnlyImportant) => {
 const mapStateToProps = (state) => {
   return {
     messages: getVisibleMessages(
-      state.messages,
+      state.messages.items,
       state.showOnlyImportant
     )
   };
@@ -23,6 +23,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onMessageClick: (id) => {
       dispatch(showFullMessage(id))
+    },
+    fetchMessages: () => {
+      dispatch(fetchMessages()).then(() =>
+        console.log(this.props.getState())
+      )
     }
   };
 };

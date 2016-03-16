@@ -4,6 +4,9 @@ import Header from './header'
 import Drawer from './drawer'
 
 class MessageList extends Component {
+  componentWillMount() {
+    this.props.fetchMessages()
+  }
   componentDidMount() {
     componentHandler.upgradeDom();
   }
