@@ -62,16 +62,9 @@ export const addCode = (code) => {
   }
 }
 
-export const showModal = (message) => {
+export const showCodeSaved = () => {
   return {
-    type: 'SHOW_MODAL',
-    message: message
-  }
-}
-
-export const hideModal = () => {
-  return {
-    type: 'HIDE_MODAL'
+    type: 'SHOW_CODE_SAVED'
   }
 }
 

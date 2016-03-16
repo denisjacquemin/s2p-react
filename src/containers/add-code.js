@@ -1,19 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addCode, showModal } from '../actions'
+import { addCode, showMessagesScreen } from '../actions'
 
-import AddCodeForm from '../components/add-code-form'
+import AddCodeScreen from '../components/add-code-screen'
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onAddCode: (code) => {
       dispatch(addCode(code))
-      dispatch(showModal('Voulez vous entrer un autre Code?'))
+    },
+    onShowMessagesScreen: () => {
+      dispatch(showMessagesScreen())
     }
   };
 };
@@ -21,6 +22,6 @@ const mapDispatchToProps = (dispatch) => {
 const AddCode = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddCodeForm);
+)(AddCodeScreen);
 
 export default AddCode;

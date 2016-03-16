@@ -17,7 +17,7 @@ class App extends Component {
 
   render() {
     console.log('App.render' + this.props.currentScreen);
-    let screenToShow = <AddCode/>
+    let screenToShow = <AddCode />
     if (this.props.currentScreen === 'messages') {
       screenToShow = <VisibleMessageList />
     }

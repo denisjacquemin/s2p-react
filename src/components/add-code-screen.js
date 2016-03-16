@@ -1,18 +1,74 @@
-import React from 'react'
-import AddCodeModal from '../containers/add-code-modal'
+import React, {Component} from 'react'
 
 
-var AddCodeForm = React.createClass({
-  componentDidUpdate: function() {
-      // This upgrades all upgradable components (i.e. with 'mdl-js-*' class)
-      componentHandler.upgradeDom();
+function getCodeSaved(handleShowMessagesScreen, handleShowCodeForm) {
+  return (
+    <div>
+      <div className="mdl-textfield mdl-js-textfield">
+        <h4>Code Enregistré</h4>
+        <p>
+          Avez vous un autre code à rentrer?
+        </p>
+      </div>
+      <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" onClick={handleShowMessagesScreen}>Non</button>
+      <button type="button" className="mdl-button mdl-js-button mdl-button--raised" onClick={handleShowCodeForm}>Oui</button>
+    </div>
+  )
+};
+
+function getAddCodeForm(addCode, handleNewCodeChange) {
+  return (
+    <div className="form">
+      <div className="mdl-textfield mdl-js-textfield">
+        <input className="mdl-textfield__input" type="text" id="sample3" onChange={handleNewCodeChange} />
+        <label className="mdl-textfield__label">Code...</label>
+      </div>
+      <div className="fullname">Un message ici</div>
+      <button onClick={addCode} className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+        Enregistrer
+      </button>
+    </div>
+  )
+};
+
+var AddCodeScreen = React.createClass( {
+
+  getInitialState: function() {
+    return { body: 'AddCodeForm', newCode: '' };
   },
 
-  addCode: function(e) {
-    this.props.onAddCode(this.refs.new_code.value);
+  componentWillMount: function () {
+    this.codeSaved = getCodeSaved(this.handleShowMessagesScreen, this.handleShowCodeForm)
+    this.addCodeForm = getAddCodeForm(this.handleAddCode, this.handleNewCodeChange)
+  },
+
+  handleAddCode: function(code) {
+    this.props.onAddCode(this.state.newCode);
+    this.setState({ body: 'CodeSaved' })
+  },
+
+  handleNewCodeChange: function(e) {
+    this.setState({newCode: e.target.value})
+  },
+
+  handleShowCodeForm: function() {
+    console.log('In handleShowCodeForm')
+    this.setState({ body: 'AddCodeForm', newCode: '' })
+  },
+
+  handleShowMessagesScreen: function() {
+    console.log('In handleShowMessagesScreen')
+    this.props.onShowMessagesScreen()
   },
 
   render: function() {
+
+    let body = this.codeSaved
+    if (this.state.body === 'AddCodeForm') {
+      body = this.addCodeForm
+    }
+
+    console.log('AddCodeScreen render')
     return (
       <div>
         <div className="add_code">
@@ -27,21 +83,11 @@ var AddCodeForm = React.createClass({
             </header>
             <main className="mdl-layout__content">
               <div className="mdl-grid mdl-grid--no-spacing">
-                <div className="form">
-                  <div className="mdl-textfield mdl-js-textfield">
-                    <input className="mdl-textfield__input" type="text" id="sample3" ref="new_code" />
-                    <label className="mdl-textfield__label">Code...</label>
-                  </div>
-                  <div className="fullname">Un message ici</div>
-                  <button onClick={this.addCode} className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
-                    Enregistrer
-                  </button>
-                </div>
+                {body}
               </div>
             </main>
           </div>
         </div>
-        <AddCodeModal />
       </div>
     )
   }
@@ -112,4 +158,4 @@ var AddCodeForm = React.createClass({
 //     );
 //   }
 // });
-export default AddCodeForm;
+export default AddCodeScreen;
