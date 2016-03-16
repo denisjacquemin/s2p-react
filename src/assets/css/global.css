@@ -1,12 +1,30 @@
-
-.mdl-layout__header-row {
+.mdl-layout__header {
+  min-height: 66px;
+  padding-top: 10px;
+}
+.mdl-layout__drawer-button {
+    top: 10px;
 }
 
 .mdl-layout__header-big {
   height:30%;
 }
 .mdl-layout__header-big .mdl-layout__header-row {
+  display: flex;
   height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 5px 5px 5px;
+  align-items: flex-start;
+}
+
+.mdl-layout__header-big h2, .mdl-layout__header-big h5 {
+  margin: 0;
+  font-weight: 200;
+}
+
+.mdl-layout__content-big {
+  padding: 20px;
 }
 
 .mdl-layout__header-text {
@@ -45,4 +63,8 @@
 
 .mdl-switch.is-checked.mdl-switch--accent .mdl-switch__thumb {
   background-color: #ff4082;
+}
+
+.mdl-dialog__title {
+  line-height: normal;
 }
