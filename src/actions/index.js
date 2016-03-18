@@ -1,17 +1,9 @@
 import fetch from 'isomorphic-fetch'
 import moment from 'moment'
 
-const serializeJSON = (data) => {
-  return Object.keys(data).map(function (keyName) {
-    return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
-  }).join('&');
-}
-
-
 export const showFullMessage = (id) => {
   return {
-    type: 'SHOW_FULL_MESSAGE',
-    id
+    type: 'SHOW_FULL_MESSAGE'
   }
 }
 
@@ -21,9 +13,10 @@ export const toggleShowImportant = () => {
   }
 }
 
-export const toggleImportant = () => {
+export const toggleImportant = (message_id) => {
   return {
-    type: 'TOGGLE_IMPORTANT'
+    type: 'TOGGLE_IMPORTANT',
+    id: message_id
   }
 }
 
@@ -41,7 +34,7 @@ export const receiveMessages = (json) => {
   return {
     type: 'RECEIVE_MESSAGES',
     messages: json,
-    receivedAt: moment().format('YYYY-MM-DD') // now
+    receivedAt: moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
   }
 }
 
@@ -53,7 +46,7 @@ export const fetchMessages = () => {
 
     let lastUpdate = messages.lastUpdate
     if (lastUpdate === undefined) {
-      lastUpdate = moment().format('YYYY-MM-DD') // now
+      lastUpdate = moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
     }
 
     let params = '?last_update=' + lastUpdate

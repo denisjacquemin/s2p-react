@@ -2,8 +2,12 @@
   min-height: 66px;
   padding-top: 10px;
 }
-.mdl-layout__drawer-button {
+.mdl-layout__header .mdl-layout__drawer-button {
     top: 10px;
+}
+
+.mdl-layout__header>.mdl-layout-icon {
+  top: 22px;
 }
 
 .mdl-layout__header-big {

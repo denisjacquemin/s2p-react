@@ -61,10 +61,30 @@ const messages = (state = messagesInitialState, action) => {
       });
     case 'RECEIVE_MESSAGES':
       console.log('In RECEIVE_MESSAGES: ' + JSON.stringify(action.json))
+
+      let messagesInStore = []
+      if (state.items !== undefined) { messagesInStore = state.items.slice() }
+      console.log('messagesInStore: ' + JSON.stringify(messagesInStore))
+      action.messages.map((newM) => { // for each new/update of message
+
+        // if message is already present in state, get the index
+        let index = messagesInStore.findIndex((mInStore) => {
+          return mInStore.id === newM.id
+        })
+        console.log('index: ' + index)
+        if (index !== -1) { // replace it
+          messagesInStore[index] = newM
+        } else { // if message is not already present in state
+          messagesInStore.push(newM) // add it
+        }
+        console.log('messagesInStore: ' + JSON.stringify(messagesInStore))
+
+      });
+
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
-        items: action.messages,
+        items: messagesInStore,
         lastUpdate: action.receivedAt
       });
     default:

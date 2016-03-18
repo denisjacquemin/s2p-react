@@ -6,8 +6,8 @@ function getCodeSaved(handleShowMessagesScreen, handleShowCodeForm) {
       <div className="mdl-dialog__title">Code Enregistré</div>
       <div className="mdl-dialog__content"><p>Avez-vous un autre code à rentrer?</p></div>
       <div className="mdl-dialog__actions">
-        <button type="button" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent" onClick={handleShowMessagesScreen}>Non</button>
-        <button type="button" className="mdl-button mdl-js-button mdl-js-ripple-effect" onClick={handleShowCodeForm}>Oui</button>
+        <button onTouchTap={handleShowMessagesScreen} type="button" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">Non</button>
+        <button onTouchTab={handleShowCodeForm} type="button" className="mdl-button mdl-js-button mdl-js-ripple-effect">Oui</button>
       </div>
     </div>
   )
@@ -21,8 +21,8 @@ function getAddCodeForm(addCode, handleNewCodeChange) {
         <label className="mdl-textfield__label">Code...</label>
       </div>
       <div className="fullname">Un message ici</div>
-      <button onClick={addCode} className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
-        Enregistrer
+      <button onTouchTab={addCode} className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+          Enregistrer
       </button>
     </div>
   )

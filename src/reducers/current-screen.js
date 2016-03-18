@@ -5,6 +5,10 @@ const currentScreen = (state = currentScreenInitialState, action) => {
   switch (action.type) {
     case 'SHOW_MESSAGES_SCREEN':
       return 'messages'
+      break;
+    case 'SHOW_FULL_MESSAGE':
+      return 'full_message'
+      break;
     default:
       return state;
   }

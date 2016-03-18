@@ -25,9 +25,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showFullMessage(id))
     },
     fetchMessages: () => {
-      dispatch(fetchMessages()).then(() =>
-        console.log(this.props.getState())
-      )
+      dispatch(fetchMessages());
     }
   };
 };

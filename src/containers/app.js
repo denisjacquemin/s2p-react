@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import VisibleMessageList from '../containers/visible-message-list'
 import AddCode from './add-code'
+import FullMessage from './full-message'
 
 
 class App extends Component {
@@ -14,11 +15,24 @@ class App extends Component {
   }
 
   render() {
-    console.log('App render: ' + this.props.currentScreen);
-    let screenToShow = <AddCode />
-    if (this.props.currentScreen === 'messages') {
-      screenToShow = <VisibleMessageList />
-    }
+    let screenToShow;
+    switch (this.props.currentScreen) {
+      case 'messages':
+        screenToShow = <VisibleMessageList />;
+        break;
+      case 'full_message':
+        screenToShow = [<VisibleMessageList />, <FullMessage />];
+        break;
+      default:
+        screenToShow = <AddCode />;
+    };
+
+
+    // console.log('App render: ' + this.props.currentScreen);
+    //
+    // if (this.props.currentScreen === 'messages') {
+    //   screenToShow = <VisibleMessageList />
+    // }
     return (
       <div>
         {screenToShow}

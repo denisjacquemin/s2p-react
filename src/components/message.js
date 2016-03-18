@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Message = ({
-  onClick,
+  onMessageTap,
   title,
   content,
   important
@@ -14,7 +14,7 @@ const Message = ({
       { content }
     </div>
     <div className="mdl-card__actions mdl-card--border">
-      <a onClick={onClick} href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">La suite</a>
+      <a href="#" onTouchTap={onMessageTap} className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">La suite</a>
     </div>
   </div>
 );

@@ -5,6 +5,7 @@ import Drawer from './drawer'
 
 class MessageList extends Component {
   componentWillMount() {
+    console.log('MESSAGELIST ######### componentWillMount')
     this.props.fetchMessages()
   }
   componentDidMount() {
@@ -23,7 +24,7 @@ class MessageList extends Component {
                 <Message
                   key={message.id}
                   {...message}
-                  onClick={() => this.props.onMessageClick(message.id)}
+                  onMessageTap={() => this.props.onMessageClick(message.id)}
                 />
             )}
           </div>
