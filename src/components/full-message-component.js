@@ -21,7 +21,7 @@ var FullMessageComponent  = React.createClass( {
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header className="mdl-layout__header">
             <button className="mdl-layout-icon mdl-button mdl-js-button mdl-button--icon" onTouchTap={this.handleShowMessagesScreen}>
-              <i className="material-icons">arrow_back</i>
+              <i className="material-icons">close</i>
             </button>
         </header>
         <main className="mdl-layout__content entry">
