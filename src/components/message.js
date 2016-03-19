@@ -6,15 +6,15 @@ const Message = ({
   content,
   important
 }) => (
-  <div className="bienmanger mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col mdl-cell--10-col-tablet mdl-cell--8-col-desktop">
-    <div className="mdl-card__media mdl-card__title mdl-card--expand mdl-color--teal-300">
-      { title }
+  <div className="bienmanger mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--10-col-tablet mdl-cell--8-col-desktop">
+    <div className="mdl-card__title">
+    { title }
     </div>
-    <div className="mdl-card__supporting-text mdl-color-text--grey-600">
+    <div className="mdl-card__supporting-text">
       { content }
     </div>
     <div className="mdl-card__actions mdl-card--border">
-      <a href="#" onTouchTap={onMessageTap} className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">La suite</a>
+      <a href="#" onTouchTap={onMessageTap} className="mdl-button mdl-js-button mdl-js-ripple-effect"> La suite</a>
     </div>
   </div>
 );
