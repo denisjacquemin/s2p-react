@@ -1,3 +1,15 @@
+body {
+  background: #f5f5f5;
+  background: -moz-linear-gradient(top,#fafafa,#f5f5f5);
+  background: -webkit-linear-gradient(top,#fafafa,#f5f5f5);
+  background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#fafafa),color-stop(1,#f5f5f5));
+  background: linear-gradient(top,#fafafa,#f5f5f5);
+}
+
+.mdl-grid {
+    padding: 0;
+}
+
 .mdl-layout__header {
   min-height: 66px;
   padding-top: 10px;
@@ -71,4 +83,19 @@
 
 .mdl-dialog__title {
   line-height: normal;
+}
+
+.mdl-card {
+  min-height: initial;
+}
+
+.mdl-card__title {
+  font-family: "Roboto", "Helvetica", "Arial",sans-serif;
+  font-size: 24px;
+  color: #333;
+}
+
+.mdl-card__supporting-text {
+  font-family: "Roboto", "Helvetica", "Arial",sans-serif;
+  font-size: 14px;
 }
