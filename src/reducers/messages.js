@@ -60,8 +60,6 @@ const messages = (state = messagesInitialState, action) => {
         didInvalidate: false
       });
     case 'RECEIVE_MESSAGES':
-      console.log('In RECEIVE_MESSAGES: ' + JSON.stringify(action.json))
-
       let messagesInStore = []
       if (state.items !== undefined) { messagesInStore = state.items.slice() }
       console.log('messagesInStore: ' + JSON.stringify(messagesInStore))

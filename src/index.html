@@ -7,15 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 		<title></title>
 		<link rel="stylesheet" href="assets/css/fonts.css">
-		<link rel="stylesheet" href="assets/vendor/mdl-1.1.2/material.min.css">
-		<link rel="stylesheet" href="assets/vendor/dialog-polyfill/dialog-polyfill.css">
-		<script src="assets/vendor/dialog-polyfill/dialog-polyfill.js"></script>
 		<link rel="stylesheet" href="assets/css/global.css">
 		<link rel="stylesheet" href="assets/css/codes.css">
+		<script src="assets/vendor/zepto.min.js"></script>
+		<link rel="stylesheet" href="assets/vendor/material-refresh/material-refresh.min.css">
 	</head>
 	<body>
 		<div id="root"></div>
-		<script src="assets/vendor/mdl-1.1.2/material.min.js"></script>
 		<script src="app.js"></script>
+		<script src="assets/vendor/material-refresh/material-refresh.js"></script>
+		<script>
+			var opts = {
+				nav: '#header'
+			}
+		  mRefresh(opts);
+		</script>
 	</body>
 </html>

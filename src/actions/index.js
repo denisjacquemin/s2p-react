@@ -1,9 +1,11 @@
 import fetch from 'isomorphic-fetch'
 import moment from 'moment'
 
-export const showFullMessage = (id) => {
+export const showFullMessage = (message) => {
   return {
-    type: 'SHOW_FULL_MESSAGE'
+    type: 'SHOW_FULL_MESSAGE',
+    ...message
+
   }
 }
 
@@ -30,7 +32,6 @@ export const requestMessages = (params = {}) => {
 
 
 export const receiveMessages = (json) => {
-  console.log('receiveMessages: ' + JSON.stringify(json))
   return {
     type: 'RECEIVE_MESSAGES',
     messages: json,

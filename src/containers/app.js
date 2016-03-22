@@ -4,7 +4,6 @@ import VisibleMessageList from '../containers/visible-message-list'
 import AddCode from './add-code'
 import FullMessage from './full-message'
 
-
 class App extends Component {
   componentWillMount() {
     console.log('App componentWillMount: ' + this.props.currentScreen)
@@ -21,7 +20,7 @@ class App extends Component {
         screenToShow = <VisibleMessageList />;
         break;
       case 'full_message':
-        screenToShow = [<VisibleMessageList />, <FullMessage />];
+        screenToShow = <FullMessage />;
         break;
       default:
         screenToShow = <AddCode />;

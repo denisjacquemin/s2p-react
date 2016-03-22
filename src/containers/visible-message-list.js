@@ -21,8 +21,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onMessageClick: (id) => {
-      dispatch(showFullMessage(id))
+    onMessageClick: (message) => {
+      console.log('onMessageClick')
+      dispatch(showFullMessage(message))
     },
     fetchMessages: () => {
       dispatch(fetchMessages());

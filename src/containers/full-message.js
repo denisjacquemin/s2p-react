@@ -5,7 +5,7 @@ import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
   return {
-
+    currentMessage: state.currentMessage
   };
 };
 
