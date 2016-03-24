@@ -4,14 +4,19 @@ import { toggleImportant, showMessagesScreen } from '../actions'
 import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
+  console.log('Message id: ' + state.currentMessage.id)
+  let message = state.messages.items.find((m) => {
+    return m.id === state.currentMessage.id
+  })
+  console.log('Message: ' + JSON.stringify(message))
   return {
-    currentMessage: state.currentMessage
+    currentMessage: message
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onToggleImportant: (code) => {
+    onToggleImportant: (id) => {
       dispatch(toggleImportant(id))
     },
     onShowMessagesScreen: () => {

@@ -32,7 +32,6 @@ const message = (state = messageInitialState, action) => {
       if (state.id !== action.id) {
         return state;
       }
-
       return {
         ...state,
         important: !state.important
@@ -53,7 +52,12 @@ const messages = (state = messagesInitialState, action) => {
         message(undefined, action)
       ];
     case 'TOGGLE_IMPORTANT':
-      return state.map(m => message(m, action));
+      console.log('TOGGLE_IMPORTANT: ' + JSON.stringify(state.items));
+      let items = state.items.map(m => message(m, action));
+      return Object.assign({}, state, {
+          items: items
+      });
+
     case 'REQUEST_MESSAGES':
       return Object.assign({}, state, {
         isFetching: true,
@@ -62,20 +66,24 @@ const messages = (state = messagesInitialState, action) => {
     case 'RECEIVE_MESSAGES':
       let messagesInStore = []
       if (state.items !== undefined) { messagesInStore = state.items.slice() }
-      console.log('messagesInStore: ' + JSON.stringify(messagesInStore))
       action.messages.map((newM) => { // for each new/update of message
 
         // if message is already present in state, get the index
         let index = messagesInStore.findIndex((mInStore) => {
           return mInStore.id === newM.id
         })
-        console.log('index: ' + index)
         if (index !== -1) { // replace it
-          messagesInStore[index] = newM
+          messagesInStore[index] = {
+            ...newM,
+            important: messagesInStore[index].important
+          }
         } else { // if message is not already present in state
-          messagesInStore.push(newM) // add it
+          message(undefined, newM)
+          messagesInStore.push({
+            ...newM,
+            important: false
+          })
         }
-        console.log('messagesInStore: ' + JSON.stringify(messagesInStore))
 
       });
 

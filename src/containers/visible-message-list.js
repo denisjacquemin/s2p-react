@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showFullMessage, fetchMessages } from '../actions'
+import { showFullMessage, fetchMessages, toggleShowImportant } from '../actions'
 import MessageList from '../components/message-list'
 
 const getVisibleMessages = (messages = [], showOnlyImportant) => {
@@ -15,18 +15,21 @@ const mapStateToProps = (state) => {
     messages: getVisibleMessages(
       state.messages.items,
       state.showOnlyImportant
-    )
+    ),
+    isFetching: state.isFetching
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onMessageClick: (message) => {
-      console.log('onMessageClick')
-      dispatch(showFullMessage(message))
+    onMessageClick: (id) => {
+      dispatch(showFullMessage(id))
     },
     fetchMessages: () => {
       dispatch(fetchMessages());
+    },
+    toggleShowImportant: () => {
+      dispatch(toggleShowImportant());
     }
   };
 };

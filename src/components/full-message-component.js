@@ -3,6 +3,8 @@ import React, {Component} from 'react'
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
+import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import Star from 'material-ui/lib/svg-icons/toggle/star';
 import Card from 'material-ui/lib/card/card';
 import CardTitle from 'material-ui/lib/card/card-title';
 import CardText from 'material-ui/lib/card/card-text';
@@ -20,8 +22,12 @@ var FullMessageComponent  = React.createClass( {
   },
 
   handleShowMessagesScreen: function(e) {
-    console.log('in handleShowMessagesScreen ' + e)
     this.props.onShowMessagesScreen()
+    e.preventDefault();
+  },
+
+  toggleImportant: function(e) {
+    this.props.onToggleImportant(this.props.currentMessage.id)
     e.preventDefault();
   },
 
@@ -50,11 +56,18 @@ var FullMessageComponent  = React.createClass( {
     const styles = this.getStyles();
     const message = this.props.currentMessage;
 
+    let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><StarBorder/></IconButton>
+    if (message.important) {
+      starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
+    }
+
+
     return (
       <div>
         <AppBar title="App"
           style={styles.appBar}
           iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><NavigationClose /></IconButton>}
+          iconElementRight={starIcon}
         />
         <div style={styles.root}>
           <Card style={styles.fullscreen}>

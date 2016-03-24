@@ -1,11 +1,10 @@
 import fetch from 'isomorphic-fetch'
 import moment from 'moment'
 
-export const showFullMessage = (message) => {
+export const showFullMessage = (id) => {
   return {
     type: 'SHOW_FULL_MESSAGE',
-    ...message
-
+    id: id
   }
 }
 

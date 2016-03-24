@@ -6,11 +6,11 @@ import FullMessage from './full-message'
 
 class App extends Component {
   componentWillMount() {
-    console.log('App componentWillMount: ' + this.props.currentScreen)
+
   }
 
   componentDidUpdate() {
-    console.log('App componentDidUpdate: ' + this.props.currentScreen)
+    
   }
 
   render() {

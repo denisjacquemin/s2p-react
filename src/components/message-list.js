@@ -3,6 +3,9 @@ import React, {Component} from 'react'
 import AppBar from 'material-ui/lib/app-bar';
 import LeftNav from 'material-ui/lib/left-nav';
 import IconButton from 'material-ui/lib/icon-button';
+import FontIcon from 'material-ui/lib/font-icon';
+import ToggleStarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
@@ -14,6 +17,10 @@ import CardActions from 'material-ui/lib/card/card-actions';
 import FlatButton from 'material-ui/lib/flat-button';
 import {Spacing} from 'material-ui/lib/styles';
 
+import ReactPullToRefresh from 'react-pull-to-refresh'
+import RefreshIndicator from 'material-ui/lib/refresh-indicator';
+
+
 
 var MessageList = React.createClass( {
 
@@ -22,7 +29,6 @@ var MessageList = React.createClass( {
   },
 
   componentWillMount: function() {
-    console.log('MESSAGELIST ######### componentWillMount')
     this.props.fetchMessages()
   },
 
@@ -39,6 +45,14 @@ var MessageList = React.createClass( {
     e.preventDefault();
   },
 
+  handleRefresh: function() {
+    this.props.fetchMessages()
+  },
+
+  toggleShowImportant: function() {
+    this.props.toggleShowImportant();
+  },
+
   getStyles: function() {
     const styles = {
       appBar: {
@@ -46,15 +60,25 @@ var MessageList = React.createClass( {
         top: 0,
         paddingTop: '10px'
       },
+      icon: {
+        fill: '#ffffff',
+        color: '#ffffff'
+      },
       root: {
-        paddingTop: Spacing.desktopKeylineIncrement + 10,
-        minHeight: 400,
+        paddingTop: '80px',
+        minHeight: 400
       },
       content: {
         margin: Spacing.desktopGutter,
       },
       card: {
         margin: '12px 8px'
+      },
+      loading: {
+        display: 'inline-block',
+      	textAlign: 'center',
+      	opacity: '.4',
+      	margin: '12px 0 0 5px'
       }
     };
     return styles;
@@ -69,19 +93,12 @@ var MessageList = React.createClass( {
           style={styles.appBar}
           onLeftIconButtonTouchTap={this.handleLeftMenu}
           iconElementRight={
-            <IconMenu
-              iconButtonElement={
-                <IconButton><MoreVertIcon /></IconButton>
-              }
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-              <MenuItem primaryText="Refresh" />
-              <MenuItem primaryText="Help" />
-              <MenuItem primaryText="Sign out" />
-            </IconMenu>
-          }/>
-
+            <div >
+              <IconButton iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><ToggleStarBorder/></IconButton>
+              <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+            </div>
+          }
+        />
         <div style={styles.root}>
           {
             this.props.messages.map(message =>
@@ -89,7 +106,7 @@ var MessageList = React.createClass( {
                 <CardTitle title={message.title} subtitle="Aujourd'hui" />
                 <CardText>{ message.content }</CardText>
                 <CardActions>
-                  <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message)}/>
+                  <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
                 </CardActions>
               </Card>
           )}
@@ -103,7 +120,6 @@ var MessageList = React.createClass( {
           <MenuItem onTouchTap={this.handleLeftMenuClose}>Liste des messages</MenuItem>
           <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
         </LeftNav>
-
       </div>
     )
   }
