@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
       state.messages.items,
       state.showOnlyImportant
     ),
-    isFetching: state.isFetching
+    isFetching: state.isFetching,
+    showImportant: state.showOnlyImportant
   };
 };
 

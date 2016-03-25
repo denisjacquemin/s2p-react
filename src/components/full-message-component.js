@@ -41,15 +41,22 @@ var FullMessageComponent  = React.createClass( {
       root: {
         paddingTop: Spacing.desktopKeylineIncrement + 10,
         minHeight: 400,
+        WebkitTransform: 'translate3d(0, 0, 0)'
       },
       content: {
         margin: Spacing.desktopGutter,
       },
       fullscreen: {
-        margin: '0'
+        margin: '0',
+        WebkitFontSmoothing: 'subpixel-antialiased',
+        boxShadow: 'none'
       }
     };
     return styles;
+  },
+
+  getContent: function(theHTML) {
+    return {__html: theHTML };
   },
 
   render: function() {
@@ -61,7 +68,6 @@ var FullMessageComponent  = React.createClass( {
       starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
     }
 
-
     return (
       <div>
         <AppBar title="App"
@@ -70,9 +76,9 @@ var FullMessageComponent  = React.createClass( {
           iconElementRight={starIcon}
         />
         <div style={styles.root}>
-          <Card style={styles.fullscreen}>
+          <Card style={styles.fullscreen} className="fade-in">
             <CardTitle title={message.title} subtitle="Aujourd'hui" />
-            <CardText>{ message.content }</CardText>
+            <CardText className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
           </Card>
         </div>
       </div>

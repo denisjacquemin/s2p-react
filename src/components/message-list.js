@@ -4,7 +4,8 @@ import AppBar from 'material-ui/lib/app-bar';
 import LeftNav from 'material-ui/lib/left-nav';
 import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
-import ToggleStarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import Star from 'material-ui/lib/svg-icons/toggle/star';
 import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
@@ -84,8 +85,19 @@ var MessageList = React.createClass( {
     return styles;
   },
 
+  stripHTML: function(theHTML) {
+    var div = document.createElement("div");
+    div.innerHTML = theHTML;
+    return div.textContent || div.innerText || "";
+  },
+
   render: function() {
     const styles = this.getStyles();
+
+    let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><StarBorder/></IconButton>
+    if (this.props.showImportant) {
+      starIcon = <IconButton  iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
+    }
 
     return (
       <div>
@@ -94,17 +106,17 @@ var MessageList = React.createClass( {
           onLeftIconButtonTouchTap={this.handleLeftMenu}
           iconElementRight={
             <div >
-              <IconButton iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><ToggleStarBorder/></IconButton>
+              {starIcon}
               <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
             </div>
           }
         />
-        <div style={styles.root}>
+        <div style={styles.root} className="fade-in">
           {
             this.props.messages.map(message =>
               <Card key={message.id} style={styles.card}>
                 <CardTitle title={message.title} subtitle="Aujourd'hui" />
-                <CardText>{ message.content }</CardText>
+                <CardText>{ this.stripHTML(message.content) }</CardText>
                 <CardActions>
                   <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
                 </CardActions>

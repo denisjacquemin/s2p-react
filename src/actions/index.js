@@ -40,30 +40,34 @@ export const receiveMessages = (json) => {
 
 export const fetchMessages = () => {
   return function (dispatch, getState) {
-    dispatch(requestMessages())
-
+    // check if another fetch request is still in progress
     const { codes, messages } = getState()
+    if (!messages.isFetching) {
+      dispatch(requestMessages())
 
-    let lastUpdate = messages.lastUpdate
-    if (lastUpdate === undefined) {
-      lastUpdate = moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
-    }
 
-    let params = '?last_update=' + lastUpdate
-    for(let c of codes) {
-      params += '&codes[]=' + c.code
-    }
 
-    //https://s2p-api-demo.herokuapp.com/
-    return fetch('https://s2p-api-demo.herokuapp.com/messages' + params, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+      let lastUpdate = messages.lastUpdate
+      if (lastUpdate === undefined) {
+        lastUpdate = moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
       }
-    }).then(response => response.json())
-      .then(json =>
-        dispatch(receiveMessages(json))
-      )
+
+      let params = '?last_update=' + lastUpdate
+      for(let c of codes) {
+        params += '&codes[]=' + c.code
+      }
+
+      // https://s2p-api-demo.herokuapp.com/messages
+      return fetch('https://s2p-api-demo.herokuapp.com/messages' + params, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(json =>
+          dispatch(receiveMessages(json))
+        )
+    }
   }
 }
 
