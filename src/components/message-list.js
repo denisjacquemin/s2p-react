@@ -1,27 +1,29 @@
 import React, {Component} from 'react'
 
+import Message from './message'
+
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import s2pTheme from '../theme';
+
+
 import AppBar from 'material-ui/lib/app-bar';
 import LeftNav from 'material-ui/lib/left-nav';
 import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
 import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import Card from 'material-ui/lib/card/card';
-import CardTitle from 'material-ui/lib/card/card-title';
-import CardText from 'material-ui/lib/card/card-text';
-import CardActions from 'material-ui/lib/card/card-actions';
-import FlatButton from 'material-ui/lib/flat-button';
 import {Spacing} from 'material-ui/lib/styles';
 
-import ReactPullToRefresh from 'react-pull-to-refresh'
-import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 
-
+const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var MessageList = React.createClass( {
 
@@ -58,22 +60,16 @@ var MessageList = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        top: 0,
-        paddingTop: '10px'
+        paddingTop: '10px',
+        top: '0'
       },
       icon: {
         fill: '#ffffff',
         color: '#ffffff'
       },
-      root: {
-        paddingTop: '80px',
-        minHeight: 400
-      },
       content: {
-        margin: Spacing.desktopGutter,
-      },
-      card: {
-        margin: '12px 8px'
+        position: 'absolute',
+        top: '60px'
       },
       loading: {
         display: 'inline-block',
@@ -85,12 +81,6 @@ var MessageList = React.createClass( {
     return styles;
   },
 
-  stripHTML: function(theHTML) {
-    var div = document.createElement("div");
-    div.innerHTML = theHTML;
-    return div.textContent || div.innerText || "";
-  },
-
   render: function() {
     const styles = this.getStyles();
 
@@ -100,39 +90,37 @@ var MessageList = React.createClass( {
     }
 
     return (
-      <div>
-        <AppBar id="header" title="App"
-          style={styles.appBar}
-          onLeftIconButtonTouchTap={this.handleLeftMenu}
-          iconElementRight={
-            <div >
-              {starIcon}
-              <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
-            </div>
-          }
-        />
-        <div style={styles.root} className="fade-in">
-          {
-            this.props.messages.map(message =>
-              <Card key={message.id} style={styles.card}>
-                <CardTitle title={message.title} subtitle="Aujourd'hui" />
-                <CardText>{ this.stripHTML(message.content) }</CardText>
-                <CardActions>
-                  <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
-                </CardActions>
-              </Card>
-          )}
+      <MuiThemeProvider muiTheme={s2pMuiTheme}>
+        <div>
+          <AppBar id="header" title="App"
+            style={styles.appBar}
+            onLeftIconButtonTouchTap={this.handleLeftMenu}
+            iconElementRight={
+              <div >
+                {starIcon}
+                <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+              </div>
+            }
+          />
+          <List className="fade-in" style={styles.content}>
+            {
+              this.props.messages.map(message =>
+                <ListItem key={message.id}
+                  children=<Message message={message} onMessageClick={this.props.onMessageClick} />
+                />
+            )}
+          </List>
+          <LeftNav
+            docked={false}
+            width={200}
+            open={this.state.open}
+            onRequestChange={open => this.setState({ open })}
+          >
+            <MenuItem onTouchTap={this.handleLeftMenuClose}>Liste des messages</MenuItem>
+            <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
+          </LeftNav>
         </div>
-        <LeftNav
-          docked={false}
-          width={200}
-          open={this.state.open}
-          onRequestChange={open => this.setState({ open })}
-        >
-          <MenuItem onTouchTap={this.handleLeftMenuClose}>Liste des messages</MenuItem>
-          <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
-        </LeftNav>
-      </div>
+      </MuiThemeProvider>
     )
   }
 });

@@ -1,17 +1,26 @@
 import React, {Component} from 'react'
 
+import Slider from 'react-slick';
+
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import s2pTheme from '../theme';
+
+
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
 import Card from 'material-ui/lib/card/card';
+import CardMedia from 'material-ui/lib/card/card-media';
 import CardTitle from 'material-ui/lib/card/card-title';
 import CardText from 'material-ui/lib/card/card-text';
 import CardActions from 'material-ui/lib/card/card-actions';
 import FlatButton from 'material-ui/lib/flat-button';
 import {Spacing} from 'material-ui/lib/styles';
 
+const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var FullMessageComponent  = React.createClass( {
 
@@ -35,21 +44,27 @@ var FullMessageComponent  = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        top: 0,
-        paddingTop: '10px'
-      },
-      root: {
-        paddingTop: Spacing.desktopKeylineIncrement + 10,
-        minHeight: 400,
-        WebkitTransform: 'translate3d(0, 0, 0)'
+        paddingTop: '10px',
+        top: '0'
       },
       content: {
-        margin: Spacing.desktopGutter,
+        position: 'fixed',
+        top: Spacing.desktopGutter
       },
       fullscreen: {
-        margin: '0',
+        position: 'relative',
+        top: '74px',
+        marginLeft: '0',
+        marginRight: '0',
         WebkitFontSmoothing: 'subpixel-antialiased',
         boxShadow: 'none'
+      },
+      cardMedia: {
+        maxHeight: '250px',
+        overflow: 'hidden'
+      },
+      cardText: {
+        fontSize: '16px'
       }
     };
     return styles;
@@ -59,29 +74,60 @@ var FullMessageComponent  = React.createClass( {
     return {__html: theHTML };
   },
 
+  getSlickSettings: function() {
+    const settings = {
+      dots: true,
+      dotsClass: 'slick-dots',
+      infinite: true,
+      autoplay: false,
+      arrows: false,
+      swipe: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      mobileFirst: true
+    }
+    return settings;
+  },
+
   render: function() {
     const styles = this.getStyles();
     const message = this.props.currentMessage;
+    const settings = this.getSlickSettings();
 
     let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><StarBorder/></IconButton>
     if (message.important) {
       starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
     }
 
+    let media
+    if (message.mfiles != undefined && message.mfiles.length > 0) {
+      let slides = []
+      for (let i in message.mfiles) {
+        slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><img src={'http:' + message.mfiles[i].file_url} /></div>)
+      }
+      media = <CardMedia>
+        <Slider {...settings}>
+          {slides}
+        </Slider>
+      </CardMedia>
+    }
+
     return (
-      <div>
-        <AppBar title="App"
-          style={styles.appBar}
-          iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><NavigationClose /></IconButton>}
-          iconElementRight={starIcon}
-        />
-        <div style={styles.root}>
+      <MuiThemeProvider muiTheme={s2pMuiTheme}>
+        <div>
+          <AppBar title="App"
+            style={styles.appBar}
+            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><NavigationClose /></IconButton>}
+            iconElementRight={starIcon}
+          />
+
           <Card style={styles.fullscreen} className="fade-in">
-            <CardTitle title={message.title} subtitle="Aujourd'hui" />
-            <CardText className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
+              { media }
+              <CardTitle title={message.title} subtitle="Aujourd'hui" />
+              <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
           </Card>
         </div>
-      </div>
+      </MuiThemeProvider>
 
     )
   }

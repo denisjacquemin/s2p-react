@@ -1,38 +1,66 @@
 import React from 'react'
 
-const Message = ({
-  onMessageTap,
-  title,
-  content,
-  important
-}) => (
-  <div className="bienmanger mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--10-col-tablet mdl-cell--8-col-desktop">
-    <div className="mdl-card__title">
-    { title }
-    </div>
-    <div className="mdl-card__supporting-text">
-      { content }
-    </div>
-    <div className="mdl-card__actions mdl-card--border">
-      <a href="#" onTouchTap={onMessageTap} className="mdl-button mdl-js-button mdl-js-ripple-effect"> La suite</a>
-    </div>
-  </div>
-);
+import Card from 'material-ui/lib/card/card';
+import CardMedia from 'material-ui/lib/card/card-media';
+import CardTitle from 'material-ui/lib/card/card-title';
+import CardText from 'material-ui/lib/card/card-text';
+import CardActions from 'material-ui/lib/card/card-actions';
+import FlatButton from 'material-ui/lib/flat-button';
 
-// var Message = React.createClass({
-//   render: function() {
-//     return (
-//       <div className="bienmanger mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col mdl-cell--10-col-tablet mdl-cell--8-col-desktop">
-//         <div className="mdl-card__media mdl-card__title mdl-card--expand mdl-color--teal-300">
-//         </div>
-//         <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-//           { this.props.data.content }
-//         </div>
-//         <div className="mdl-card__actions mdl-card--border">
-//           <a href="#" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">La suite</a>
-//         </div>
-//       </div>
-//     );
-//   }
-// });
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import CustomTheme from '../theme';
+
+var Message = React.createClass( {
+
+  stripHTML: function(theHTML) {
+    var div = document.createElement("div");
+    div.innerHTML = theHTML;
+    return div.textContent || div.innerText || "";
+  },
+
+  getStyles: function() {
+    const styles = {
+      card: {
+        margin: '12px 8px'
+      },
+      cardMedia: {
+        maxHeight: '250px',
+        overflow: 'hidden'
+      },
+      cardActions: {
+        borderTop: '1px solid #dddddd'
+      }
+    };
+    return styles;
+  },
+
+  truncate: function(string){
+     if (string.length > 200)
+        return string.substring(0,200)+'...';
+     else
+        return string;
+  },
+
+  render: function() {
+
+    const message = this.props.message
+    const styles = this.getStyles();
+
+    let media
+    if (message.mfiles != undefined && message.mfiles.length > 0) {
+      media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
+    }
+
+    return (
+      <Card key={message.id} style={styles.card}>
+        {media}
+        <CardTitle title={message.title} subtitle="Aujourd'hui" />
+        <CardText>{ this.stripHTML(this.truncate(message.content)) }</CardText>
+        <CardActions style={styles.cardActions}>
+          <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
+        </CardActions>
+      </Card>
+    )
+  }
+});
 export default Message;
