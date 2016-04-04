@@ -13,14 +13,63 @@
 		<link rel="stylesheet" href="assets/css/fadein.css">
 		<link rel="stylesheet" href="assets/vendor/slick.css">
 		<link rel="stylesheet" href="assets/css/disable_copypaste.css">
-
-
 		<script src="assets/vendor/zepto.min.js"></script>
-		<link rel="stylesheet" href="assets/vendor/material-refresh/material-refresh.min.css">
+		<script type="text/javascript" src="cordova.js"></script>
 	</head>
-	<body>
+	<body onload="onLoad()">
 		<div id="root"></div>
 		<script src="app.js"></script>
-		<script src="assets/vendor/material-refresh/material-refresh.js"></script>
+		<script>
+			function initPushwoosh() {
+					var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+
+					//set push notification callback before we initialize the plugin
+					document.addEventListener('push-notification', function(event) {
+																			//get the notification payload
+																			var notification = event.notification;
+
+																			//display alert to the user for example
+																			alert(notification.aps.alert);
+
+																			//clear the app badge
+																			pushNotification.setApplicationIconBadgeNumber(0);
+																	});
+
+					//initialize the plugin
+					pushNotification.onDeviceReady({pw_appid:"43CCF-B338D"});
+
+					//register for pushes
+					pushNotification.registerDevice(
+							function(status) {
+									var deviceToken = status['deviceToken'];
+									console.warn('registerDevice: ' + deviceToken);
+							},
+							function(status) {
+									console.warn('failed to register : ' + JSON.stringify(status));
+									alert(JSON.stringify(['failed to register ', status]));
+							}
+					);
+
+					//reset badges on app start
+					pushNotification.setApplicationIconBadgeNumber(0);
+			}
+
+			function onDeviceReady() {
+				console.log('Device Readyy')
+				initPushwoosh();
+			}
+
+			function onLoad() {
+					var url = document.URL;
+					var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
+					if( isSmart ){
+						console.log('isSmartPhone')
+						document.addEventListener('deviceready', onDeviceReady, false);
+					}
+					else {
+							console.log('not isSmartPhone')
+					}
+			}
+		</script>
 	</body>
 </html>
