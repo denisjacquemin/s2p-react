@@ -41,6 +41,11 @@ var Message = React.createClass( {
         return string;
   },
 
+  componentDidMount: function() {
+      console.log('update Images');
+      handleImageCache();
+  },
+
   render: function() {
 
     const message = this.props.message

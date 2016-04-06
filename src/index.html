@@ -13,10 +13,12 @@
 		<link rel="stylesheet" href="assets/css/fadein.css">
 		<link rel="stylesheet" href="assets/vendor/slick.css">
 		<link rel="stylesheet" href="assets/css/disable_copypaste.css">
-		<script src="assets/vendor/zepto.min.js"></script>
-		<script type="text/javascript" src="cordova.js"></script>
+		<script src="assets/vendor/jquery-2.2.2.min.js"></script>
+		<script src="assets/vendor/imgcache.js"></script>
+		<script src="assets/vendor/imagesloaded.pkgd.js"></script>
+		<script src="cordova.js"></script>
 	</head>
-	<body onload="onLoad()">
+	<body>
 		<div id="root"></div>
 		<script src="app.js"></script>
 		<script>
@@ -42,11 +44,11 @@
 					pushNotification.registerDevice(
 							function(status) {
 									var deviceToken = status['deviceToken'];
-									console.warn('registerDevice: ' + deviceToken);
+									console.warn('pushwoosh registerDevice: ' + deviceToken);
 							},
 							function(status) {
-									console.warn('failed to register : ' + JSON.stringify(status));
-									alert(JSON.stringify(['failed to register ', status]));
+									console.warn('pushwoosh failed to register : ' + JSON.stringify(status));
+									//alert(JSON.stringify(['failed to register ', status]));
 							}
 					);
 
@@ -54,12 +56,61 @@
 					pushNotification.setApplicationIconBadgeNumber(0);
 			}
 
-			function onDeviceReady() {
-				console.log('Device Readyy')
-				initPushwoosh();
+			function initImgcache() {
+				ImgCache.options.debug = true;
+        ImgCache.options.usePersistentCache = true;
+
+				ImgCache.init(function() {
+					handleImageCache()
+				})
+
+			 $('body').imagesLoaded()
+			 		.progress( function( instance, image ) {
+				    var result = image.isLoaded ? 'loaded' : 'broken';
+				    console.log( 'image is ' + result + ' for ' + image.img.src );
+				  });
 			}
 
-			function onLoad() {
+			function handleImageCache() {
+				$('img').each(function(index) {
+					var img = $(this);
+					ImgCache.isCached(img.attr('src'), function(path, success) {
+						if (success) {
+							// already cached
+							console.log('Image ' + path + ' already cached')
+							ImgCache.useCachedFile(img);
+						} else {
+							// not there, need to cache the image
+							console.log('need to cache ' + path)
+							ImgCache.cacheFile(img.attr('src'),
+								function success() {
+									console.log ('cacheFile success for ' + img.attr('src'));
+									ImgCache.useCachedFile(img,
+										function success () {
+										console.info('now using local copy');
+										},
+										function error() {
+											console.info('could not load from cache');
+										}
+									);
+								},
+								function error (err) {
+									console.error('error cacheFile: ' + err)
+								}
+							);
+						}
+					});
+				});
+				console.log('Cache size: ' + ImgCache.getCurrentSize());
+			}
+
+			function onDeviceReady() {
+				console.log('Device Ready')
+				//initPushwoosh();
+				initImgcache();
+			}
+
+			$(function() {
 					var url = document.URL;
 					var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
 					if( isSmart ){
@@ -67,9 +118,9 @@
 						document.addEventListener('deviceready', onDeviceReady, false);
 					}
 					else {
-							console.log('not isSmartPhone')
+						console.log('not isSmartPhone')
 					}
-			}
+			})
 		</script>
 	</body>
 </html>
