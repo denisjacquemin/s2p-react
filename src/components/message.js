@@ -1,5 +1,8 @@
 import React from 'react'
 
+import moment from 'moment'
+import "moment/locale/fr";
+
 import Card from 'material-ui/lib/card/card';
 import CardMedia from 'material-ui/lib/card/card-media';
 import CardTitle from 'material-ui/lib/card/card-title';
@@ -51,10 +54,12 @@ var Message = React.createClass( {
       media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
     }
 
+    let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
+
     return (
       <Card key={message.id} style={styles.card}>
         {media}
-        <CardTitle title={message.title} subtitle="Aujourd'hui" />
+        <CardTitle title={message.title} subtitle={publish_date} />
         <CardText>{ this.stripHTML(this.truncate(message.content)) }</CardText>
         <CardActions style={styles.cardActions}>
           <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>

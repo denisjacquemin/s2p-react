@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 
 import Slider from 'react-slick';
+import moment from 'moment'
+import "moment/locale/fr";
 
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
@@ -112,6 +114,8 @@ var FullMessageComponent  = React.createClass( {
       </CardMedia>
     }
 
+    let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
+
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
@@ -123,7 +127,7 @@ var FullMessageComponent  = React.createClass( {
 
           <Card style={styles.fullscreen} className="fade-in">
               { media }
-              <CardTitle title={message.title} subtitle="Aujourd'hui" />
+              <CardTitle title={message.title} subtitle={publish_date} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
           </Card>
         </div>
