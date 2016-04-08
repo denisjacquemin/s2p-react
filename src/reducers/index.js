@@ -5,6 +5,8 @@ import currentMessage from './current-message'
 import showOnlyImportant from './show-only-important'
 import codes from './codes'
 import currentScreen from './current-screen'
+import snackbar from './snackbar'
+
 
 
 
@@ -13,7 +15,8 @@ const messageApp = combineReducers({
   showOnlyImportant,
   codes,
   currentScreen,
-  currentMessage
+  currentMessage,
+  snackbar
 })
 
 export default messageApp
