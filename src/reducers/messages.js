@@ -52,7 +52,6 @@ const messages = (state = messagesInitialState, action) => {
         message(undefined, action)
       ];
     case 'TOGGLE_IMPORTANT':
-      console.log('TOGGLE_IMPORTANT: ' + JSON.stringify(state.items));
       let items = state.items.map(m => message(m, action));
       return Object.assign({}, state, {
           items: items
@@ -64,34 +63,39 @@ const messages = (state = messagesInitialState, action) => {
         didInvalidate: false
       });
     case 'RECEIVE_MESSAGES':
-      let messagesInStore = []
-      if (state.items !== undefined) { messagesInStore = state.items.slice() }
-      action.messages.map((newM) => { // for each new/update of message
-
-        // if message is already present in state, get the index
-        let index = messagesInStore.findIndex((mInStore) => {
-          return mInStore.id === newM.id
-        })
-        if (index !== -1) { // replace it
-          messagesInStore[index] = {
-            ...newM,
-            important: messagesInStore[index].important
-          }
-        } else { // if message is not already present in state
-          message(undefined, newM)
-          messagesInStore.push({
-            ...newM,
-            important: false
-          })
-        }
-
-      });
+      // let messagesInStore = []
+      // if (state.items !== undefined) { messagesInStore = state.items.slice() }
+      // action.messages.map((newM) => { // for each new/update of message
+      //
+      //   // if message is already present in state, get the index
+      //   let index = messagesInStore.findIndex((mInStore) => {
+      //     return mInStore.id === newM.id
+      //   })
+      //   if (index !== -1) { // replace it
+      //     messagesInStore[index] = {
+      //       ...newM,
+      //       important: messagesInStore[index].important
+      //     }
+      //   } else { // if message is not already present in state
+      //     message(undefined, newM)
+      //     messagesInStore.push({
+      //       ...newM,
+      //       important: false
+      //     })
+      //   }
+      //
+      // });
 
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
-        items: messagesInStore,
+        items: action.messages,
         lastUpdate: action.receivedAt
+      });
+    case 'HANDLE_REQUEST_MESSAGES_ERROR':
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false
       });
     default:
       return state;
