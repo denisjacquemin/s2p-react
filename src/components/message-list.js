@@ -13,6 +13,7 @@ import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
+import LinearProgress from 'material-ui/lib/linear-progress';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
@@ -21,6 +22,7 @@ import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Spacing} from 'material-ui/lib/styles';
+import Snackbar from 'material-ui/lib/snackbar';
 
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
@@ -49,6 +51,7 @@ var MessageList = React.createClass( {
   },
 
   handleRefresh: function() {
+    console.log('handleRefresh in MessageList')
     this.props.fetchMessages()
   },
 
@@ -67,15 +70,27 @@ var MessageList = React.createClass( {
         fill: '#ffffff',
         color: '#ffffff'
       },
+      progress: {
+        position: 'absolute',
+        top: '74px',
+        borderRadius: '0'
+      },
       content: {
         position: 'absolute',
-        top: '60px'
+        top: '70px'
       },
       loading: {
         display: 'inline-block',
       	textAlign: 'center',
       	opacity: '.4',
       	margin: '12px 0 0 5px'
+      },
+      refresh: {
+        width: '48px',
+        height: '48px'
+      },
+      message: {
+        padding:0
       }
     };
     return styles;
@@ -89,6 +104,14 @@ var MessageList = React.createClass( {
       starIcon = <IconButton  iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
     }
 
+    console.log('test isFetching: ' + this.props.isFetching)
+    let refreshIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+    let progress
+    if (this.props.isFetching) {
+      refreshIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+      progress = <LinearProgress mode="indeterminate" style={styles.progress} color="#f44336" />
+    }
+
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
@@ -98,15 +121,16 @@ var MessageList = React.createClass( {
             iconElementRight={
               <div >
                 {starIcon}
-                <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+                {refreshIcon}
               </div>
             }
           />
-          <List className="fade-in" style={styles.content}>
+          {progress}
+          <List className="fade-in">
             {
               this.props.messages.map(message =>
-                <ListItem key={message.id}
-                  children=<Message message={message} onMessageClick={this.props.onMessageClick} />
+                <ListItem key={message.id} style={styles.listItem}
+                  children=<Message message={message} onMessageClick={this.props.onMessageClick}  />
                 />
             )}
           </List>
@@ -119,6 +143,12 @@ var MessageList = React.createClass( {
             <MenuItem onTouchTap={this.handleLeftMenuClose}>Liste des messages</MenuItem>
             <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
           </LeftNav>
+          <Snackbar
+            open={this.props.snackbar.show}
+            message={this.props.snackbar.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
       </MuiThemeProvider>
     )

@@ -34,7 +34,13 @@ export const receiveMessages = (json) => {
   return {
     type: 'RECEIVE_MESSAGES',
     messages: json,
-    receivedAt: moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
+    receivedAt: moment().utc().format('YYYY-MM-DD [[]HH:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
+  }
+}
+
+export const handleFetchError = () => {
+  return {
+    type: 'HANDLE_REQUEST_MESSAGES_ERROR'
   }
 }
 
@@ -49,7 +55,7 @@ export const fetchMessages = () => {
 
       let lastUpdate = messages.lastUpdate
       if (lastUpdate === undefined) {
-        lastUpdate = moment().utc().format('YYYY-MM-DD [[]h:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
+        lastUpdate = moment().utc().format('YYYY-MM-DD [[]HH:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
       }
 
       let params = '?last_update=' + lastUpdate
@@ -63,10 +69,22 @@ export const fetchMessages = () => {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }
-      }).then(response => response.json())
-        .then(json =>
-          dispatch(receiveMessages(json))
-        )
+      })
+      .then(function(response) {
+        if(response.ok) {
+          console.log('fetch response ok')
+          return response.json().then(function(json) {
+            dispatch(receiveMessages(json))
+          })
+        } else {
+          console.log('fetch response not ok, reset messages.isFetching');
+          dispatch(handleFetchError())
+        }
+      })
+      .catch(function(err) {
+        dispatch(handleFetchError())
+        dispatch(showSnackbar('Pas de connexion'))
+      })
     }
   }
 }
@@ -88,5 +106,18 @@ export const showCodeSaved = () => {
 export const showMessagesScreen =() => {
   return {
     type: 'SHOW_MESSAGES_SCREEN'
+  }
+}
+
+export const showSnackbar = (message) => {
+  return {
+    type: 'SHOW_SNACKBAR',
+    message: message
+  }
+}
+
+export const hideSnackbar = () => {
+  return {
+    type: 'HIDE_SNACKBAR'
   }
 }
