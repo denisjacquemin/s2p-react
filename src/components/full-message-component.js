@@ -13,6 +13,7 @@ import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import Group from 'material-ui/lib/svg-icons/social/group';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
 import Card from 'material-ui/lib/card/card';
 import CardMedia from 'material-ui/lib/card/card-media';
@@ -114,7 +115,7 @@ var FullMessageComponent  = React.createClass( {
       </CardMedia>
     }
 
-    let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
+    let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY')} - {message.students.join(' - ')}</span>;
 
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
@@ -127,7 +128,7 @@ var FullMessageComponent  = React.createClass( {
 
           <Card style={styles.fullscreen} className="fade-in">
               { media }
-              <CardTitle title={message.title} subtitle={publish_date} />
+              <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
           </Card>
         </div>
