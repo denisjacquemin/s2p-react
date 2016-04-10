@@ -104,15 +104,19 @@ var FullMessageComponent  = React.createClass( {
 
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
-      let slides = []
-      for (let i in message.mfiles) {
-        slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><img src={'http:' + message.mfiles[i].file_url} /></div>)
+      if (message.mfiles.length > 1) {
+        let slides = []
+        for (let i in message.mfiles) {
+          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><img src={'http:' + message.mfiles[i].file_url} /></div>)
+        }
+        media = <CardMedia>
+          <Slider {...settings}>
+            {slides}
+          </Slider>
+        </CardMedia>
+      } else {
+        media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
       }
-      media = <CardMedia>
-        <Slider {...settings}>
-          {slides}
-        </Slider>
-      </CardMedia>
     }
 
     let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY')} - {message.students.join(' - ')}</span>;

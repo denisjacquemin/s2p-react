@@ -126,7 +126,7 @@ var MessageList = React.createClass( {
             }
           />
           {progress}
-          <List className="fade-in">
+          <List className="fade-in" style={styles.content}>
             {
               this.props.messages.map(message =>
                 <ListItem key={message.id} style={styles.listItem}
