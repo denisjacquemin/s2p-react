@@ -105,7 +105,7 @@ var CodeListComponent = React.createClass( {
   },
 
   handleDeleteCode: function(code) {
-    console.log('delete code: ' + code)
+    this.props.onDeleteCode(code);
   },
 
   getAddCodeForm: function() {

@@ -89,6 +89,12 @@ export const fetchMessages = () => {
   }
 }
 
+export const deleteCode = (code) => {
+  return {
+    type: 'DELETE_CODE',
+    code: code
+  }
+}
 
 export const addCode = (code) => {
   return function (dispatch, getState) {

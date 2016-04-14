@@ -37,6 +37,19 @@ const codes = (state = codesInitialState, action) => {
           code(undefined, action)
         ];
       }
+      break;
+    case 'DELETE_CODE':
+      let index = state.findIndex(function(el){
+        return el.code === action.code
+      })
+      if (index > -1) {
+        let newState = state.slice()
+        newState.splice(index, 1)
+        return newState
+      } else {
+        return state;
+      }
+      break;
     default:
       return state;
   }
