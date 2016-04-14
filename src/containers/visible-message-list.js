@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showFullMessage, fetchMessages, toggleShowImportant, hideSnackbar } from '../actions'
+import { showFullMessage, fetchMessages, toggleShowImportant, hideSnackbar, showCodeList} from '../actions'
 import MessageList from '../components/message-list'
 
 const getVisibleMessages = (messages = [], showOnlyImportant) => {
@@ -30,6 +30,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchMessages: () => {
       dispatch(hideSnackbar());
       dispatch(fetchMessages());
+    },
+    showCodeList: () => {
+      dispatch(showCodeList());
     },
     toggleShowImportant: () => {
       dispatch(toggleShowImportant());

@@ -9,6 +9,9 @@ const currentScreen = (state = currentScreenInitialState, action) => {
     case 'SHOW_FULL_MESSAGE':
       return 'full_message'
       break;
+    case 'SHOW_CODE_LIST':
+      return 'codes'
+      break;
     default:
       return state;
   }

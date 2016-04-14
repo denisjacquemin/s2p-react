@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import VisibleMessageList from '../containers/visible-message-list'
 import AddCode from './add-code'
 import FullMessage from './full-message'
+import CodeList from './code-list'
+
 
 class App extends Component {
   componentWillMount() {
@@ -10,7 +12,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    
+
   }
 
   render() {
@@ -21,6 +23,9 @@ class App extends Component {
         break;
       case 'full_message':
         screenToShow = <FullMessage />;
+        break;
+      case 'codes':
+        screenToShow = <CodeList />;
         break;
       default:
         screenToShow = <AddCode />;

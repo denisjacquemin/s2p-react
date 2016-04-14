@@ -89,17 +89,52 @@ export const fetchMessages = () => {
   }
 }
 
+
 export const addCode = (code) => {
+  return function (dispatch, getState) {
+    // https://s2p-api-demo.herokuapp.com
+    return fetch('https://s2p-api-demo.herokuapp.com/getfullnamebycode/' + code, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
+          dispatch(receiveFullnameByCode(json))
+        })
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+    })
+  }
+}
+
+export const receiveFullnameByCode = (json) => {
   return {
     type: 'ADD_CODE',
-    code: code,
-    last_update: Date.now()
+    fullname: json.fullname,
+    code: json.code,
+    receivedAt: moment().utc().format('YYYY-MM-DD [[]HH:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
   }
 }
 
 export const showCodeSaved = () => {
   return {
     type: 'SHOW_CODE_SAVED'
+  }
+}
+
+export const showCodeList = () => {
+  return {
+    type: 'SHOW_CODE_LIST'
   }
 }
 

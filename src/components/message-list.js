@@ -50,6 +50,12 @@ var MessageList = React.createClass( {
     e.preventDefault();
   },
 
+  handleCodes: function(e) {
+    this.props.showCodeList()
+    this.setState({open: false});
+    e.preventDefault();
+  },
+
   handleRefresh: function() {
     console.log('handleRefresh in MessageList')
     this.props.fetchMessages()
@@ -140,8 +146,9 @@ var MessageList = React.createClass( {
             open={this.state.open}
             onRequestChange={open => this.setState({ open })}
           >
-            <MenuItem onTouchTap={this.handleLeftMenuClose}>Liste des messages</MenuItem>
+            <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
             <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
+
           </LeftNav>
           <Snackbar
             open={this.props.snackbar.show}

@@ -116,7 +116,7 @@ var FullMessageComponent  = React.createClass( {
         </CardMedia>
       } else {
         media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
-      }
+        }
     }
 
     let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY')} - {message.students.join(' - ')}</span>;

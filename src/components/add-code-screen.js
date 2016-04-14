@@ -7,7 +7,12 @@ import CardText from 'material-ui/lib/card/card-text';
 import CardActions from 'material-ui/lib/card/card-actions';
 import FlatButton from 'material-ui/lib/flat-button';
 
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import s2pTheme from '../theme';
 
+
+const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var AddCodeScreen = React.createClass( {
 
@@ -41,7 +46,7 @@ var AddCodeScreen = React.createClass( {
         </CardText>>
         <CardActions style={actionsStyle}>
           <RaisedButton style={buttonYesStyle}  label="Oui" onTouchTap={this.handleShowCodeForm} />
-          <RaisedButton style={buttonNoStyle} label="Non" onTouchTap={this.handleShowMessagesScreen} primary={true}/>
+          <RaisedButton style={buttonNoStyle} label="Non" onTouchTap={this.handleShowMessagesScreen} secondary={true}/>
         </CardActions>
       </Card>
     )
@@ -72,7 +77,7 @@ var AddCodeScreen = React.createClass( {
         <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
         <div style={formStyle}>
           <TextField hintText="Code" style={fieldStyle} ref="textfield" onChange={this.handleNewCodeChange}/>
-          <RaisedButton label="Enregistrer" primary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
+          <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
         </div>
       </Card>
     )
@@ -80,13 +85,6 @@ var AddCodeScreen = React.createClass( {
 
   getInitialState: function() {
     return { showCodeSaved: false, newCode: '' };
-  },
-
-  componentDidUpdate: function () {
-  },
-
-  componentWillMount: function () {
-
   },
 
   handleAddCode: function(code) {
@@ -115,9 +113,11 @@ var AddCodeScreen = React.createClass( {
 
 
     return (
-      <div className="codes">
-        {body}
-      </div>
+      <MuiThemeProvider muiTheme={s2pMuiTheme}>
+        <div className="codes">
+          {body}
+        </div>
+      </MuiThemeProvider>
     )
   }
 });

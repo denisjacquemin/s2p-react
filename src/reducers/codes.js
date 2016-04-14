@@ -14,7 +14,9 @@ const code = (state = codeInitialState, action) => {
   switch (action.type) {
     case 'ADD_CODE':
       return {
-          code: action.code
+          code: action.code,
+          fullname: action.fullname,
+          receivedAt: action.receivedAt
       };
     default:
       return state;
