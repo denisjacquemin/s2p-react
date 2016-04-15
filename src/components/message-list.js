@@ -32,7 +32,6 @@ var MessageList = React.createClass( {
   },
 
   componentWillMount: function() {
-    this.props.fetchMessages()
   },
 
   componentDidMount: function() {
@@ -55,7 +54,6 @@ var MessageList = React.createClass( {
   },
 
   handleRefresh: function() {
-    console.log('handleRefresh in MessageList')
     this.props.fetchMessages()
   },
 
@@ -96,6 +94,9 @@ var MessageList = React.createClass( {
       },
       message: {
         padding:0
+      },
+      snackbar: {
+        fontFamily: 'Roboto, sans-serif'
       }
     };
     return styles;
@@ -150,6 +151,7 @@ var MessageList = React.createClass( {
 
           </LeftNav>
           <Snackbar
+            style={styles.snackbar}
             open={this.props.snackbar.show}
             message={this.props.snackbar.message}
             autoHideDuration={4000}
