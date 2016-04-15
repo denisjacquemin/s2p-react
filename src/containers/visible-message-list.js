@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onMessageClick: (id) => {
+      dispatch(hideSnackbar());
       dispatch(showFullMessage(id))
     },
     fetchMessages: () => {
@@ -32,9 +33,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchMessages());
     },
     showCodeList: () => {
+      dispatch(hideSnackbar());
       dispatch(showCodeList());
     },
     toggleShowImportant: () => {
+      dispatch(hideSnackbar());
       dispatch(toggleShowImportant());
     }
   };
@@ -46,40 +49,4 @@ const VisibleMessageList = connect(
 )(MessageList);
 
 
-// class VisibleMessageList extends React.Component {
-//   componentDidMount() {
-//     const { store } = this.context;
-//     this.unsubscribe = store.subscribe(() =>
-//       this.forceUpdate()
-//     );
-//   }
-//   componentWilllUnmount() {
-//     this.unsubscribe()
-//   }
-//   render() {
-//     const props = this.props;
-//     const { store } = this.context;
-//     const state = store.getState();
-//
-//     return (
-//       <MessageList
-//         messages= {
-//           getVisibleMessages(
-//             state.messages,
-//             state.showOnlyImportant
-//           )
-//         }
-//         onMessageClick={id =>
-//           store.dispatch({
-//             type: 'SHOW_FULL_MESSAGE',
-//             id
-//           })
-//         }
-//       />
-//     )
-//   }
-// }
-// VisibleMessageList.contextTypes = {
-//   store: React.PropTypes.object
-// };
 export default VisibleMessageList;
