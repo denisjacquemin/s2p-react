@@ -97,6 +97,11 @@ const messages = (state = messagesInitialState, action) => {
         isFetching: false,
         didInvalidate: false
       });
+    case 'RESET_IS_FETCHING':
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false
+      });
     default:
       return state;
   }
