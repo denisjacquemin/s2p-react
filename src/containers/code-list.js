@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showMessagesScreen, addCode, deleteCode} from '../actions'
+import { showMessagesScreen, addCode, deleteCode, hideSnackbar, fetchMessages, resetIsFetching} from '../actions'
 
 
 import CodeListComponent from '../components/code-list-component'
@@ -18,7 +18,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addCode(code))
     },
     showMessagesScreen: () => {
+      dispatch(resetIsFetching());
       dispatch(showMessagesScreen());
+      dispatch(hideSnackbar());
+      dispatch(fetchMessages());
     },
     onDeleteCode: (code) => {
       dispatch(deleteCode(code));
