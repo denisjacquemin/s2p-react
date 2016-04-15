@@ -14,5 +14,4 @@ const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, storageMiddle
 
 
 export const store = createStoreWithMiddleware(reducer);
-const load = storage.createLoader(engine);
-load(store);
+export const load = storage.createLoader(engine);
