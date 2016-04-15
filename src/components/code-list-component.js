@@ -116,7 +116,7 @@ var CodeListComponent = React.createClass( {
           style={styles.appBar}
           iconElementLeft={<IconButton onTouchTap={this.handleShowCodeListScreen}><NavigationClose /></IconButton>}
         />
-        <div style={styles.content}>
+        <div className="fade-in" style={styles.content}>
           <div style={styles.form}>
             <TextField hintText="Code" style={styles.formElem} ref="textfield" onChange={this.handleNewCodeChange}/>
             <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onTouchTap={this.handleAddCode} />
