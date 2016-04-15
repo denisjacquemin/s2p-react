@@ -1,65 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import VisibleMessageList from '../containers/visible-message-list'
-import AddCode from './add-code'
-import FullMessage from './full-message'
-import CodeList from './code-list'
+import { hideSnackbar, fetchMessages, resetIsFetching} from '../actions'
+import AppComponent from '../components/app-component'
 
 
-class App extends Component {
-  componentWillMount() {
-
-  }
-
-  componentDidUpdate() {
-
-  }
-
-  render() {
-    let screenToShow;
-    switch (this.props.currentScreen) {
-      case 'messages':
-        screenToShow = <VisibleMessageList />;
-        break;
-      case 'full_message':
-        screenToShow = <FullMessage />;
-        break;
-      case 'codes':
-        screenToShow = <CodeList />;
-        break;
-      default:
-        screenToShow = <AddCode />;
-    };
-
-
-    // console.log('App render: ' + this.props.currentScreen);
-    //
-    // if (this.props.currentScreen === 'messages') {
-    //   screenToShow = <VisibleMessageList />
-    // }
-    return (
-      <div>
-        {screenToShow}
-      </div>
-    )
-  }
-}
-
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     currentScreen: state.currentScreen
-  }
-}
+  };
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onShowMessagesScreen: () => {
-      dispatch(showMessagesScreen())
+    fetchMessages: () => {
+      dispatch(resetIsFetching());
+      dispatch(hideSnackbar());
+      dispatch(fetchMessages());
     }
-  }
-}
+  };
+};
 
-export default connect(
+const App = connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(AppComponent);
+
+export default App;
