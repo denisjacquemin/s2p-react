@@ -138,6 +138,7 @@ var CodeListComponent = React.createClass( {
           {
             this.props.codes.map(c =>
               <ListItem
+                key={c.code}
                 primaryText={c.fullname}
                 secondaryText={
                   <p>
