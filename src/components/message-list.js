@@ -14,8 +14,6 @@ import FontIcon from 'material-ui/lib/font-icon';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
 import LinearProgress from 'material-ui/lib/linear-progress';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
 import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
@@ -132,14 +130,14 @@ var MessageList = React.createClass( {
             }
           />
           {progress}
-          <List className="fade-in" style={styles.content}>
+          <div className="fade-in" style={styles.content}>
             {
               this.props.messages.map(message =>
-                <ListItem key={message.id} style={styles.listItem}
-                  children=<Message message={message} onMessageClick={this.props.onMessageClick}  />
-                />
+
+                <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
+
             )}
-          </List>
+          </div>
           <LeftNav
             docked={false}
             width={200}
