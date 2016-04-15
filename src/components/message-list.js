@@ -75,9 +75,10 @@ var MessageList = React.createClass( {
         color: '#ffffff'
       },
       progress: {
-        position: 'absolute',
+        position: 'fixed',
         top: '74px',
-        borderRadius: '0'
+        borderRadius: '0',
+        zIndex: '100'
       },
       content: {
         position: 'absolute',
