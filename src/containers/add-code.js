@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addCode, showMessagesScreen } from '../actions'
+import { addCode, showMessagesScreen, hideSnackbar, fetchMessages } from '../actions'
 
 import AddCodeScreen from '../components/add-code-screen'
 
@@ -15,7 +15,8 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())
-      // refresh messages from server
+      dispatch(hideSnackbar());
+      dispatch(fetchMessages());
     }
   };
 };
