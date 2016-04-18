@@ -13,6 +13,8 @@ import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Star from 'material-ui/lib/svg-icons/toggle/star';
+import School from 'material-ui/lib/svg-icons/social/school';
+import MailOutline from 'material-ui/lib/svg-icons/communication/mail-outline';
 import LinearProgress from 'material-ui/lib/linear-progress';
 import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
@@ -80,7 +82,8 @@ var MessageList = React.createClass( {
       },
       content: {
         position: 'absolute',
-        top: '70px'
+        top: '70px',
+        width:  '100%'
       },
       loading: {
         display: 'inline-block',
@@ -97,6 +100,30 @@ var MessageList = React.createClass( {
       },
       snackbar: {
         fontFamily: 'Roboto, sans-serif'
+      },
+      leftbarHeader: {
+        width: '100%',
+        height: '150px',
+        backgroundColor: '#1976d2',
+        textAlign:  'center',
+        paddingTop: '20px'
+      },
+      emptyState: {
+        textAlign: 'center',
+        width: '100%',
+        fontFamily: 'Roboto, sans-serif',
+        color: '#dddddd'
+      },
+      mailOutline: {
+        marginTop: '40%',
+        height: '110px',
+        width: '110px',
+        fill: '#dddddd'
+      },
+      school: {
+        height: '70px',
+        width: '70px',
+        fill: '#ffffff'
       }
     };
     return styles;
@@ -118,6 +145,15 @@ var MessageList = React.createClass( {
       progress = <LinearProgress mode="indeterminate" style={styles.progress} color="#f44336" />
     }
 
+    let emptyState
+    console.log('this.props.messages.length' + this.props.messages.length)
+    if (this.props.messages.length === 0) {
+      emptyState = <div style={styles.emptyState}>
+          <MailOutline style={styles.mailOutline} />
+          <p>Aucun message</p>
+        </div>
+    }
+
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
@@ -135,10 +171,11 @@ var MessageList = React.createClass( {
           <div className="fade-in" style={styles.content}>
             {
               this.props.messages.map(message =>
-
                 <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
 
-            )}
+              )
+            }
+            {emptyState}
           </div>
           <LeftNav
             docked={false}
@@ -146,6 +183,9 @@ var MessageList = React.createClass( {
             open={this.state.open}
             onRequestChange={open => this.setState({ open })}
           >
+            <div style={styles.leftbarHeader}>
+              <School style={styles.school}/>
+            </div>
             <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
             <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
 

@@ -6,6 +6,8 @@ import CardTitle from 'material-ui/lib/card/card-title';
 import CardText from 'material-ui/lib/card/card-text';
 import CardActions from 'material-ui/lib/card/card-actions';
 import FlatButton from 'material-ui/lib/flat-button';
+import School from 'material-ui/lib/svg-icons/social/school';
+
 
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
@@ -55,8 +57,12 @@ var AddCodeScreen = React.createClass( {
   getAddCodeForm: function() {
 
     const cardStyle = {
-      margin: '70% 10% 20% 10%',
-      padding: '0 0 10% 0'
+      //margin: '70% 10% 20% 10%',
+      padding: '0 0 10% 0',
+      bottom: '50px',
+      position: 'absolute',
+      width: '80%',
+      margin: '0 10%'
     };
 
     const formStyle = {
@@ -72,14 +78,33 @@ var AddCodeScreen = React.createClass( {
       width: '70%'
     };
 
+    const schoolStyle ={
+      marginTop: '40%',
+      height: '110px',
+      width: '110px',
+      fill: '#ffffff'
+    };
+
+    const logoContainerStyle = {
+      textAlign: 'center',
+      width: '100%',
+      fontFamily: 'Roboto, sans-serif',
+      color: '#dddddd'
+    };
+
     return (
-      <Card style={cardStyle}>
-        <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
-        <div style={formStyle}>
-          <TextField hintText="Code" style={fieldStyle} ref="textfield" onChange={this.handleNewCodeChange}/>
-          <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
+      <div>
+        <div style={logoContainerStyle}>
+          <School style={schoolStyle}/>
         </div>
-      </Card>
+        <Card style={cardStyle} ref="card">
+          <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
+          <div style={formStyle}>
+            <TextField hintText="Code" style={fieldStyle} ref="textfield" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
+            <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
+          </div>
+        </Card>
+      </div>
     )
   },
 
@@ -102,6 +127,11 @@ var AddCodeScreen = React.createClass( {
 
   handleShowMessagesScreen: function() {
     this.props.onShowMessagesScreen()
+  },
+
+  handleOnFocus: function(e) {
+    console.log('focus ' +  e.target.style)
+    this.refs.card.style = {backgroundColor: 'red'}
   },
 
   render: function() {

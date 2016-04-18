@@ -51,14 +51,11 @@ export const resetIsFetching = () => {
 }
 
 export const fetchMessages = () => {
-  console.log('######## fetchMessages')
   return function (dispatch, getState) {
     // check if another fetch request is still in progress
     const { codes, messages } = getState()
-    if (!messages.isFetching) {
+    if (!messages.isFetchingn && codes.length > 0) {
       dispatch(requestMessages())
-
-
 
       let lastUpdate = messages.lastUpdate
       if (lastUpdate === undefined) {
