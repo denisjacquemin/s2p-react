@@ -119,6 +119,9 @@ var AddCodeScreen = React.createClass( {
 
   handleNewCodeChange: function(e) {
     this.setState({newCode: e.target.value})
+    if (e.target.value.length > 5) {
+      console.log('Validate code') // si valide afficher le nom prenom de l'eleve et permetre de l'enregister
+    }
   },
 
   handleShowCodeForm: function() {

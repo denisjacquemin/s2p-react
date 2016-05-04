@@ -23,6 +23,9 @@ import CardActions from 'material-ui/lib/card/card-actions';
 import FlatButton from 'material-ui/lib/flat-button';
 import {Spacing} from 'material-ui/lib/styles';
 
+
+import ImageLoader from 'react-imageloader';
+
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var FullMessageComponent  = React.createClass( {
@@ -92,6 +95,10 @@ var FullMessageComponent  = React.createClass( {
     return settings;
   },
 
+  preloader: function() {
+    return <img src="/assets/img/placeholder-470x352.jpg" />;
+  },
+
   render: function() {
     const styles = this.getStyles();
     const message = this.props.currentMessage;
@@ -107,7 +114,7 @@ var FullMessageComponent  = React.createClass( {
       if (message.mfiles.length > 1) {
         let slides = []
         for (let i in message.mfiles) {
-          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><img src={'http:' + message.mfiles[i].file_url} /></div>)
+          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><ImageLoader src={'http:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
         }
         media = <CardMedia>
           <Slider {...settings}>
