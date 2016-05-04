@@ -13,6 +13,8 @@ import FlatButton from 'material-ui/lib/flat-button';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import CustomTheme from '../theme';
 
+import ImageLoader from 'react-imageloader';
+
 var Message = React.createClass( {
 
   stripHTML: function(theHTML) {
@@ -44,6 +46,10 @@ var Message = React.createClass( {
         return string;
   },
 
+  preloader: function() {
+    return <img src="assets/img/placeholder-470x352.jpg" />;
+  },
+
   render: function() {
 
     const message = this.props.message
@@ -51,7 +57,7 @@ var Message = React.createClass( {
 
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
-      media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
+      media = <CardMedia style={styles.cardMedia}><ImageLoader src={'http:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
     }
 
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY');

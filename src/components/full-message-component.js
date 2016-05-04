@@ -96,7 +96,7 @@ var FullMessageComponent  = React.createClass( {
   },
 
   preloader: function() {
-    return <img src="/assets/img/placeholder-470x352.jpg" />;
+    return <img src="assets/img/placeholder-470x352.jpg" />;
   },
 
   render: function() {

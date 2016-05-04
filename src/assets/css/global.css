@@ -4,6 +4,6 @@ body {
 }
 
 
-.slick-slide img {
+.slick-slide img, .imageloader img {
   width: 100%;
 }
