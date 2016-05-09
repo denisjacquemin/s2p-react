@@ -114,7 +114,7 @@ var FullMessageComponent  = React.createClass( {
       if (message.mfiles.length > 1) {
         let slides = []
         for (let i in message.mfiles) {
-          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><ImageLoader src={'http:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
+          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><ImageLoader src={'https:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
         }
         media = <CardMedia>
           <Slider {...settings}>
@@ -122,7 +122,7 @@ var FullMessageComponent  = React.createClass( {
           </Slider>
         </CardMedia>
       } else {
-        media = <CardMedia style={styles.cardMedia}><img src={'http:' + message.mfiles[0].file_url} /></CardMedia>
+        media = <CardMedia style={styles.cardMedia}><img src={'https:' + message.mfiles[0].file_url} /></CardMedia>
         }
     }
 

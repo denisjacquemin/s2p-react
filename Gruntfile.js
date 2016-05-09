@@ -42,7 +42,7 @@ module.exports = function(grunt) {
         },
         cordova: {
           files: [
-            {expand: true, cwd: './dist/public/', src:['**'], dest: '../../mobileapp/www', filter: 'isFile'}
+            {expand: true, cwd: './dist/public/', src:['**'], dest: '../../s2p/www', filter: 'isFile'}
           ]
         }
       }

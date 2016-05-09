@@ -13,5 +13,5 @@ const loggerMiddleware = createLogger()
 const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, storageMiddleware, loggerMiddleware)(createStore);
 
 
-export const store = createStoreWithMiddleware(reducer);
+export const store = createStoreWithMiddleware(reducer, window.devToolsExtension ? window.devToolsExtension() : f => f);
 export const load = storage.createLoader(engine);

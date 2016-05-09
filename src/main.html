@@ -6,11 +6,11 @@
     <meta name="description" content="">
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" />
 		<meta http-equiv="Content-Security-Policy"
-					content="default-src 'self';
+					content="default-src 'self' data: gap: https://ssl.gstatic.com;
 									 connect-src https://s2p-api-demo.herokuapp.com;
 									 style-src 'self' 'unsafe-inline';
 									 script-src 'self' 'unsafe-inline' 'unsafe-eval';
-									 img-src 'self' http://s2p-demo.s3-eu-west-1.amazonaws.com data:;
+									 img-src 'self' https://s2p-demo.s3-eu-west-1.amazonaws.com data:;
 		">
 		<title></title>
 		<link rel="stylesheet" href="assets/css/fonts.css">
@@ -21,61 +21,121 @@
 		<link rel="stylesheet" href="assets/vendor/slick.css">
 		<link rel="stylesheet" href="assets/css/disable_copypaste.css">
 		<script src="assets/vendor/zepto.min.js"></script>
+		<script src="cordova.js"></script>
 	</head>
 	<body onload="onLoad()">
 		<div id="root"></div>
 		<script src="app.js"></script>
 		<script>
-			// function initPushwoosh() {
-			// 		var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+      // function initPush() {
+      //   console.log('in initPush');
+      //   var push = PushNotification.init({
+      //       android: {
+      //           senderID: "12345679"
+      //       },
+      //       ios: {
+      //            alert: "true",
+      //            badge: "true",
+      //            sound: "true"
+      //       },
+      //       windows: {}
+      //   });
 			//
-			// 		//set push notification callback before we initialize the plugin
-			// 		document.addEventListener('push-notification', function(event) {
-			// 																//get the notification payload
-			// 																var notification = event.notification;
+      //   push.on('registration', function(data) {
+      //       console.log('data.registrationId: ' + data.registrationId);
+			// 			alert('registration: ' + data.registrationId);
+			// 			dispatch(saveDeviceToken(data.registrationId));
+			// 			//saveDeviceToken(data.registrationId);
+			// 			// save registrationId in state
+			// 			// send to server in table devices (id, device_token, groups)
+      //   });
 			//
-			// 																//display alert to the user for example
-			// 																alert(notification.aps.alert);
+      //   push.on('notification', function(data) {
+			// 		  alert('notification: ' + data.title);
+      //       console.log('data.message: ' + data.message);
+      //       console.log('data.title: ' + data.title);
+      //       console.log('data.count: ' + data.count);
+      //       console.log('data.sound: ' + data.sound);
+      //       console.log('data.image: ' + data.image);
+      //       console.log('data.additionalData: ' + data.additionalData);
+      //   });
 			//
-			// 																//clear the app badge
-			// 																pushNotification.setApplicationIconBadgeNumber(0);
-			// 														});
+      //   push.on('error', function(e) {
+			// 		alert('error: ' + e.message);
 			//
-			// 		//initialize the plugin
-			// 		pushNotification.onDeviceReady({pw_appid:"CD186-D2996"});
+      //       console.log('e.message: ' + e.message);e.message
+      //   });
+			// 	// push.unregister(function() {
+			// 	//     console.log('unregister success');
+			// 	// }, function() {
+			// 	//     console.log('unregister error');
+			// 	// });
 			//
-			// 		//register for pushes
-			// 		pushNotification.registerDevice(
-			// 				function(status) {
-			// 						var deviceToken = status['deviceToken'];
-			// 						console.warn('registerDevice: ' + deviceToken);
-			// 				},
-			// 				function(status) {
-			// 						console.warn('failed to register : ' + JSON.stringify(status));
-			// 						alert(JSON.stringify(['failed to register ', status]));
-			// 				}
-			// 		);
 			//
-			// 		//reset badges on app start
-			// 		pushNotification.setApplicationIconBadgeNumber(0);
-			//}
+			// 	PushNotification.hasPermission(function(data) {
+			// 	    if (data.isEnabled) {
+			// 				alert('hasPermission isEnabled')
+			//
+			// 	      console.log('hasPermission isEnabled');
+			// 	    } else {
+			// 				alert('hasPermission isDisabled')
+			//
+			// 				console.log('hasPermission isDisabled');
+			// 			}
+			// 	});
+      // }
 
-			function onDeviceReady() {
-				console.log('Device Ready')
-				//initPushwoosh();
-			}
+      // function initPushwoosh() {
+      // 		var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+      //
+      // 		//set push notification callback before we initialize the plugin
+      // 		document.addEventListener('push-notification', function(event) {
+      // 																//get the notification payload
+      // 																var notification = event.notification;
+      //
+      // 																//display alert to the user for example
+      // 																alert(notification.aps.alert);
+      //
+      // 																//clear the app badge
+      // 																pushNotification.setApplicationIconBadgeNumber(0);
+      // 														});
+      //
+      // 		//initialize the plugin
+      // 		pushNotification.onDeviceReady({pw_appid:"CD186-D2996"});
+      //
+      // 		//register for pushes
+      // 		pushNotification.registerDevice(
+      // 				function(status) {
+      // 						var deviceToken = status['deviceToken'];
+      // 						console.warn('registerDevice: ' + deviceToken);
+      // 				},
+      // 				function(status) {
+      // 						console.warn('failed to register : ' + JSON.stringify(status));
+      // 						alert(JSON.stringify(['failed to register ', status]));
+      // 				}
+      // 		);
+      //
+      // 		//reset badges on app start
+      // 		pushNotification.setApplicationIconBadgeNumber(0);
+      //}
 
-			function onLoad() {
-					var url = document.URL;
-					var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
-					if( isSmart ){
-						console.log('isSmartPhone')
-						document.addEventListener('deviceready', onDeviceReady, false);
-					}
-					else {
-							console.log('not isSmartPhone')
-					}
-			}
-		</script>
+      // function onDeviceReady() {
+      //   console.log('Device Ready')
+      //   //initPushwoosh();
+      //   initPush();
+      // }
+			//
+      // function onLoad() {
+      //     var url = document.URL;
+      //     var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
+      //     if( isSmart ){
+      //       console.log('isSmartPhone')
+      //       document.addEventListener('deviceready', onDeviceReady, false);
+      //     }
+      //     else {
+      //         console.log('not isSmartPhone')
+      //     }
+      // }
+    </script>
 	</body>
 </html>

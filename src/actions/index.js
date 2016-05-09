@@ -166,3 +166,10 @@ export const hideSnackbar = () => {
     type: 'HIDE_SNACKBAR'
   }
 }
+
+export const saveDeviceToken = (token) => {
+  return {
+    type: 'SAVE_DEVICE_TOKEN',
+    token: token
+  }
+}

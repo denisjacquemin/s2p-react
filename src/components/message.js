@@ -57,7 +57,7 @@ var Message = React.createClass( {
 
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
-      media = <CardMedia style={styles.cardMedia}><ImageLoader src={'http:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
+      media = <CardMedia style={styles.cardMedia}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
     }
 
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
