@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addCode, showMessagesScreen, hideSnackbar, fetchMessages } from '../actions'
+import { addCode, showMessagesScreen, hideSnackbar, fetchMessages, linkCodeToDevice } from '../actions'
 
 import AddCodeScreen from '../components/add-code-screen'
 
@@ -12,6 +12,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddCode: (code) => {
       dispatch(addCode(code))
+      dispatch(linkCodeToDevice(code))
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())

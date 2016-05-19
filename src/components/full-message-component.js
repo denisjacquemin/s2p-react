@@ -31,9 +31,16 @@ const s2pMuiTheme = getMuiTheme(s2pTheme);
 var FullMessageComponent  = React.createClass( {
 
   componentWillMount: function() {
+    this.firebaseRef = new Firebase("https://s2p-test.firebaseio.com/messages/" + this.props.currentMessage.id);
+    this.firebaseRef.transaction(function(currentCounter) {
+      return currentCounter+1;
+    });
+
   },
 
-  componentDidMount: function() {
+  componentDidUpdate: function() {
+    console.debug('In didUpdate')
+    this.refs.body.scrollTop(0);
   },
 
   handleShowMessagesScreen: function(e) {
@@ -70,7 +77,8 @@ var FullMessageComponent  = React.createClass( {
         overflow: 'hidden'
       },
       cardText: {
-        fontSize: '16px'
+        fontSize: '16px',
+        wordWrap: 'break-word'
       }
     };
     return styles;
@@ -100,6 +108,7 @@ var FullMessageComponent  = React.createClass( {
   },
 
   render: function() {
+    console.debug('In render ')
     const styles = this.getStyles();
     const message = this.props.currentMessage;
     const settings = this.getSlickSettings();
@@ -130,7 +139,7 @@ var FullMessageComponent  = React.createClass( {
 
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
-        <div>
+        <div ref="body">
           <AppBar title="App"
             style={styles.appBar}
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><NavigationClose /></IconButton>}

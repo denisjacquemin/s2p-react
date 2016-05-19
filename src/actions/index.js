@@ -173,3 +173,57 @@ export const saveDeviceToken = (token) => {
     token: token
   }
 }
+
+export const linkCodeToDevice = (code) => {
+  return function (dispatch, getState) {
+
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?token=' + device.token + '&code=' + code, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
+          dispatch(receiveFullnameByCode(json))
+        })
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+    })
+  }
+}
+
+export const unlinkCodeToDevice = (code) => {
+  return function (dispatch, getState) {
+
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/unlinkcodetodevice/?token=' + device.token + '&code=' + code, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
+          dispatch(receiveFullnameByCode(json))
+        })
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+    })
+  }
+}

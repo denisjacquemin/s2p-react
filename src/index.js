@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveDeviceToken } from './actions'
+import { saveDeviceToken, hideSnackbar, fetchMessages, showFullMessage } from './actions'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -41,7 +41,6 @@ function initPush() {
 
   push.on('registration', function(data) {
       console.log('data.registrationId: ' + data.registrationId);
-      alert('registration: ' + data.registrationId);
       store.dispatch(saveDeviceToken(data.registrationId));
       //saveDeviceToken(data.registrationId);
       // save registrationId in state
@@ -49,17 +48,23 @@ function initPush() {
   });
 
   push.on('notification', function(data) {
-      alert('notification: ' + data.title);
+      if (!data.additionalData.foreground) {
+        store.dispatch(hideSnackbar());
+        store.dispatch(fetchMessages()).then(
+          function() {
+            store.dispatch(showFullMessage(data.additionalData.message_id))
+          });
+      }
       console.log('data.message: ' + data.message);
       console.log('data.title: ' + data.title);
       console.log('data.count: ' + data.count);
       console.log('data.sound: ' + data.sound);
       console.log('data.image: ' + data.image);
-      console.log('data.additionalData: ' + data.additionalData);
+      console.log('data.additionalData: ' + JSON.stringify(data.additionalData));
   });
 
   push.on('error', function(e) {
-    alert('error: ' + e.message);
+      alert('error: ' + e.message);
 
       console.log('e.message: ' + e.message);e.message
   });
@@ -72,15 +77,16 @@ function initPush() {
 
   PushNotification.hasPermission(function(data) {
       if (data.isEnabled) {
-        alert('hasPermission isEnabled')
-
         console.log('hasPermission isEnabled');
       } else {
-        alert('hasPermission isDisabled')
-
         console.log('hasPermission isDisabled');
       }
   });
+}
+
+function startSmartApp() {
+  startApp();
+  initPush();
 }
 
 function startApp(){
@@ -90,20 +96,19 @@ function startApp(){
         console.log('Loaded state:', newState)
         renderApp(store)
       })
-      .catch(() => {console.log('Failed to load previous state')});
+      .catch((e) => {console.log('Failed to load previous state: ' + e)});
 
       function startApp(){
       	var app = new App({});
       	React.renderComponent(app, document.body);
       }
-  initPush();
 }
 
 window.onload = function(){
 	var url = document.URL;
 	var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
 	if( isSmart ){
-		document.addEventListener('deviceready', startApp, false);
+		document.addEventListener('deviceready', startSmartApp, false);
 	}
 	else{
 		startApp();

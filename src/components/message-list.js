@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 
 import Message from './message'
+import Alert from './alert'
 
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
@@ -169,11 +170,21 @@ var MessageList = React.createClass( {
           />
           {progress}
           <div className="fade-in" style={styles.content}>
-            {
-              this.props.messages.map(message =>
-                <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
 
-              )
+            {
+
+              this.props.messages.map(message => {
+                if (message.mtype == 1 ) {
+                  return <Alert key={message.id} message={message} />
+                } else {
+                  return <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
+                }
+                // if (message.mtype == 1) {
+                //   <Alert key={message.id} message={message} />
+                // } else {
+                //   <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
+                // }
+              })
             }
             {emptyState}
           </div>
