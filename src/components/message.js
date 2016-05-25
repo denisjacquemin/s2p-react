@@ -57,7 +57,7 @@ var Message = React.createClass( {
 
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
-      media = <CardMedia style={styles.cardMedia}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
+      media = <CardMedia style={styles.cardMedia} onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
     }
 
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
@@ -65,8 +65,8 @@ var Message = React.createClass( {
     return (
       <Card key={message.id} style={styles.card}>
         {media}
-        <CardTitle title={message.title} subtitle={publish_date} />
-        <CardText>{ this.stripHTML(this.truncate(message.content)) }</CardText>
+        <CardTitle title={message.title} subtitle={publish_date} onTouchTap={() => this.props.onMessageClick(message.id)} />
+        <CardText onTouchTap={() => this.props.onMessageClick(message.id)}>{ this.stripHTML(this.truncate(message.content)) }</CardText>
         <CardActions style={styles.cardActions}>
           <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
         </CardActions>

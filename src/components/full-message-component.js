@@ -11,6 +11,7 @@ import s2pTheme from '../theme';
 
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
+import ChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Group from 'material-ui/lib/svg-icons/social/group';
@@ -31,7 +32,7 @@ const s2pMuiTheme = getMuiTheme(s2pTheme);
 var FullMessageComponent  = React.createClass( {
 
   componentWillMount: function() {
-    this.firebaseRef = new Firebase("https://s2p-test.firebaseio.com/messages/" + this.props.currentMessage.id);
+    this.firebaseRef = new Firebase("https://s2p-test.firebaseio.com/messages/" + this.props.currentMessage.school_id + '/' + this.props.currentMessage.id);
     this.firebaseRef.transaction(function(currentCounter) {
       return currentCounter+1;
     });
@@ -142,7 +143,7 @@ var FullMessageComponent  = React.createClass( {
         <div ref="body">
           <AppBar title="App"
             style={styles.appBar}
-            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><NavigationClose /></IconButton>}
+            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}
             iconElementRight={starIcon}
           />
 
