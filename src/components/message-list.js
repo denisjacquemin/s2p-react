@@ -7,6 +7,8 @@ import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
+var Scroll    = require('react-scroll');
+var scroll    = Scroll.animateScroll
 
 import AppBar from 'material-ui/lib/app-bar';
 import LeftNav from 'material-ui/lib/left-nav';
@@ -34,10 +36,16 @@ var MessageList = React.createClass( {
     return { open: false };
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
+    scroll.scrollTo(this.props.currentScrollPositionY, {
+      duration: 0,
+      delay: 0,
+      smooth: false,
+    });
+    console.debug('MessageList componentDidMount' + this.props.currentScrollPositionY);
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
   },
 
   handleLeftMenu: function(e) {

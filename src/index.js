@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveDeviceToken, hideSnackbar, fetchMessages, showFullMessage } from './actions'
+import { saveDeviceToken, hideSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -26,10 +26,10 @@ function renderApp(theStore) {
 
 
 function initPush() {
-  console.log('in initPush');
+  console.debug('in initPush');
   var push = PushNotification.init({
       android: {
-          senderID: "12345679"
+          senderID: "441581989301"
       },
       ios: {
            alert: "true",
@@ -40,7 +40,7 @@ function initPush() {
   });
 
   push.on('registration', function(data) {
-      console.log('data.registrationId: ' + data.registrationId);
+      console.debug('data.registrationId: ' + data.registrationId);
       store.dispatch(saveDeviceToken(data.registrationId));
       //saveDeviceToken(data.registrationId);
       // save registrationId in state
@@ -55,18 +55,18 @@ function initPush() {
             store.dispatch(showFullMessage(data.additionalData.message_id))
           });
       }
-      console.log('data.message: ' + data.message);
-      console.log('data.title: ' + data.title);
-      console.log('data.count: ' + data.count);
-      console.log('data.sound: ' + data.sound);
-      console.log('data.image: ' + data.image);
-      console.log('data.additionalData: ' + JSON.stringify(data.additionalData));
+      console.debug('data.message: ' + data.message);
+      console.debug('data.title: ' + data.title);
+      console.debug('data.count: ' + data.count);
+      console.debug('data.sound: ' + data.sound);
+      console.debug('data.image: ' + data.image);
+      console.debug('data.additionalData: ' + JSON.stringify(data.additionalData));
   });
 
   push.on('error', function(e) {
-      alert('error: ' + e.message);
+      //alert('error: ' + e.message);
 
-      console.log('e.message: ' + e.message);e.message
+      console.debug('e.message: ' + e.message);e.message
   });
   // push.unregister(function() {
   //     console.log('unregister success');
@@ -77,9 +77,11 @@ function initPush() {
 
   PushNotification.hasPermission(function(data) {
       if (data.isEnabled) {
-        console.log('hasPermission isEnabled');
+        store.dispatch(enableDeviceNotification());
+        console.debug('hasPermission isEnabled');
       } else {
-        console.log('hasPermission isDisabled');
+        store.dispatch(disableDeviceNotification());
+        console.debug('hasPermission isDisabled');
       }
   });
 }

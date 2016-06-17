@@ -8,6 +8,19 @@ export const showFullMessage = (id) => {
   }
 }
 
+export const saveCurrentScrollPositionY = () => {
+  var currentPositionY = function () {
+    var supportPageOffset = window.pageXOffset !== undefined;
+    var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+    return supportPageOffset ? window.pageYOffset : isCSS1Compat ?
+        document.documentElement.scrollTop : document.body.scrollTop;
+  };
+  return {
+    type: 'SAVE_CURRENT_POSITIONY',
+    currentScrollPositionY: currentPositionY()
+  }
+}
+
 export const toggleShowImportant = () => {
   return {
     type: 'TOGGLE_SHOW_IMPORTANT'
@@ -174,11 +187,11 @@ export const saveDeviceToken = (token) => {
   }
 }
 
-export const linkCodeToDevice = (code) => {
+export const linkCodeToDevice = (code, platform) => {
   return function (dispatch, getState) {
-
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?token=' + device.token + '&code=' + code, {
+
+    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?token=' + device.token + '&code=' + code + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -188,6 +201,56 @@ export const linkCodeToDevice = (code) => {
         console.log('fetch response ok')
         return response.json().then(function(json) {
           dispatch(receiveFullnameByCode(json))
+        })
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+    })
+  }
+}
+
+export const enableDeviceNotification = () => {
+  return function (dispatch, getState) {
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/enabledevicenotifictation/?token=' + device.token, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
+        })
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+    })
+  }
+}
+
+export const disableDeviceNotification = () => {
+  return function (dispatch, getState) {
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/disabledevicenotifictation/?token=' + device.token, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
         })
       } else {
         console.log('fetch response not ok, reset messages.isFetching');

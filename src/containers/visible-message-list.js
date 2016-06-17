@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showFullMessage, fetchMessages, toggleShowImportant, hideSnackbar, showCodeList} from '../actions'
+import { showFullMessage, fetchMessages, toggleShowImportant, hideSnackbar, showCodeList, saveCurrentScrollPositionY} from '../actions'
 import MessageList from '../components/message-list'
 
 const getVisibleMessages = (messages = [], showOnlyImportant) => {
@@ -18,7 +18,8 @@ const mapStateToProps = (state) => {
     ),
     isFetching: state.messages.isFetching,
     showImportant: state.showOnlyImportant,
-    snackbar: state.snackbar
+    snackbar: state.snackbar,
+    currentScrollPositionY: state.currentScrollPositionY
   };
 };
 
@@ -26,7 +27,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onMessageClick: (id) => {
       dispatch(hideSnackbar());
-      dispatch(showFullMessage(id))
+      dispatch(saveCurrentScrollPositionY());
+      dispatch(showFullMessage(id));
     },
     fetchMessages: () => {
       dispatch(hideSnackbar());
@@ -34,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     showCodeList: () => {
       dispatch(hideSnackbar());
+      dispatch(saveCurrentScrollPositionY());
       dispatch(showCodeList());
     },
     toggleShowImportant: () => {

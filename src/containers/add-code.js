@@ -12,7 +12,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddCode: (code) => {
       dispatch(addCode(code))
-      dispatch(linkCodeToDevice(code))
+      dispatch(linkCodeToDevice(code, device.platform))
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())

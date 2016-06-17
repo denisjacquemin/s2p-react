@@ -60,7 +60,7 @@ var Message = React.createClass( {
       media = <CardMedia style={styles.cardMedia} onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
     }
 
-    let publish_date = moment(message.publish_date).format('Do MMMM YYYY');
+    let publish_date = moment(message.publish_date).format('Do MMMM YYYY HH:mm');
 
     return (
       <Card key={message.id} style={styles.card}>
