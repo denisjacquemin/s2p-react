@@ -100,7 +100,7 @@ var AddCodeScreen = React.createClass( {
         <Card style={cardStyle} ref="card">
           <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
           <div style={formStyle}>
-            <TextField hintText="Code" style={fieldStyle} ref="textfield" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
+            <TextField hintText="Code" style={fieldStyle} ref="textfield" autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
             <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
           </div>
         </Card>

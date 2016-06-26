@@ -100,7 +100,8 @@ export const fetchMessages = () => {
       })
       .catch(function(err) {
         dispatch(handleFetchError())
-        dispatch(showSnackbar('Pas de connexion'))
+        dispatch(showSnackbar('Pas de connexion (3)' + err))
+        console.log('Pas de connexion (fetchMessages)' + err);
       })
     }
   }
@@ -135,7 +136,8 @@ export const addCode = (code) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
+      dispatch(showSnackbar('Pas de connexion (4)' + err))
+      console.log('Pas de connexion (addCode)' + err);
     })
   }
 }
@@ -180,44 +182,26 @@ export const hideSnackbar = () => {
   }
 }
 
-export const saveDeviceToken = (token) => {
+// export const saveDeviceToken = (token) => {
+//   return {
+//     type: 'SAVE_DEVICE_TOKEN',
+//     token: token
+//   }
+// }
+
+export const saveRegistrationId = (registrationId, uuid) => {
   return {
-    type: 'SAVE_DEVICE_TOKEN',
-    token: token
+    type: 'SAVE_REGISTRATION_ID',
+    registrationId: registrationId,
+    uuid: uuid
   }
 }
 
-export const linkCodeToDevice = (code, platform) => {
+export const saveRegistrationIdToServer = (registrationId, uuid) => {
   return function (dispatch, getState) {
     const { device } = getState()
 
-    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?token=' + device.token + '&code=' + code + '&platform=' + platform, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(function(response) {
-      if(response.ok) {
-        console.log('fetch response ok')
-        return response.json().then(function(json) {
-          dispatch(receiveFullnameByCode(json))
-        })
-      } else {
-        console.log('fetch response not ok, reset messages.isFetching');
-        dispatch(handleFetchError())
-      }
-    })
-    .catch(function(err) {
-      dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
-    })
-  }
-}
-
-export const enableDeviceNotification = () => {
-  return function (dispatch, getState) {
-    const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/enabledevicenotifictation/?token=' + device.token, {
+    return fetch('https://s2p-api-demo.herokuapp.com/saveregistrationid/?rid=' + registrationId + '&uuid=' + uuid, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -233,16 +217,44 @@ export const enableDeviceNotification = () => {
       }
     })
     .catch(function(err) {
+      console.debug('saveRegistrationIdToServer:' + err)
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
+      dispatch(showSnackbar('Pas de connexion (5)' + err))
+      console.log('Pas de connexion (saveRegistrationIdToServer)' + err);
     })
   }
 }
 
-export const disableDeviceNotification = () => {
+export const linkCodeToDevice = (code, uuid) => {
   return function (dispatch, getState) {
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/disabledevicenotifictation/?token=' + device.token, {
+
+    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?uuid=' + uuid + '&code=' + code, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('linkCodeToDevice response ok')
+        return true
+      } else {
+        console.log('linkCodeToDevice response not ok');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion (6)' + err))
+      console.log('Pas de connexion (linkCodeToDevice)' + err);
+    })
+  }
+}
+
+export const enableDeviceNotification = (uuid, platform) => {
+  return function (dispatch, getState) {
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/enabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -259,16 +271,18 @@ export const disableDeviceNotification = () => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
+      dispatch(showSnackbar('Pas de connexion (7) ' + err))
+      alert(err);
+      console.log('Pas de connexion (enableDeviceNotification)' + err);
+
     })
   }
 }
 
-export const unlinkCodeToDevice = (code) => {
+export const disableDeviceNotification = (uuid, platform) => {
   return function (dispatch, getState) {
-
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/unlinkcodetodevice/?token=' + device.token + '&code=' + code, {
+    return fetch('https://s2p-api-demo.herokuapp.com/disabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -277,7 +291,6 @@ export const unlinkCodeToDevice = (code) => {
       if(response.ok) {
         console.log('fetch response ok')
         return response.json().then(function(json) {
-          dispatch(receiveFullnameByCode(json))
         })
       } else {
         console.log('fetch response not ok, reset messages.isFetching');
@@ -286,7 +299,35 @@ export const unlinkCodeToDevice = (code) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
+      dispatch(showSnackbar('Pas de connexion (1)' + err));
+      console.log('Pas de connexion (disableDeviceNotification)' + err );
+    })
+  }
+}
+
+export const unlinkCodeToDevice = (code, uuid) => {
+  return function (dispatch, getState) {
+
+    const { device } = getState()
+    return fetch('https://s2p-api-demo.herokuapp.com/unlinkcodetodevice/?uuid=' + uuid + '&code=' + code, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('unlinkCodeToDevice response ok')
+        return true
+      } else {
+        console.log('unlinkCodeToDevice response not ok');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion (2)' + err))
+      console.log('Pas de connexion (unlinkCodeToDevice)' + err );
+
     })
   }
 }

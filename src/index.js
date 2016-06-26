@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveDeviceToken, hideSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
+import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -41,7 +41,9 @@ function initPush() {
 
   push.on('registration', function(data) {
       console.debug('data.registrationId: ' + data.registrationId);
-      store.dispatch(saveDeviceToken(data.registrationId));
+      store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
+      store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid));
+
       //saveDeviceToken(data.registrationId);
       // save registrationId in state
       // send to server in table devices (id, device_token, groups)
@@ -77,10 +79,10 @@ function initPush() {
 
   PushNotification.hasPermission(function(data) {
       if (data.isEnabled) {
-        store.dispatch(enableDeviceNotification());
+        store.dispatch(enableDeviceNotification(device.uuid, device.platform));
         console.debug('hasPermission isEnabled');
       } else {
-        store.dispatch(disableDeviceNotification());
+        store.dispatch(disableDeviceNotification(device.uuid, device.platform));
         console.debug('hasPermission isDisabled');
       }
   });

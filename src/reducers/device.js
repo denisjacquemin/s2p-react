@@ -3,8 +3,11 @@ const initialDeviceState = {}
 
 const currentDevice = (state = initialDeviceState, action) => {
   switch (action.type) {
-    case 'SAVE_DEVICE_TOKEN':
-      return { token: action.token}
+    case 'SAVE_REGISTRATION_ID':
+      return {
+        registrationId: action.registrationId,
+        uuid: action.uuid
+      }
       break;
     default:
       return state;

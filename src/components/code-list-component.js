@@ -107,6 +107,7 @@ var CodeListComponent = React.createClass( {
 
   handleNewCodeChange: function(e) {
     this.setState({newCode: e.target.value})
+    e.preventDefault()
   },
   handleAddCode: function(e) {
     this.props.onAddCode(this.state.newCode);
@@ -123,8 +124,9 @@ var CodeListComponent = React.createClass( {
     e.preventDefault()
   },
 
-  handleDeleteCode: function(code) {
+  handleDeleteCode: function(code, e) {
     this.props.onDeleteCode(code);
+    e.stopPropagation()
   },
 
   getAddCodeForm: function() {
@@ -137,7 +139,7 @@ var CodeListComponent = React.createClass( {
         />
         <div className="fade-in" style={styles.content}>
           <div style={styles.form}>
-            <TextField hintText="Code" style={styles.formElem} ref="textfield" onChange={this.handleNewCodeChange}/>
+            <TextField hintText="Code" style={styles.formElem} ref="textfield" autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange}/>
             <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onTouchTap={this.handleAddCode} />
           </div>
         </div>
@@ -174,7 +176,7 @@ var CodeListComponent = React.createClass( {
                       <span>{c.code}</span>
                     </p>
                   }
-                  rightIconButton={<IconButton onTouchTap={() => this.handleDeleteCode(c.code)}><Delete /></IconButton>}
+                  rightIconButton={<IconButton onTouchTap={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
                 />
             )}
           </List>

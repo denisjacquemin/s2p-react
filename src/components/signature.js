@@ -5,11 +5,11 @@ var Signature = React.createClass( {
     return (
       <div className="signature">
         <div className="logo"><img src="assets/img/hologne.jpg"/></div>
-          <div className="fullname">Jean-Marie LOBET</div>
-          <div className="school">Ecole communale fondamentale Hollogne-Humain </div>
-          <div className="function">Directeur</div>
-          <div className="address">60 Rue Saint-Denis, 6900 Hollogne</div>
-          <div className="contact">Tél: 084/31 54 30 - Fax: 084/31 54 30 - Gsm: 0495/77 11 94 jean-marie.lobet@marche.be - http://ecolescommunales.marche.be</div>
+          <div className="fullname">{this.props.signature.fullname}</div>
+          <div className="school">{this.props.signature.schoolname}</div>
+          <div className="function">{this.props.signature.function}</div>
+          <div className="address">{this.props.signature.address}</div>
+          <div className="contact">{this.props.signature.phone}</div>
       </div>
     )
   }

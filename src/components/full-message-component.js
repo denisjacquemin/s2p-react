@@ -152,7 +152,7 @@ var FullMessageComponent  = React.createClass( {
               { media }
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
-              <Signature>
+              <Signature signature={message.signature}>
               </Signature>
           </Card>
         </div>
