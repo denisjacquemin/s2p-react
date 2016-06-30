@@ -49,7 +49,26 @@ function initPush() {
       // send to server in table devices (id, device_token, groups)
   });
 
+  // App in background
+  // push.on('notification', function(data) {
+  //   push.getApplicationIconBadgeNumber(function(n) {
+  //     push.setApplicationIconBadgeNumber(function() {
+  //       console.log('success setApplicationIconBadgeNumber');
+  //     }, function() {
+  //       console.log('error setApplicationIconBadgeNumber');
+  //     }, n + 1);
+  //   }, function() {
+  //       console.log('error getApplicationIconBadgeNumber');
+  //   });
+  // });
+
+  // Notification tap
   push.on('notification', function(data) {
+      push.setApplicationIconBadgeNumber(function() {
+        console.log('success setApplicationIconBadgeNumber');
+      }, function() {
+        console.log('error setApplicationIconBadgeNumber');
+      }, 0);
       if (!data.additionalData.foreground) {
         store.dispatch(hideSnackbar());
         store.dispatch(fetchMessages()).then(
@@ -68,7 +87,7 @@ function initPush() {
   push.on('error', function(e) {
       //alert('error: ' + e.message);
 
-      console.debug('e.message: ' + e.message);e.message
+      console.debug('e.message: ' + e.message);
   });
   // push.unregister(function() {
   //     console.log('unregister success');
@@ -91,6 +110,8 @@ function initPush() {
 function startSmartApp() {
   startApp();
   initPush();
+  window.analytics.startTrackerWithId('UA-79998761-1')
+
 }
 
 function startApp(){
@@ -99,6 +120,8 @@ function startApp(){
       .then((newState) => {
         console.log('Loaded state:', newState)
         renderApp(store)
+        window.analytics.setUserId(buildUserId(store.getState()))
+        console.log('userId: ' + buildUserId(store.getState()))
       })
       .catch((e) => {console.log('Failed to load previous state: ' + e)});
 
@@ -107,6 +130,15 @@ function startApp(){
       	React.renderComponent(app, document.body);
       }
 }
+
+function buildUserId(state) {
+  var userId = state.device.uuid
+  for (var c in state.codes) {
+    userId = userId + '-' + state.codes[c].fullname
+  }
+  return userId
+}
+
 
 window.onload = function(){
 	var url = document.URL;

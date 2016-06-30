@@ -28,6 +28,10 @@ var CodeListComponent = React.createClass( {
     return { showAddCode: false, newCode: '' };
   },
 
+  componentDidMount: function() {
+    window.analytics.trackView('Liste des Codes')
+  },
+
   handleLeftMenu: function(e) {
     this.setState({open: !this.state.open});
     e.preventDefault();

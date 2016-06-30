@@ -9,9 +9,13 @@ var Signature = React.createClass( {
           <div className="school">{this.props.signature.schoolname}</div>
           <div className="function">{this.props.signature.function}</div>
           <div className="address">{this.props.signature.address}</div>
-          <div className="contact">{this.props.signature.phone}</div>
+          <div className="url">{this.props.signature.url}</div>
+          <div className="email"><a href="mailto:{this.props.signature.email}">{this.props.signature.email}</a></div>
+          <div className="phone">{this.props.signature.phone}</div>
       </div>
     )
   }
 });
 export default Signature;
+
+//<a href="tel:{this.props.signature.phone}">{this.props.signature.phone}</a></div>

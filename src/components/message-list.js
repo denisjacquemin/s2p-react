@@ -42,7 +42,7 @@ var MessageList = React.createClass( {
       delay: 0,
       smooth: false,
     });
-    console.debug('MessageList componentDidMount' + this.props.currentScrollPositionY);
+    window.analytics.trackView('Liste des Messages')
   },
 
   componentWillMount: function() {

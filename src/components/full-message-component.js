@@ -40,6 +40,11 @@ var FullMessageComponent  = React.createClass( {
 
   componentDidMount: function() {
     scroller.scrollTo('top');
+    try {
+      window.analytics.trackView('Message ' + this.props.currentMessage.title)
+    } catch (e) {
+      console.log('componentDidMount  ' + e)
+    }
   },
 
   componentDidUpdate: function() {
