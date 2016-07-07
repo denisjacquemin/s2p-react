@@ -41,7 +41,7 @@ var AddCodeScreen = React.createClass( {
 
 
     return (
-      <Card style={cardStyle}>
+      <Card style={cardStyle} className="animated fadeIn">
         <CardTitle title="Code Enregistré" />
         <CardText>
           Avez-vous un autre code à rentrer?
@@ -81,7 +81,9 @@ var AddCodeScreen = React.createClass( {
     const schoolStyle ={
       marginTop: '40%',
       height: '110px',
-      width: '110px',
+      marginLeft: '20%',
+      margingRight: '20%',
+      width: '60%',
       fill: '#ffffff'
     };
 
@@ -95,9 +97,11 @@ var AddCodeScreen = React.createClass( {
     return (
       <div>
         <div style={logoContainerStyle}>
-          <School style={schoolStyle}/>
+          <div style={schoolStyle}>
+            <img className="animated bounceInDown" src="assets/img/logo2x.png" width="100%"/>
+          </div>
         </div>
-        <Card style={cardStyle} ref="card">
+        <Card style={cardStyle} ref="card" className="animated fadeIn">
           <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
           <div style={formStyle}>
             <TextField hintText="Code" style={fieldStyle} ref="textfield" autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>

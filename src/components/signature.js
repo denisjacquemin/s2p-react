@@ -4,7 +4,7 @@ var Signature = React.createClass( {
   render: function() {
     return (
       <div className="signature">
-        <div className="logo"><img src="assets/img/hologne.jpg"/></div>
+        <div className="logo"><img src={'https:' + this.props.signature.logo_url} /></div>
           <div className="fullname">{this.props.signature.fullname}</div>
           <div className="school">{this.props.signature.schoolname}</div>
           <div className="function">{this.props.signature.function}</div>

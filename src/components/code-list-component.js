@@ -29,7 +29,11 @@ var CodeListComponent = React.createClass( {
   },
 
   componentDidMount: function() {
-    window.analytics.trackView('Liste des Codes')
+    try {
+      window.analytics.trackView('Liste des Codes')
+    } catch(e) {
+      console.error(e);
+    }
   },
 
   handleLeftMenu: function(e) {
@@ -97,13 +101,13 @@ var CodeListComponent = React.createClass( {
         textAlign: 'center',
         width: '100%',
         fontFamily: 'Roboto, sans-serif',
-        color: '#dddddd'
+        color: '#ffffff'
       },
       people: {
         marginTop: '40%',
         height: '110px',
         width: '110px',
-        fill: '#dddddd'
+        fill: '#ffffff'
       }
     };
     return styles;
@@ -156,7 +160,7 @@ var CodeListComponent = React.createClass( {
 
     let emptyState
     if (this.props.codes.length === 0) {
-      emptyState = <div style={styles.emptyState}>
+      emptyState = <div style={styles.emptyState} className="animated fadeIn">
           <People style={styles.people} />
           <p>Aucun code</p>
         </div>

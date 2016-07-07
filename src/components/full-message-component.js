@@ -43,7 +43,7 @@ var FullMessageComponent  = React.createClass( {
     try {
       window.analytics.trackView('Message ' + this.props.currentMessage.title)
     } catch (e) {
-      console.log('componentDidMount  ' + e)
+      console.log(e)
     }
   },
 

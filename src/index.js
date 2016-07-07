@@ -110,7 +110,11 @@ function initPush() {
 function startSmartApp() {
   startApp();
   initPush();
-  window.analytics.startTrackerWithId('UA-79998761-1')
+  try {
+    window.analytics.startTrackerWithId('UA-79998761-1')
+  } catch(e) {
+    console.error(e);
+  }
 
 }
 

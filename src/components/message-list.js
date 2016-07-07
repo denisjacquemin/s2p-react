@@ -42,7 +42,11 @@ var MessageList = React.createClass( {
       delay: 0,
       smooth: false,
     });
-    window.analytics.trackView('Liste des Messages')
+    try {
+      window.analytics.trackView('Liste des Messages')
+    } catch (e) {
+      console.error(e)
+    }
   },
 
   componentWillMount: function() {
@@ -60,6 +64,11 @@ var MessageList = React.createClass( {
 
   handleCodes: function(e) {
     this.props.showCodeList()
+    this.setState({open: false});
+    e.preventDefault();
+  },
+
+  handleMessagesScreen: function(e) {
     this.setState({open: false});
     e.preventDefault();
   },
@@ -121,13 +130,13 @@ var MessageList = React.createClass( {
         textAlign: 'center',
         width: '100%',
         fontFamily: 'Roboto, sans-serif',
-        color: '#dddddd'
+        color: '#ffffff'
       },
       mailOutline: {
         marginTop: '40%',
         height: '110px',
         width: '110px',
-        fill: '#dddddd'
+        fill: '#ffffff'
       },
       school: {
         height: '70px',
@@ -146,7 +155,6 @@ var MessageList = React.createClass( {
       starIcon = <IconButton  iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
     }
 
-    console.log('test isFetching: ' + this.props.isFetching)
     let refreshIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
     let progress
     if (this.props.isFetching) {
@@ -157,7 +165,7 @@ var MessageList = React.createClass( {
     let emptyState
     console.log('this.props.messages.length' + this.props.messages.length)
     if (this.props.messages.length === 0) {
-      emptyState = <div style={styles.emptyState}>
+      emptyState = <div style={styles.emptyState} className="animated fadeIn">
           <MailOutline style={styles.mailOutline} />
           <p>Aucun message</p>
         </div>
@@ -166,7 +174,7 @@ var MessageList = React.createClass( {
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
-          <AppBar id="header" title="App"
+          <AppBar id="header" title="Liste des messages"
             style={styles.appBar}
             onLeftIconButtonTouchTap={this.handleLeftMenu}
             iconElementRight={
@@ -187,11 +195,6 @@ var MessageList = React.createClass( {
                 } else {
                   return <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
                 }
-                // if (message.mtype == 1) {
-                //   <Alert key={message.id} message={message} />
-                // } else {
-                //   <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
-                // }
               })
             }
             {emptyState}
@@ -205,9 +208,8 @@ var MessageList = React.createClass( {
             <div style={styles.leftbarHeader}>
               <School style={styles.school}/>
             </div>
+            <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
             <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
-            <MenuItem onTouchTap={this.handleLeftMenuClose}>Infos importantes</MenuItem>
-
           </LeftNav>
           <Snackbar
             style={styles.snackbar}
@@ -223,21 +225,3 @@ var MessageList = React.createClass( {
 });
 
 export default MessageList;
-
-
-// <div className="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header has-drawer is-upgraded is-small-screen">
-//   <Header />
-//   <Drawer />
-//   <main className="mdl-layout__content">
-//     <div className="mdl-grid">
-//       {
-//         this.props.messages.map(message =>
-//           <Message
-//             key={message.id}
-//             {...message}
-//             onMessageTap={() => this.props.onMessageClick(message.id)}
-//           />
-//       )}
-//     </div>
-//   </main>
-// </div>

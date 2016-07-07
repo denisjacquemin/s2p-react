@@ -21,122 +21,13 @@
 		<link rel="stylesheet" href="assets/css/fadein.css">
 		<link rel="stylesheet" href="assets/vendor/slick.css">
 		<link rel="stylesheet" href="assets/css/disable_copypaste.css">
+		<link rel="stylesheet" href="assets/css/animate.min.css">
+
 		<script src="assets/vendor/zepto.min.js"></script>
 		<script src="cordova.js"></script>
 	</head>
 	<body onload="onLoad()">
 		<div id="root"></div>
 		<script src="app.js"></script>
-		<script>
-      // function initPush() {
-      //   console.log('in initPush');
-      //   var push = PushNotification.init({
-      //       android: {
-      //           senderID: "12345679"
-      //       },
-      //       ios: {
-      //            alert: "true",
-      //            badge: "true",
-      //            sound: "true"
-      //       },
-      //       windows: {}
-      //   });
-			//
-      //   push.on('registration', function(data) {
-      //       console.log('data.registrationId: ' + data.registrationId);
-			// 			alert('registration: ' + data.registrationId);
-			// 			dispatch(saveDeviceToken(data.registrationId));
-			// 			//saveDeviceToken(data.registrationId);
-			// 			// save registrationId in state
-			// 			// send to server in table devices (id, device_token, groups)
-      //   });
-			//
-      //   push.on('notification', function(data) {
-			// 		  alert('notification: ' + data.title);
-      //       console.log('data.message: ' + data.message);
-      //       console.log('data.title: ' + data.title);
-      //       console.log('data.count: ' + data.count);
-      //       console.log('data.sound: ' + data.sound);
-      //       console.log('data.image: ' + data.image);
-      //       console.log('data.additionalData: ' + data.additionalData);
-      //   });
-			//
-      //   push.on('error', function(e) {
-			// 		alert('error: ' + e.message);
-			//
-      //       console.log('e.message: ' + e.message);e.message
-      //   });
-			// 	// push.unregister(function() {
-			// 	//     console.log('unregister success');
-			// 	// }, function() {
-			// 	//     console.log('unregister error');
-			// 	// });
-			//
-			//
-			// 	PushNotification.hasPermission(function(data) {
-			// 	    if (data.isEnabled) {
-			// 				alert('hasPermission isEnabled')
-			//
-			// 	      console.log('hasPermission isEnabled');
-			// 	    } else {
-			// 				alert('hasPermission isDisabled')
-			//
-			// 				console.log('hasPermission isDisabled');
-			// 			}
-			// 	});
-      // }
-
-      // function initPushwoosh() {
-      // 		var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-      //
-      // 		//set push notification callback before we initialize the plugin
-      // 		document.addEventListener('push-notification', function(event) {
-      // 																//get the notification payload
-      // 																var notification = event.notification;
-      //
-      // 																//display alert to the user for example
-      // 																alert(notification.aps.alert);
-      //
-      // 																//clear the app badge
-      // 																pushNotification.setApplicationIconBadgeNumber(0);
-      // 														});
-      //
-      // 		//initialize the plugin
-      // 		pushNotification.onDeviceReady({pw_appid:"CD186-D2996"});
-      //
-      // 		//register for pushes
-      // 		pushNotification.registerDevice(
-      // 				function(status) {
-      // 						var deviceToken = status['deviceToken'];
-      // 						console.warn('registerDevice: ' + deviceToken);
-      // 				},
-      // 				function(status) {
-      // 						console.warn('failed to register : ' + JSON.stringify(status));
-      // 						alert(JSON.stringify(['failed to register ', status]));
-      // 				}
-      // 		);
-      //
-      // 		//reset badges on app start
-      // 		pushNotification.setApplicationIconBadgeNumber(0);
-      //}
-
-      // function onDeviceReady() {
-      //   console.log('Device Ready')
-      //   //initPushwoosh();
-      //   initPush();
-      // }
-			//
-      // function onLoad() {
-      //     var url = document.URL;
-      //     var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
-      //     if( isSmart ){
-      //       console.log('isSmartPhone')
-      //       document.addEventListener('deviceready', onDeviceReady, false);
-      //     }
-      //     else {
-      //         console.log('not isSmartPhone')
-      //     }
-      // }
-    </script>
 	</body>
 </html>
