@@ -199,7 +199,9 @@ var CodeListComponent = React.createClass( {
           open={this.state.open}
           onRequestChange={open => this.setState({ open })}
         >
-          <div style={styles.leftbarHeader}></div>
+          <div style={styles.leftbarHeader}>
+            <img src="assets/img/logo2x.png" width="100%"/>
+          </div>
           <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
           <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
 

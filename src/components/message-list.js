@@ -101,7 +101,8 @@ var MessageList = React.createClass( {
       content: {
         position: 'absolute',
         top: '70px',
-        width:  '100%'
+        width:  '100%',
+        backgroundColor: '#ffffff'
       },
       loading: {
         display: 'inline-block',
@@ -148,6 +149,7 @@ var MessageList = React.createClass( {
   },
 
   render: function() {
+
     const styles = this.getStyles();
 
     let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><StarBorder/></IconButton>

@@ -25,9 +25,6 @@ var Message = React.createClass( {
 
   getStyles: function() {
     const styles = {
-      card: {
-        margin: '12px 8px'
-      },
       cardMedia: {
         maxHeight: '250px',
         overflow: 'hidden'
@@ -63,7 +60,7 @@ var Message = React.createClass( {
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY HH:mm');
 
     return (
-      <Card key={message.id} style={styles.card}>
+      <Card key={message.id} className="aMessage">
         {media}
         <CardTitle title={message.title} subtitle={publish_date} onTouchTap={() => this.props.onMessageClick(message.id)} />
         <CardText onTouchTap={() => this.props.onMessageClick(message.id)}>{ this.stripHTML(this.truncate(message.content)) }</CardText>
