@@ -94,20 +94,28 @@ var CodeListComponent = React.createClass( {
       },
       leftbarHeader: {
         width: '100%',
-        height: '150px',
-        backgroundColor: '#1976d2'
+        backgroundColor: '#ffffff',
+        textAlign:  'center',
+        padding: '0 auto 0 auto',
+        backgroundImage: 'url("assets/img/headerbg.jpg")',
+        backgroundPosition: 'center',
+        backgroundSize: '100%',
+        opacity: '.7',
+        paddingTop: '30px',
+        paddingBottom: '15px'
       },
       emptyState: {
         textAlign: 'center',
         width: '100%',
         fontFamily: 'Roboto, sans-serif',
-        color: '#ffffff'
+        color: '#d0d0d0',
+        backgroundColor: '#ffffff'
       },
       people: {
         marginTop: '40%',
         height: '110px',
         width: '110px',
-        fill: '#ffffff'
+        fill: '#d0d0d0'
       }
     };
     return styles;
@@ -158,12 +166,32 @@ var CodeListComponent = React.createClass( {
   getCodeList: function() {
     const styles = this.getStyles();
 
-    let emptyState
+    let content
     if (this.props.codes.length === 0) {
-      emptyState = <div style={styles.emptyState} className="animated fadeIn">
-          <People style={styles.people} />
-          <p>Aucun code</p>
-        </div>
+      content = <div style={styles.emptyState} className="animated fadeIn">
+                  <div>
+                    <People style={styles.people} />
+                    <p>Aucun code</p>
+                  </div>
+                </div>
+    } else {
+      content = <div className="fade-in" style={styles.content}>
+                  <List>
+                    {
+                      this.props.codes.map(c =>
+                        <ListItem
+                          key={c.code}
+                          primaryText={c.fullname}
+                          secondaryText={
+                            <p>
+                              <span>{c.code}</span>
+                            </p>
+                          }
+                          rightIconButton={<IconButton onTouchTap={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
+                        />
+                    )}
+                  </List>
+                </div>
     }
 
     return(
@@ -172,24 +200,7 @@ var CodeListComponent = React.createClass( {
           style={styles.appBar}
           onLeftIconButtonTouchTap={this.handleLeftMenu}
         />
-        <div className="fade-in" style={styles.content}>
-          <List>
-            {
-              this.props.codes.map(c =>
-                <ListItem
-                  key={c.code}
-                  primaryText={c.fullname}
-                  secondaryText={
-                    <p>
-                      <span>{c.code}</span>
-                    </p>
-                  }
-                  rightIconButton={<IconButton onTouchTap={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
-                />
-            )}
-          </List>
-          {emptyState}
-        </div>
+        {content}
         <FloatingActionButton style={styles.add} secondary={true} onTouchEnd={this.handleShowAddCodeForm}>
           <ContentAdd />
         </FloatingActionButton>
@@ -200,7 +211,8 @@ var CodeListComponent = React.createClass( {
           onRequestChange={open => this.setState({ open })}
         >
           <div style={styles.leftbarHeader}>
-            <img src="assets/img/logo2x.png" width="100%"/>
+            <img src="assets/img/logo_draw.png" width="45%"/><br />
+            <img src="assets/img/logo_text.png" width="35%"/>
           </div>
           <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
           <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>

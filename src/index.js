@@ -42,7 +42,7 @@ function initPush() {
   push.on('registration', function(data) {
       console.debug('data.registrationId: ' + data.registrationId);
       store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
-      store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid));
+      store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
 
       //saveDeviceToken(data.registrationId);
       // save registrationId in state
@@ -76,6 +76,8 @@ function initPush() {
             store.dispatch(showFullMessage(data.additionalData.message_id))
           });
       }
+      // if app in foreground
+      showSnackbar('Nouveau message');
       console.debug('data.message: ' + data.message);
       console.debug('data.title: ' + data.title);
       console.debug('data.count: ' + data.count);

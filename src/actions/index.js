@@ -80,8 +80,8 @@ export const fetchMessages = () => {
         params += '&codes[]=' + c.code
       }
 
-      // https://s2p-api-demo.herokuapp.com/messages
-      return fetch('https://s2p-api-demo.herokuapp.com/messages' + params, {
+      // https://s2p-api-prod.herokuapp.com/messages
+      return fetch('https://s2p-api-prod.herokuapp.com/messages' + params, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ export const fetchMessages = () => {
       })
       .catch(function(err) {
         dispatch(handleFetchError())
-        dispatch(showSnackbar('Pas de connexion (3)' + err))
+        dispatch(showSnackbar('Pas de connexion'))
         console.log('Pas de connexion (fetchMessages)' + err);
       })
     }
@@ -116,8 +116,8 @@ export const deleteCode = (code) => {
 
 export const addCode = (code) => {
   return function (dispatch, getState) {
-    // https://s2p-api-demo.herokuapp.com
-    return fetch('https://s2p-api-demo.herokuapp.com/getfullnamebycode/' + code, {
+    // https://s2p-api-prod.herokuapp.com
+    return fetch('https://s2p-api-prod.herokuapp.com/getfullnamebycode/' + code, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ export const addCode = (code) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (4)' + err))
+      dispatch(showSnackbar('Pas de connexion'))
       console.log('Pas de connexion (addCode)' + err);
     })
   }
@@ -197,11 +197,11 @@ export const saveRegistrationId = (registrationId, uuid) => {
   }
 }
 
-export const saveRegistrationIdToServer = (registrationId, uuid) => {
+export const saveRegistrationIdToServer = (registrationId, uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
 
-    return fetch('https://s2p-api-demo.herokuapp.com/saveregistrationid/?rid=' + registrationId + '&uuid=' + uuid, {
+    return fetch('https://s2p-api-prod.herokuapp.com/saveregistrationid/?rid=' + registrationId + '&uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -219,17 +219,17 @@ export const saveRegistrationIdToServer = (registrationId, uuid) => {
     .catch(function(err) {
       console.debug('saveRegistrationIdToServer:' + err)
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (5)' + err))
+      dispatch(showSnackbar('Pas de connexion'))
       console.log('Pas de connexion (saveRegistrationIdToServer)' + err);
     })
   }
 }
 
-export const linkCodeToDevice = (code, uuid) => {
+export const linkCodeToDevice = (code, uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
 
-    return fetch('https://s2p-api-demo.herokuapp.com/linkcodetodevice/?uuid=' + uuid + '&code=' + code, {
+    return fetch('https://s2p-api-prod.herokuapp.com/linkcodetodevice/?uuid=' + uuid + '&code=' + code + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -245,7 +245,7 @@ export const linkCodeToDevice = (code, uuid) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (6)' + err))
+      dispatch(showSnackbar('Pas de connexion'))
       console.log('Pas de connexion (linkCodeToDevice)' + err);
     })
   }
@@ -254,7 +254,7 @@ export const linkCodeToDevice = (code, uuid) => {
 export const enableDeviceNotification = (uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/enabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
+    return fetch('https://s2p-api-prod.herokuapp.com/enabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -271,8 +271,7 @@ export const enableDeviceNotification = (uuid, platform) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (7) ' + err))
-      alert(err);
+      dispatch(showSnackbar('Pas de connexion'))
       console.log('Pas de connexion (enableDeviceNotification)' + err);
 
     })
@@ -282,7 +281,7 @@ export const enableDeviceNotification = (uuid, platform) => {
 export const disableDeviceNotification = (uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/disabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
+    return fetch('https://s2p-api-prod.herokuapp.com/disabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -299,7 +298,7 @@ export const disableDeviceNotification = (uuid, platform) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (1)' + err));
+      dispatch(showSnackbar('Pas de connexion'));
       console.log('Pas de connexion (disableDeviceNotification)' + err );
     })
   }
@@ -309,7 +308,7 @@ export const unlinkCodeToDevice = (code, uuid) => {
   return function (dispatch, getState) {
 
     const { device } = getState()
-    return fetch('https://s2p-api-demo.herokuapp.com/unlinkcodetodevice/?uuid=' + uuid + '&code=' + code, {
+    return fetch('https://s2p-api-prod.herokuapp.com/unlinkcodetodevice/?uuid=' + uuid + '&code=' + code, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -325,7 +324,7 @@ export const unlinkCodeToDevice = (code, uuid) => {
     })
     .catch(function(err) {
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion (2)' + err))
+      dispatch(showSnackbar('Pas de connexion'))
       console.log('Pas de connexion (unlinkCodeToDevice)' + err );
 
     })

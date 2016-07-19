@@ -102,7 +102,7 @@ var MessageList = React.createClass( {
         position: 'absolute',
         top: '70px',
         width:  '100%',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#dadada'
       },
       loading: {
         display: 'inline-block',
@@ -122,22 +122,28 @@ var MessageList = React.createClass( {
       },
       leftbarHeader: {
         width: '100%',
-        height: '150px',
-        backgroundColor: '#1976d2',
+        backgroundColor: '#ffffff',
         textAlign:  'center',
-        paddingTop: '20px'
+        padding: '0 auto 0 auto',
+        backgroundImage: 'url("assets/img/headerbg.jpg")',
+        backgroundPosition: 'center',
+        backgroundSize: '100%',
+        opacity: '.7',
+        paddingTop: '30px',
+        paddingBottom: '15px'
       },
       emptyState: {
         textAlign: 'center',
         width: '100%',
         fontFamily: 'Roboto, sans-serif',
-        color: '#ffffff'
+        color: '#d0d0d0',
+        backgroundColor: '#ffffff'
       },
       mailOutline: {
         marginTop: '40%',
         height: '110px',
         width: '110px',
-        fill: '#ffffff'
+        fill: '#d0d0d0'
       },
       school: {
         height: '70px',
@@ -168,9 +174,11 @@ var MessageList = React.createClass( {
     console.log('this.props.messages.length' + this.props.messages.length)
     if (this.props.messages.length === 0) {
       emptyState = <div style={styles.emptyState} className="animated fadeIn">
+        <div>
           <MailOutline style={styles.mailOutline} />
           <p>Aucun message</p>
         </div>
+      </div>
     }
 
     return (
@@ -188,7 +196,6 @@ var MessageList = React.createClass( {
           />
           {progress}
           <div className="fade-in" style={styles.content}>
-
             {
 
               this.props.messages.map(message => {
@@ -199,8 +206,9 @@ var MessageList = React.createClass( {
                 }
               })
             }
-            {emptyState}
+
           </div>
+          {emptyState}
           <LeftNav
             docked={false}
             width={200}
@@ -208,7 +216,8 @@ var MessageList = React.createClass( {
             onRequestChange={open => this.setState({ open })}
           >
             <div style={styles.leftbarHeader}>
-              <School style={styles.school}/>
+              <img src="assets/img/logo_draw.png" width="45%"/><br />
+              <img src="assets/img/logo_text.png" width="35%"/>
             </div>
             <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
             <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>

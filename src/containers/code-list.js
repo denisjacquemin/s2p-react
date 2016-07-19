@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddCode: (code) => {
       dispatch(addCode(code))
-      dispatch(linkCodeToDevice(code, device.uuid))
+      dispatch(linkCodeToDevice(code, device.uuid, device.platform))
     },
     showMessagesScreen: () => {
       dispatch(resetIsFetching());
