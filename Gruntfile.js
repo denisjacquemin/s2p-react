@@ -3,11 +3,33 @@ module.exports = function(grunt) {
   grunt.initConfig({
         env : {
           dev : {
-            NODE_ENV : 'development'
+            NODE_ENV : 'development',
+            HOST_API: 'https://s2p-api-demo.herokuapp.com',
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
+          },
+          demo : {
+            NODE_ENV : 'production',
+            HOST_API: 'https://s2p-api-demo.herokuapp.com',
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
           },
           prod : {
-            NODE_ENV : 'production'
+            NODE_ENV : 'production',
+            HOST_API: 'https://s2p-api-prod.herokuapp.com',
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
           }
+      },
+      replace: {
+        example: {
+          src: ["./dist/**/*.js", "./dist/**/*.html"],             // source files array (supports minimatch)
+          overwrite: true,
+          replacements: [{
+            from: 'HOST_API',                   // string replacement
+            to: process.env.HOST_API
+          }, {
+            from: 'HOST_S3',      // regex replacement ('Fooo' to 'Mooo')
+            to: process.env.HOST_S3
+          }]
+        }
       },
       browserify: {
          dist: {
@@ -29,7 +51,7 @@ module.exports = function(grunt) {
       watch: {
          scripts: {
             files: ["./src/**/*.js", "./src/*.html"],
-            tasks: ["browserify", "copy:main"]
+            tasks: ["browserify", "copy:main", "replace"]
          }
       },
       copy: {
@@ -42,7 +64,7 @@ module.exports = function(grunt) {
         },
         cordova: {
           files: [
-            {expand: true, cwd: './dist/public/', src:['**'], dest: '../../s2p/www', filter: 'isFile'}
+            {expand: true, cwd: './dist/public/', src:['**'], dest: '../../konecto-cordova/www', filter: 'isFile'}
           ]
         }
       }
@@ -51,8 +73,11 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks("grunt-browserify");
    grunt.loadNpmTasks("grunt-contrib-watch");
    grunt.loadNpmTasks('grunt-contrib-copy');
+   grunt.loadNpmTasks('grunt-text-replace');
+
 
    grunt.registerTask("default", ["env:dev", "watch"]);
-   grunt.registerTask("build", ["browserify", "copy:main", "copy:cordova"]);
+   grunt.registerTask("demo", ["env:demo", "browserify", "copy:main", "copy:cordova"]);
+   grunt.registerTask("prod", ["env:prod", "browserify", "copy:main", "copy:cordova"]);
 
 };

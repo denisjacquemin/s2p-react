@@ -8,7 +8,8 @@ import CodeListComponent from '../components/code-list-component'
 
 const mapStateToProps = (state) => {
   return {
-    codes: state.codes
+    codes: state.codes,
+    snackbar: state.snackbar,
   };
 };
 

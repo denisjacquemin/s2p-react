@@ -80,8 +80,7 @@ export const fetchMessages = () => {
         params += '&codes[]=' + c.code
       }
 
-      // https://s2p-api-prod.herokuapp.com/messages
-      return fetch('https://s2p-api-prod.herokuapp.com/messages' + params, {
+      return fetch('HOST_API/messages' + params, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -117,7 +116,7 @@ export const deleteCode = (code) => {
 export const addCode = (code) => {
   return function (dispatch, getState) {
     // https://s2p-api-prod.herokuapp.com
-    return fetch('https://s2p-api-prod.herokuapp.com/getfullnamebycode/' + code, {
+    return fetch('HOST_API/getfullnamebycode/' + code, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -201,7 +200,7 @@ export const saveRegistrationIdToServer = (registrationId, uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
 
-    return fetch('https://s2p-api-prod.herokuapp.com/saveregistrationid/?rid=' + registrationId + '&uuid=' + uuid + '&platform=' + platform, {
+    return fetch('HOST_API/saveregistrationid/?rid=' + registrationId + '&uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -229,7 +228,7 @@ export const linkCodeToDevice = (code, uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
 
-    return fetch('https://s2p-api-prod.herokuapp.com/linkcodetodevice/?uuid=' + uuid + '&code=' + code + '&platform=' + platform, {
+    return fetch('HOST_API/linkcodetodevice/?uuid=' + uuid + '&code=' + code + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -254,7 +253,7 @@ export const linkCodeToDevice = (code, uuid, platform) => {
 export const enableDeviceNotification = (uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
-    return fetch('https://s2p-api-prod.herokuapp.com/enabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
+    return fetch('HOST_API/enabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -281,7 +280,7 @@ export const enableDeviceNotification = (uuid, platform) => {
 export const disableDeviceNotification = (uuid, platform) => {
   return function (dispatch, getState) {
     const { device } = getState()
-    return fetch('https://s2p-api-prod.herokuapp.com/disabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
+    return fetch('HOST_API/disabledevicenotifictation/?uuid=' + uuid + '&platform=' + platform, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -308,7 +307,7 @@ export const unlinkCodeToDevice = (code, uuid) => {
   return function (dispatch, getState) {
 
     const { device } = getState()
-    return fetch('https://s2p-api-prod.herokuapp.com/unlinkcodetodevice/?uuid=' + uuid + '&code=' + code, {
+    return fetch('HOST_API/unlinkcodetodevice/?uuid=' + uuid + '&code=' + code, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

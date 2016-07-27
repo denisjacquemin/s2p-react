@@ -1,23 +1,25 @@
 import React, {Component} from 'react'
 
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
-import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
-import AppBar from 'material-ui/lib/app-bar';
-import IconButton from 'material-ui/lib/icon-button';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
-import People from 'material-ui/lib/svg-icons/social/people';
-import Delete from 'material-ui/lib/svg-icons/action/delete';
-import LeftNav from 'material-ui/lib/left-nav';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import Card from 'material-ui/lib/card/card';
-import FloatingActionButton from 'material-ui/lib/floating-action-button';
-import ContentAdd from 'material-ui/lib/svg-icons/content/add';
-import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import MailOutline from 'material-ui/svg-icons/communication/mail-outline';
+import People from 'material-ui/svg-icons/social/people';
+import Delete from 'material-ui/svg-icons/action/delete';
+import Drawer from 'material-ui/Drawer';
+import {List, ListItem} from 'material-ui/List';
+import MenuItem from 'material-ui/MenuItem';
+import {Card} from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
+
 
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
@@ -72,6 +74,10 @@ var CodeListComponent = React.createClass( {
         position: 'absolute',
         top: '74px',
         borderRadius: '0'
+      },
+      snackbar: {
+        fontFamily: 'Roboto, sans-serif',
+        webkitFontSmoothing: 'antialiased'
       },
       content: {
         position: 'absolute',
@@ -204,7 +210,7 @@ var CodeListComponent = React.createClass( {
         <FloatingActionButton style={styles.add} secondary={true} onTouchEnd={this.handleShowAddCodeForm}>
           <ContentAdd />
         </FloatingActionButton>
-        <LeftNav
+        <Drawer
           docked={false}
           width={200}
           open={this.state.open}
@@ -214,10 +220,17 @@ var CodeListComponent = React.createClass( {
             <img src="assets/img/logo_draw.png" width="45%"/><br />
             <img src="assets/img/logo_text.png" width="35%"/>
           </div>
-          <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
-          <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
+          <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline/>}> Messages</MenuItem>
+          <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
 
-        </LeftNav>
+        </Drawer>
+        <Snackbar
+          style={styles.snackbar}
+          open={this.props.snackbar.show}
+          message={this.props.snackbar.message}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     )
   },

@@ -3,16 +3,11 @@ import React from 'react'
 import moment from 'moment'
 import "moment/locale/fr";
 
-import Card from 'material-ui/lib/card/card';
-import CardTitle from 'material-ui/lib/card/card-title';
-import CardText from 'material-ui/lib/card/card-text';
-import CardActions from 'material-ui/lib/card/card-actions';
-import FlatButton from 'material-ui/lib/flat-button';
-import Event from 'material-ui/lib/svg-icons/action/event';
-import FontIcon from 'material-ui/lib/font-icon';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import Event from 'material-ui/svg-icons/action/event';
+import FontIcon from 'material-ui/FontIcon';
 
-
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import CustomTheme from '../theme';
 
 

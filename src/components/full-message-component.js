@@ -9,27 +9,23 @@ import Slider from 'react-slick';
 import moment from 'moment'
 import "moment/locale/fr";
 
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
-import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
 import Signature from './signature'
 
-import AppBar from 'material-ui/lib/app-bar';
-import IconButton from 'material-ui/lib/icon-button';
-import ChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
-import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
-import Group from 'material-ui/lib/svg-icons/social/group';
-import Star from 'material-ui/lib/svg-icons/toggle/star';
-import Card from 'material-ui/lib/card/card';
-import CardMedia from 'material-ui/lib/card/card-media';
-import CardTitle from 'material-ui/lib/card/card-title';
-import CardText from 'material-ui/lib/card/card-text';
-import CardActions from 'material-ui/lib/card/card-actions';
-import FlatButton from 'material-ui/lib/flat-button';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import Group from 'material-ui/svg-icons/social/group';
+import Star from 'material-ui/svg-icons/toggle/star';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
-import {Spacing} from 'material-ui/lib/styles';
+import {Spacing} from 'material-ui/styles';
 
 
 import ImageLoader from 'react-imageloader';

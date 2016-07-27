@@ -1,16 +1,11 @@
 import React, {Component} from 'react'
-import TextField from 'material-ui/lib/text-field';
-import RaisedButton from 'material-ui/lib/raised-button';
-import Card from 'material-ui/lib/card/card';
-import CardTitle from 'material-ui/lib/card/card-title';
-import CardText from 'material-ui/lib/card/card-text';
-import CardActions from 'material-ui/lib/card/card-actions';
-import FlatButton from 'material-ui/lib/flat-button';
-import School from 'material-ui/lib/svg-icons/social/school';
-
-
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
-import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import School from 'material-ui/svg-icons/social/school';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
 

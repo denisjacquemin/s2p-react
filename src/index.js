@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
+import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -64,20 +64,27 @@ function initPush() {
 
   // Notification tap
   push.on('notification', function(data) {
-      push.setApplicationIconBadgeNumber(function() {
-        console.log('success setApplicationIconBadgeNumber');
-      }, function() {
-        console.log('error setApplicationIconBadgeNumber');
-      }, 0);
+
+
+      // push.setApplicationIconBadgeNumber(function() {
+      //   console.log('success setApplicationIconBadgeNumber');
+      // }, function() {
+      //   console.log('error setApplicationIconBadgeNumber');
+      // }, 0);
       if (!data.additionalData.foreground) {
+        console.debug('App in background');
         store.dispatch(hideSnackbar());
         store.dispatch(fetchMessages()).then(
           function() {
             store.dispatch(showFullMessage(data.additionalData.message_id))
           });
+      } else {
+        console.debug('App in foreground');
+        // if app in foreground
+        store.dispatch(showSnackbar(data.title));
+        store.dispatch(fetchMessages());
       }
-      // if app in foreground
-      showSnackbar('Nouveau message');
+
       console.debug('data.message: ' + data.message);
       console.debug('data.title: ' + data.title);
       console.debug('data.count: ' + data.count);
@@ -131,10 +138,6 @@ function startApp(){
       })
       .catch((e) => {console.log('Failed to load previous state: ' + e)});
 
-      function startApp(){
-      	var app = new App({});
-      	React.renderComponent(app, document.body);
-      }
 }
 
 function buildUserId(state) {

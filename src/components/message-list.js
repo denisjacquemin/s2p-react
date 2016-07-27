@@ -3,29 +3,29 @@ import React, {Component} from 'react'
 import Message from './message'
 import Alert from './alert'
 
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
-import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
 var Scroll    = require('react-scroll');
 var scroll    = Scroll.animateScroll
 
-import AppBar from 'material-ui/lib/app-bar';
-import LeftNav from 'material-ui/lib/left-nav';
-import IconButton from 'material-ui/lib/icon-button';
-import FontIcon from 'material-ui/lib/font-icon';
-import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
-import Star from 'material-ui/lib/svg-icons/toggle/star';
-import School from 'material-ui/lib/svg-icons/social/school';
-import MailOutline from 'material-ui/lib/svg-icons/communication/mail-outline';
-import LinearProgress from 'material-ui/lib/linear-progress';
-import NavigationRefresh from 'material-ui/lib/svg-icons/navigation/refresh';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import {Spacing} from 'material-ui/lib/styles';
-import Snackbar from 'material-ui/lib/snackbar';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import Star from 'material-ui/svg-icons/toggle/star';
+import School from 'material-ui/svg-icons/social/school';
+import MailOutline from 'material-ui/svg-icons/communication/mail-outline';
+import People from 'material-ui/svg-icons/social/people';
+import LinearProgress from 'material-ui/LinearProgress';
+import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import IconMenu from 'material-ui/IconButton/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
 
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
@@ -118,7 +118,8 @@ var MessageList = React.createClass( {
         padding:0
       },
       snackbar: {
-        fontFamily: 'Roboto, sans-serif'
+        fontFamily: 'Roboto, sans-serif',
+        WebkitFontSmoothing: 'antialiased'
       },
       leftbarHeader: {
         width: '100%',
@@ -184,7 +185,7 @@ var MessageList = React.createClass( {
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
-          <AppBar id="header" title="Liste des messages"
+          <AppBar id="header" title="Messages"
             style={styles.appBar}
             onLeftIconButtonTouchTap={this.handleLeftMenu}
             iconElementRight={
@@ -209,7 +210,7 @@ var MessageList = React.createClass( {
 
           </div>
           {emptyState}
-          <LeftNav
+          <Drawer
             docked={false}
             width={200}
             open={this.state.open}
@@ -219,9 +220,9 @@ var MessageList = React.createClass( {
               <img src="assets/img/logo_draw.png" width="45%"/><br />
               <img src="assets/img/logo_text.png" width="35%"/>
             </div>
-            <MenuItem onTouchTap={this.handleMessagesScreen}>Liste des messages</MenuItem>
-            <MenuItem onTouchTap={this.handleCodes}>Gestion des codes</MenuItem>
-          </LeftNav>
+            <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline />}>Messages</MenuItem>
+            <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
+          </Drawer>
           <Snackbar
             style={styles.snackbar}
             open={this.props.snackbar.show}
