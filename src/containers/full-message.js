@@ -19,7 +19,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())
-      
     }
   };
 };

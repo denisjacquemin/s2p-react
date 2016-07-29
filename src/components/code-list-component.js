@@ -77,7 +77,7 @@ var CodeListComponent = React.createClass( {
       },
       snackbar: {
         fontFamily: 'Roboto, sans-serif',
-        webkitFontSmoothing: 'antialiased'
+        WebkitFontSmoothing: 'antialiased'
       },
       content: {
         position: 'absolute',

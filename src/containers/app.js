@@ -3,10 +3,22 @@ import { connect } from 'react-redux'
 import { hideSnackbar, fetchMessages, resetIsFetching} from '../actions'
 import AppComponent from '../components/app-component'
 
+const getVisibleMessages = (messages = [], showOnlyImportant) => {
+  if (showOnlyImportant) {
+    return messages.filter(m => m.important)
+  }
+  return messages
+}
+
 
 const mapStateToProps = (state) => {
   return {
-    currentScreen: state.currentScreen
+    currentScreen: state.currentScreen,
+    currentMessage: state.currentMessage.id,
+    messages: getVisibleMessages(
+      state.messages.items,
+      state.showOnlyImportant
+    )
   };
 };
 

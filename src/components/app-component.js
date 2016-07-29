@@ -20,7 +20,14 @@ var AppComponent = React.createClass( {
         screenToShow = <VisibleMessageList />;
         break;
       case 'full_message':
-        screenToShow = <FullMessage />;
+        let message = this.props.messages.find((m) => {
+          return m.id === this.props.currentMessage
+        })
+        if (message === undefined) {
+          screenToShow = <VisibleMessageList />;
+        } else {
+          screenToShow = <FullMessage />;
+        }
         break;
       case 'codes':
         screenToShow = <CodeList />;

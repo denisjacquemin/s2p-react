@@ -8,7 +8,7 @@ module.exports = function(grunt) {
             HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
           },
           demo : {
-            NODE_ENV : 'production',
+            NODE_ENV : 'development',
             HOST_API: 'https://s2p-api-demo.herokuapp.com',
             HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
           },
@@ -24,10 +24,10 @@ module.exports = function(grunt) {
           overwrite: true,
           replacements: [{
             from: 'HOST_API',                   // string replacement
-            to: process.env.HOST_API
+            to: 'https://s2p-api-demo.herokuapp.com'
           }, {
             from: 'HOST_S3',      // regex replacement ('Fooo' to 'Mooo')
-            to: process.env.HOST_S3
+            to: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
           }]
         }
       },
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
 
 
    grunt.registerTask("default", ["env:dev", "watch"]);
-   grunt.registerTask("demo", ["env:demo", "browserify", "copy:main", "copy:cordova"]);
-   grunt.registerTask("prod", ["env:prod", "browserify", "copy:main", "copy:cordova"]);
+   grunt.registerTask("demo", ["env:demo", "browserify", "copy:main", "replace", "copy:cordova"]);
+   grunt.registerTask("prod", ["env:prod", "browserify", "copy:main", "replace", "copy:cordova"]);
 
 };

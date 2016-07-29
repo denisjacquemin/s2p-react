@@ -25,7 +25,7 @@ import Star from 'material-ui/svg-icons/toggle/star';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 
-import {Spacing} from 'material-ui/styles';
+import Spacing from 'material-ui/styles/spacing'
 
 
 import ImageLoader from 'react-imageloader';
@@ -143,7 +143,7 @@ var FullMessageComponent  = React.createClass( {
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div ref="body">
-          <AppBar title="App"
+          <AppBar title={message.title}
             style={styles.appBar}
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}
             iconElementRight={starIcon}
