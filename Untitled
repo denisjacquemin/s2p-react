@@ -1,0 +1,32 @@
+####### push.unregister
+
+click sur ok notifications
+encodage code + 'enregistrer'
+click sur 'Non'
+
+reload app
+
+####### push.unregister
+
+kill app
+
+restart
+
+reload
+
+####### push.unregister
+
+Desinstallation avec unregister callback supprimé
+
+####### push.on(registration
+notification enabled on server (alors que les notifi n'ont pas encore ete acceptee)
+
+ok sur les notifications
+
+code rentré + enregistré
+
+click 'non'
+
+reload
+####### push.on(registration
+notification enabled on server 

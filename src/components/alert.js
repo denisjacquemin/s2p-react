@@ -52,6 +52,10 @@ var Alert = React.createClass( {
 
     const message = this.props.message
     const styles = this.getStyles();
+    let student_names = ""
+    if (message.student != undefined) {
+      student_names = message.student_names.join(' - ');
+    }
 
     return (
       <Card style={styles.card}>
@@ -61,7 +65,7 @@ var Alert = React.createClass( {
           <small style={styles.cardTextSmall}>{message.body}</small>
         </CardText>
         <div style={styles.students}>
-          {message.students.join(' - ')}
+          {student_names}
         </div>
       </Card>
     )

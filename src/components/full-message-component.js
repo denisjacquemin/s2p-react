@@ -137,17 +137,18 @@ var FullMessageComponent  = React.createClass( {
         media = <CardMedia style={styles.cardMedia}><img src={'https:' + message.mfiles[0].file_url} /></CardMedia>
         }
     }
-
-    let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY HH:mm')} - {message.students.join(' - ')}</span>;
+    let student_names = ""
+    if (message.student != undefined) {
+      student_names = ' - ' + message.student_names.join(' - ');
+    }
+    let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY HH:mm')}{student_names}</span>;
 
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div ref="body">
           <AppBar title={message.title}
             style={styles.appBar}
-            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}
-            iconElementRight={starIcon}
-          />
+            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}          />
           <Element name="top" className="top"></Element>
           <Card style={styles.fullscreen} className="fade-in">
               { media }

@@ -15,130 +15,130 @@ injectTapEventPlugin();
 import {store, load} from './store'
 import App from './containers/app'
 
-function renderApp(theStore) {
-  ReactDOM.render(
-    <Provider store={theStore}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  );
-}
+// function renderApp(theStore) {
+//   ReactDOM.render(
+//     <Provider store={theStore}>
+//       <App />
+//     </Provider>,
+//     document.getElementById('root')
+//   );
+// }
 
 
-function initPush() {
-  console.debug('in initPush');
-  var push = PushNotification.init({
-      android: {
-          senderID: "441581989301"
-      },
-      ios: {
-           alert: "true",
-           badge: "true",
-           sound: "true"
-      },
-      windows: {}
-  });
+// function initPush() {
+//   console.debug('in initPush');
+//   var push = PushNotification.init({
+//       android: {
+//           senderID: "441581989301"
+//       },
+//       ios: {
+//            alert: "true",
+//            badge: "false",
+//            sound: "true"
+//       },
+//       windows: {}
+//   });
+//
+//   push.on('registration', function(data) {
+//       console.debug('data.registrationId: ' + data.registrationId);
+//       store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
+//       store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+//
+//       //saveDeviceToken(data.registrationId);
+//       // save registrationId in state
+//       // send to server in table devices (id, device_token, groups)
+//   });
+//
+//   // App in background
+//   // push.on('notification', function(data) {
+//   //   push.getApplicationIconBadgeNumber(function(n) {
+//   //     push.setApplicationIconBadgeNumber(function() {
+//   //       console.log('success setApplicationIconBadgeNumber');
+//   //     }, function() {
+//   //       console.log('error setApplicationIconBadgeNumber');
+//   //     }, n + 1);
+//   //   }, function() {
+//   //       console.log('error getApplicationIconBadgeNumber');
+//   //   });
+//   // });
+//
+//   // Notification tap
+//   push.on('notification', function(data) {
+//
+//
+//       // push.setApplicationIconBadgeNumber(function() {
+//       //   console.log('success setApplicationIconBadgeNumber');
+//       // }, function() {
+//       //   console.log('error setApplicationIconBadgeNumber');
+//       // }, 0);
+//       if (!data.additionalData.foreground) {
+//         console.debug('App in background');
+//         store.dispatch(hideSnackbar());
+//         store.dispatch(fetchMessages()).then(
+//           function() {
+//             store.dispatch(showFullMessage(data.additionalData.message_id))
+//           });
+//       } else {
+//         console.debug('App in foreground');
+//         // if app in foreground
+//         store.dispatch(showSnackbar(data.title));
+//         store.dispatch(fetchMessages());
+//       }
+//
+//       console.debug('data.message: ' + data.message);
+//       console.debug('data.title: ' + data.title);
+//       console.debug('data.count: ' + data.count);
+//       console.debug('data.sound: ' + data.sound);
+//       console.debug('data.image: ' + data.image);
+//       console.debug('data.additionalData: ' + JSON.stringify(data.additionalData));
+//   });
+//
+//   push.on('error', function(e) {
+//       //alert('error: ' + e.message);
+//
+//       console.debug('e.message: ' + e.message);
+//   });
+//   // push.unregister(function() {
+//   //     console.log('unregister success');
+//   // }, function() {
+//   //     console.log('unregister error');
+//   // });
+//
+//
+//   PushNotification.hasPermission(function(data) {
+//       if (data.isEnabled) {
+//         store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+//         console.debug('hasPermission isEnabled');
+//       } else {
+//         store.dispatch(disableDeviceNotification(device.uuid, device.platform));
+//         console.debug('hasPermission isDisabled');
+//       }
+//   });
+// }
 
-  push.on('registration', function(data) {
-      console.debug('data.registrationId: ' + data.registrationId);
-      store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
-      store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+// function startSmartApp() {
+//   startApp();
+//   initPush();
+//   try {
+//     window.analytics.startTrackerWithId('UA-79998761-1')
+//   } catch(e) {
+//     console.error(e);
+//   }
+//
+// }
 
-      //saveDeviceToken(data.registrationId);
-      // save registrationId in state
-      // send to server in table devices (id, device_token, groups)
-  });
-
-  // App in background
-  // push.on('notification', function(data) {
-  //   push.getApplicationIconBadgeNumber(function(n) {
-  //     push.setApplicationIconBadgeNumber(function() {
-  //       console.log('success setApplicationIconBadgeNumber');
-  //     }, function() {
-  //       console.log('error setApplicationIconBadgeNumber');
-  //     }, n + 1);
-  //   }, function() {
-  //       console.log('error getApplicationIconBadgeNumber');
-  //   });
-  // });
-
-  // Notification tap
-  push.on('notification', function(data) {
-
-
-      // push.setApplicationIconBadgeNumber(function() {
-      //   console.log('success setApplicationIconBadgeNumber');
-      // }, function() {
-      //   console.log('error setApplicationIconBadgeNumber');
-      // }, 0);
-      if (!data.additionalData.foreground) {
-        console.debug('App in background');
-        store.dispatch(hideSnackbar());
-        store.dispatch(fetchMessages()).then(
-          function() {
-            store.dispatch(showFullMessage(data.additionalData.message_id))
-          });
-      } else {
-        console.debug('App in foreground');
-        // if app in foreground
-        store.dispatch(showSnackbar(data.title));
-        store.dispatch(fetchMessages());
-      }
-
-      console.debug('data.message: ' + data.message);
-      console.debug('data.title: ' + data.title);
-      console.debug('data.count: ' + data.count);
-      console.debug('data.sound: ' + data.sound);
-      console.debug('data.image: ' + data.image);
-      console.debug('data.additionalData: ' + JSON.stringify(data.additionalData));
-  });
-
-  push.on('error', function(e) {
-      //alert('error: ' + e.message);
-
-      console.debug('e.message: ' + e.message);
-  });
-  // push.unregister(function() {
-  //     console.log('unregister success');
-  // }, function() {
-  //     console.log('unregister error');
-  // });
-
-
-  PushNotification.hasPermission(function(data) {
-      if (data.isEnabled) {
-        store.dispatch(enableDeviceNotification(device.uuid, device.platform));
-        console.debug('hasPermission isEnabled');
-      } else {
-        store.dispatch(disableDeviceNotification(device.uuid, device.platform));
-        console.debug('hasPermission isDisabled');
-      }
-  });
-}
-
-function startSmartApp() {
-  startApp();
-  initPush();
-  try {
-    window.analytics.startTrackerWithId('UA-79998761-1')
-  } catch(e) {
-    console.error(e);
-  }
-
-}
-
-function startApp(){
-  console.log('loading store')
-  load(store)
-      .then((newState) => {
-        console.log('Loaded state:', newState)
-        renderApp(store)
-        window.analytics.setUserId(buildUserId(store.getState()))
-        console.log('userId: ' + buildUserId(store.getState()))
-      })
-      .catch((e) => {console.log('Failed to load previous state: ' + e)});
-
-}
+// function startApp(){
+//   console.log('loading store')
+//   load(store)
+//       .then((newState) => {
+//         console.log('Loaded state:', newState)
+//         renderApp(store)
+//         window.analytics.setUserId(buildUserId(store.getState()))
+//         console.log('userId: ' + buildUserId(store.getState()))
+//       })
+//       .catch((e) => {console.log('Failed to load previous state: ' + e)});
+//
+// }
 
 function buildUserId(state) {
   var userId = state.device.uuid
@@ -161,10 +161,10 @@ var app = {
       var url = document.URL;
       var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
       if( isSmart ){
-        document.addEventListener('deviceready', startSmartApp, false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
       }
       else{
-        startApp();
+        app.startApp();
       }
     },
     // deviceready Event Handler
@@ -172,7 +172,8 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        console.log('onDeviceReady');
+        app.startApp();
 
         var push = PushNotification.init({
             android: {
@@ -180,38 +181,84 @@ var app = {
             },
             ios: {
                 alert: "true",
-                badge: "true",
+                badge: "false",
+                clearBadge: "true",
                 sound: "true"
             }
         });
 
         push.on('registration', function(data) {
+            console.log('####### push.on(registration')
+
             console.log('data.registrationId: ' + data.registrationId)
+            store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
+            store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+            store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+            console.log('notification enabled on server');
         });
 
         push.on('notification', function(data) {
+            console.log('####### push.on(notification');
+
             console.log(data.message)
             console.log(data.title)
             console.log(data.count)
             console.log(data.sound)
             console.log(data.image)
             console.log(data.additionalData)
+            if (!data.additionalData.foreground) {
+              console.debug('App in background');
+              store.dispatch(hideSnackbar());
+              store.dispatch(fetchMessages()).then(
+                function() {
+                  store.dispatch(showFullMessage(data.additionalData.message_id))
+                });
+            } else {
+              console.debug('App in foreground');
+              // if app in foreground
+              store.dispatch(showSnackbar(data.message));
+              store.dispatch(fetchMessages());
+            }
         });
 
         push.on('error', function(e) {
+            console.log('####### push.on(error');
             console.log(e.message)
         });
+
+        // push.unregister(function() {
+        //     console.log('####### push.unregister');
+        //     // store.dispatch(disableDeviceNotification(device.uuid, device.platform));
+        //     // console.log('notification disabled on server');
+        // }, function(e) {
+        //     console.log('unregister: ' + e.message)
+        // });
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    startApp: function() {
+      console.log('loading store')
+      load(store)
+          .then((newState) => {
+            console.log('Loaded state:', newState)
+            this.renderApp(store)
+            window.analytics.setUserId(buildUserId(store.getState()))
+            console.log('userId: ' + buildUserId(store.getState()))
+          })
+          .catch((e) => {console.log('Failed to load previous state: ' + e)});
+      try {
+        window.analytics.startTrackerWithId('UA-79998761-1')
+      } catch(e) {
+        console.error(e);
+      }
+    },
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+    renderApp: function(theStore) {
+      ReactDOM.render(
+        <Provider store={theStore}>
+          <App />
+        </Provider>,
+        document.getElementById('root')
+      );
     }
 };
 

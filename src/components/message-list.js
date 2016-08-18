@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
 var Scroll    = require('react-scroll');
-var scroll    = Scroll.animateScroll
+var scroll    = Scroll.animateScroll;
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -190,7 +190,6 @@ var MessageList = React.createClass( {
             onLeftIconButtonTouchTap={this.handleLeftMenu}
             iconElementRight={
               <div >
-                {starIcon}
                 {refreshIcon}
               </div>
             }
