@@ -33,7 +33,6 @@ var Alert = React.createClass( {
       },
       students: {
         borderTop: '1px solid #dddddd',
-        padding: '8px',
         position: 'relative',
         fontSize: '14px',
         color: '#ffffff',
