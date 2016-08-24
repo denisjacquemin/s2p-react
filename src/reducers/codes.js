@@ -18,8 +18,8 @@ const code = (state = codeInitialState, action) => {
           fullname: action.fullname,
           receivedAt: action.receivedAt
       };
-    default:
-      return state;
+      default:
+        return state;
   }
 };
 

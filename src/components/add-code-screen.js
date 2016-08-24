@@ -8,7 +8,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
-
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var AddCodeScreen = React.createClass( {
@@ -33,7 +32,6 @@ var AddCodeScreen = React.createClass( {
       width: '30%',
       margin: '0 0 0 15%'
     }
-
 
     return (
       <Card style={cardStyle} className="animated fadeIn">
@@ -65,8 +63,13 @@ var AddCodeScreen = React.createClass( {
     };
 
     const fieldStyle = {
-      margin: '20px 0 20% 0',
+      margin: '20px 0 5% 0',
       width: '70%'
+    };
+
+    const errorMessage = {
+      margin: '5px 0 15px 0',
+      color: '#F00'
     };
 
     const buttonStyle = {
@@ -100,6 +103,7 @@ var AddCodeScreen = React.createClass( {
           <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
           <div style={formStyle}>
             <TextField hintText="Code" style={fieldStyle} ref="textfield" autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
+            <div style={errorMessage}>{this.props.invalidCodeMessage}</div>
             <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
           </div>
         </Card>
@@ -111,9 +115,17 @@ var AddCodeScreen = React.createClass( {
     return { showCodeSaved: false, newCode: '' };
   },
 
+  componentWillMount: function() {
+    this.resetErrorMessage();
+  },
+
+  resetErrorMessage: function() {
+    this.props.resetErrorMessage();
+  },
+
   handleAddCode: function(code) {
     this.props.onAddCode(this.state.newCode);
-    this.setState({ showCodeSaved: true })
+    //this.setState({ showCodeSaved: true })
   },
 
   handleNewCodeChange: function(e) {
@@ -124,7 +136,7 @@ var AddCodeScreen = React.createClass( {
   },
 
   handleShowCodeForm: function() {
-    this.setState({ showCodeSaved: false })
+    this.props.resetValidCode();
   },
 
   handleShowMessagesScreen: function() {
@@ -132,17 +144,18 @@ var AddCodeScreen = React.createClass( {
   },
 
   handleOnFocus: function(e) {
-    console.log('focus ' +  e.target.style)
-    this.refs.card.style = {backgroundColor: 'red'}
+    this.resetErrorMessage();
   },
 
   render: function() {
 
     let body = this.getAddCodeForm()
-    if (this.state.showCodeSaved) {
+    // if (this.state.showCodeSaved) {
+    //   body = this.getCodeSaved()
+    // }
+    if (this.props.validCode) {
       body = this.getCodeSaved()
     }
-
 
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>

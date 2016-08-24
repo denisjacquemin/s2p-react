@@ -30,11 +30,30 @@ var CodeListComponent = React.createClass( {
     return { showAddCode: false, newCode: '' };
   },
 
+  componentWillMount: function() {
+    this.resetErrorMessage();
+  },
+
+  resetErrorMessage: function() {
+    this.props.resetErrorMessage();
+  },
+
+  handleOnFocus: function(e) {
+    this.resetErrorMessage();
+  },
+
   componentDidMount: function() {
     try {
       window.analytics.trackView('Liste des Codes')
     } catch(e) {
       console.error(e);
+    }
+  },
+
+  componentWillReceiveProps: function() {
+    if (this.props.validCode) {
+      this.resetErrorMessage()
+      this.setState({showAddCode: false})
     }
   },
 
@@ -122,6 +141,10 @@ var CodeListComponent = React.createClass( {
         height: '110px',
         width: '110px',
         fill: '#d0d0d0'
+      },
+      errorMessage: {
+        margin: '5px 0 15px 0',
+        color: '#F00'
       }
     };
     return styles;
@@ -133,7 +156,6 @@ var CodeListComponent = React.createClass( {
   },
   handleAddCode: function(e) {
     this.props.onAddCode(this.state.newCode);
-    this.setState({ showAddCode: false })
     e.preventDefault()
   },
   handleShowAddCodeForm: function(e) {
@@ -142,6 +164,7 @@ var CodeListComponent = React.createClass( {
   },
 
   handleShowCodeListScreen: function(e) {
+    this.resetErrorMessage()
     this.setState({showAddCode: false})
     e.preventDefault()
   },
@@ -161,7 +184,8 @@ var CodeListComponent = React.createClass( {
         />
         <div className="fade-in" style={styles.content}>
           <div style={styles.form}>
-            <TextField hintText="Code" style={styles.formElem} ref="textfield" autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange}/>
+            <TextField hintText="Code" style={styles.formElem} ref="textfield" autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange} onFocus={this.handleOnFocus}/>
+            <div style={styles.errorMessage}>{this.props.invalidCodeMessage}</div>
             <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onTouchTap={this.handleAddCode} />
           </div>
         </div>
@@ -235,9 +259,9 @@ var CodeListComponent = React.createClass( {
     )
   },
 
-
   render: function() {
     const styles = this.getStyles();
+
 
     let body = this.getCodeList()
     if (this.state.showAddCode) {

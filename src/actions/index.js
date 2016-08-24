@@ -126,18 +126,43 @@ export const addCode = (code) => {
       if(response.ok) {
         console.log('fetch response ok')
         return response.json().then(function(json) {
-          dispatch(receiveFullnameByCode(json))
+          if (json.fullname == 'notfound') {
+            dispatch(codeValid(false))
+            dispatch(codeInvalidMessage('Code invalide'))
+          } else {
+            dispatch(codeValid(true))
+            dispatch(linkCodeToDevice(code, device.uuid, device.platform))
+            dispatch(receiveFullnameByCode(json))
+          }
+
+
         })
       } else {
         console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(codeValid(false))
         dispatch(handleFetchError())
       }
     })
     .catch(function(err) {
+      dispatch(codeValid(false))
       dispatch(handleFetchError())
-      dispatch(showSnackbar('Pas de connexion'))
+      dispatch(codeInvalidMessage('Pas de connexion'))
       console.log('Pas de connexion (addCode)' + err);
     })
+  }
+}
+
+export const codeInvalidMessage = (message) => {
+  return {
+    type: 'CODE_INVALID_MESSAGE',
+    message: message
+  }
+}
+
+export const codeValid = (value) => {
+  return {
+    type: 'CODE_VALID',
+    isCodeValid: value
   }
 }
 

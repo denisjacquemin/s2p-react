@@ -8,6 +8,8 @@ import currentScreen from './current-screen'
 import snackbar from './snackbar'
 import device from './device'
 import currentScrollPositionY from './scroll'
+import invalidCodeMessage from './invalidCodeMessage'
+import validCode from './validCode'
 
 
 
@@ -21,7 +23,9 @@ const messageApp = combineReducers({
   currentMessage,
   snackbar,
   device,
-  currentScrollPositionY
+  currentScrollPositionY,
+  invalidCodeMessage,
+  validCode
 })
 
 export default messageApp
