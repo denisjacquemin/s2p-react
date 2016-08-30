@@ -60,7 +60,6 @@ var FullMessageComponent  = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        paddingTop: '10px',
         top: '0'
       },
       content: {
@@ -69,15 +68,20 @@ var FullMessageComponent  = React.createClass( {
       },
       fullscreen: {
         position: 'relative',
-        top: '74px',
+        top: '64px',
         marginLeft: '0',
         marginRight: '0',
         WebkitFontSmoothing: 'subpixel-antialiased',
         boxShadow: 'none'
       },
       cardMedia: {
-        maxHeight: '250px',
+        // maxHeight: '250px',
+        position: 'absolute',
         overflow: 'hidden'
+      },
+      cardMediaSlider: {
+        //maxHeight: '250px',
+        //overflow: 'hidden'
       },
       cardText: {
         fontSize: '16px',
@@ -101,7 +105,9 @@ var FullMessageComponent  = React.createClass( {
       swipe: true,
       slidesToShow: 1,
       slidesToScroll: 1,
-      mobileFirst: true
+      mobileFirst: true,
+      adaptiveHeight: false,
+      fade: false
     }
     return settings;
   },
@@ -126,7 +132,7 @@ var FullMessageComponent  = React.createClass( {
       if (message.mfiles.length > 1) {
         let slides = []
         for (let i in message.mfiles) {
-          slides.push(<div key={message.mfiles[i].id} style={styles.cardMedia}><ImageLoader src={'https:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
+          slides.push(<div key={message.mfiles[i].id} style={styles.cardMediaSlider}><ImageLoader src={'https:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
         }
         media = <CardMedia>
           <Slider {...settings}>
@@ -134,18 +140,18 @@ var FullMessageComponent  = React.createClass( {
           </Slider>
         </CardMedia>
       } else {
-        media = <CardMedia style={styles.cardMedia}><img src={'https:' + message.mfiles[0].file_url} /></CardMedia>
+        media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><img src={'https:' + message.mfiles[0].file_url} /></CardMedia></div>
         }
     }
     let student_names = ""
-    if (message.student != undefined) {
+    if (message.student_names != undefined) {
       student_names = ' - ' + message.student_names.join(' - ');
     }
     let subtitle = <span>{moment(message.publish_date).format('Do MMMM YYYY HH:mm')}{student_names}</span>;
 
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
-        <div ref="body">
+        <div>
           <AppBar title={message.title}
             style={styles.appBar}
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}          />

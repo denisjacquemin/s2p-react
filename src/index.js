@@ -253,11 +253,13 @@ var app = {
     },
 
     renderApp: function(theStore) {
+      const root = document.createElement('div');
+      document.body.appendChild(root);
       ReactDOM.render(
         <Provider store={theStore}>
           <App />
         </Provider>,
-        document.getElementById('root')
+        root
       );
     }
 };

@@ -21,7 +21,8 @@ var Message = React.createClass( {
   getStyles: function() {
     const styles = {
       cardMedia: {
-        maxHeight: '250px',
+        //maxHeight: '250px',
+        position: 'absolute',
         overflow: 'hidden'
       },
       cardActions: {
@@ -49,7 +50,7 @@ var Message = React.createClass( {
 
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
-      media = <CardMedia style={styles.cardMedia} onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia>
+      media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
     }
 
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY HH:mm');

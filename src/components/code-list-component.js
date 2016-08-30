@@ -19,8 +19,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-
-
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
@@ -82,12 +81,11 @@ var CodeListComponent = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        paddingTop: '10px',
         top: '0'
       },
-      icon: {
-        fill: '#ffffff',
-        color: '#ffffff'
+      bottomBar: {
+        position: 'fixed',
+        bottom: '0'
       },
       progress: {
         position: 'absolute',
@@ -105,7 +103,7 @@ var CodeListComponent = React.createClass( {
       },
       add: {
         position: 'absolute',
-        bottom: '25px',
+        bottom: '80px',
         right: '25px'
       },
       form: {
@@ -145,6 +143,14 @@ var CodeListComponent = React.createClass( {
       errorMessage: {
         margin: '5px 0 15px 0',
         color: '#F00'
+      },
+      icon: {
+        display: 'block',
+        /**
+         * Used to ensure SVG icons are centered
+         * https://github.com/callemall/material-ui/pull/4982/files
+         */
+        width: '100%'
       }
     };
     return styles;
@@ -155,6 +161,7 @@ var CodeListComponent = React.createClass( {
     e.preventDefault()
   },
   handleAddCode: function(e) {
+    this.resetErrorMessage();
     this.props.onAddCode(this.state.newCode);
     e.preventDefault()
   },
@@ -184,7 +191,7 @@ var CodeListComponent = React.createClass( {
         />
         <div className="fade-in" style={styles.content}>
           <div style={styles.form}>
-            <TextField hintText="Code" style={styles.formElem} ref="textfield" autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange} onFocus={this.handleOnFocus}/>
+            <TextField hintText="Code" style={styles.formElem} autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange} onFocus={this.handleOnFocus}/>
             <div style={styles.errorMessage}>{this.props.invalidCodeMessage}</div>
             <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onTouchTap={this.handleAddCode} />
           </div>
@@ -228,26 +235,12 @@ var CodeListComponent = React.createClass( {
       <div>
         <AppBar id="header" title="Gestion des codes"
           style={styles.appBar}
-          onLeftIconButtonTouchTap={this.handleLeftMenu}
+          showMenuIconButton={false}
         />
         {content}
         <FloatingActionButton style={styles.add} secondary={true} onTouchEnd={this.handleShowAddCodeForm}>
           <ContentAdd />
         </FloatingActionButton>
-        <Drawer
-          docked={false}
-          width={200}
-          open={this.state.open}
-          onRequestChange={open => this.setState({ open })}
-        >
-          <div style={styles.leftbarHeader}>
-            <img src="assets/img/logo_draw.png" width="45%"/><br />
-            <img src="assets/img/logo_text.png" width="35%"/>
-          </div>
-          <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline/>}> Messages</MenuItem>
-          <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
-
-        </Drawer>
         <Snackbar
           style={styles.snackbar}
           open={this.props.snackbar.show}
@@ -255,6 +248,18 @@ var CodeListComponent = React.createClass( {
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
+        <BottomNavigation selectedIndex={1} style={styles.bottomBar}>
+          <BottomNavigationItem
+            icon=<MailOutline style={styles.icon} />
+            onTouchTap={() => this.handleMessagesScreen()}
+            label="Messages"
+          />
+          <BottomNavigationItem
+            icon=<People style={styles.icon} />
+            label="Gestion codes"
+            onTouchTap={() => this.handleCodes()}
+          />
+        </BottomNavigation>
       </div>
     )
   },

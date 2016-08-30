@@ -24,8 +24,10 @@ import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconMenu from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
@@ -85,24 +87,29 @@ var MessageList = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        paddingTop: '10px',
+        paddingTop: '0px',
         top: '0'
       },
-      icon: {
+      bottomBar: {
+        position: 'fixed',
+        bottom: '0'
+      },
+      iconRefresh: {
         fill: '#ffffff',
         color: '#ffffff'
       },
       progress: {
         position: 'fixed',
-        top: '74px',
+        top: '64px',
         borderRadius: '0',
         zIndex: '100'
       },
       content: {
         position: 'absolute',
-        top: '70px',
+        top: '60px',
         width:  '100%',
-        backgroundColor: '#dadada'
+        backgroundColor: '#dadada',
+        paddingBottom: '70px'
       },
       loading: {
         display: 'inline-block',
@@ -150,6 +157,14 @@ var MessageList = React.createClass( {
         height: '70px',
         width: '70px',
         fill: '#ffffff'
+      },
+      icon: {
+        display: 'block',
+        /**
+         * Used to ensure SVG icons are centered
+         * https://github.com/callemall/material-ui/pull/4982/files
+         */
+        width: '100%'
       }
     };
     return styles;
@@ -159,15 +174,15 @@ var MessageList = React.createClass( {
 
     const styles = this.getStyles();
 
-    let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><StarBorder/></IconButton>
+    let starIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.toggleShowImportant}><StarBorder/></IconButton>
     if (this.props.showImportant) {
-      starIcon = <IconButton  iconStyle={styles.icon} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
+      starIcon = <IconButton  iconStyle={styles.iconRefresh} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
     }
 
-    let refreshIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+    let refreshIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
     let progress
     if (this.props.isFetching) {
-      refreshIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+      refreshIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
       progress = <LinearProgress mode="indeterminate" style={styles.progress} color="#f44336" />
     }
 
@@ -187,7 +202,7 @@ var MessageList = React.createClass( {
         <div>
           <AppBar id="header" title="Messages"
             style={styles.appBar}
-            onLeftIconButtonTouchTap={this.handleLeftMenu}
+            showMenuIconButton={false}
             iconElementRight={
               <div >
                 {refreshIcon}
@@ -206,22 +221,8 @@ var MessageList = React.createClass( {
                 }
               })
             }
-
           </div>
           {emptyState}
-          <Drawer
-            docked={false}
-            width={200}
-            open={this.state.open}
-            onRequestChange={open => this.setState({ open })}
-          >
-            <div style={styles.leftbarHeader}>
-              <img src="assets/img/logo_draw.png" width="45%"/><br />
-              <img src="assets/img/logo_text.png" width="35%"/>
-            </div>
-            <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline />}>Messages</MenuItem>
-            <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
-          </Drawer>
           <Snackbar
             style={styles.snackbar}
             open={this.props.snackbar.show}
@@ -229,10 +230,43 @@ var MessageList = React.createClass( {
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
+          <BottomNavigation selectedIndex={0} style={styles.bottomBar}>
+            <BottomNavigationItem
+              icon=<MailOutline style={styles.icon} />
+              onTouchTap={() => this.handleMessagesScreen()}
+              label="Messages"
+            />
+            <BottomNavigationItem
+              icon=<People style={styles.icon} />
+              label="Gestion codes"
+              onTouchTap={() => this.handleCodes()}
+            />
+          </BottomNavigation>
         </div>
       </MuiThemeProvider>
     )
   }
 });
+
+
+//onLeftIconButtonTouchTap={this.handleLeftMenu}
+// <Drawer
+//   docked={false}
+//   width={200}
+//   open={this.state.open}
+//   onRequestChange={open => this.setState({ open })}
+// >
+//   <div style={styles.leftbarHeader}>
+//     <img src="assets/img/logo_draw.png" width="45%"/><br />
+//     <img src="assets/img/logo_text.png" width="35%"/>
+//   </div>
+//   <Menu>
+//     <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline />}>Messages</MenuItem>
+//     <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
+//   </Menu>
+// </Drawer>
+
+
+
 
 export default MessageList;

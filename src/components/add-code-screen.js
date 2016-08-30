@@ -99,10 +99,10 @@ var AddCodeScreen = React.createClass( {
             <img className="animated bounceInDown" src="assets/img/logo2x.png" width="100%"/>
           </div>
         </div>
-        <Card style={cardStyle} ref="card" className="animated fadeIn">
+        <Card style={cardStyle} className="animated fadeIn">
           <CardTitle title="Entrez un code" subtitle="Le code fourni par l'école" />
           <div style={formStyle}>
-            <TextField hintText="Code" style={fieldStyle} ref="textfield" autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
+            <TextField hintText="Code" style={fieldStyle} autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
             <div style={errorMessage}>{this.props.invalidCodeMessage}</div>
             <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
           </div>
@@ -124,6 +124,7 @@ var AddCodeScreen = React.createClass( {
   },
 
   handleAddCode: function(code) {
+    this.resetErrorMessage();
     this.props.onAddCode(this.state.newCode);
     //this.setState({ showCodeSaved: true })
   },

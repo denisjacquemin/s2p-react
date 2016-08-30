@@ -3,7 +3,6 @@ import {fade} from 'material-ui/utils/colorManipulator';
 import Spacing from 'material-ui/styles/spacing';
 import zIndex from 'material-ui/styles/zIndex';
 
-
 export default {
   spacing: Spacing,
   zIndex: zIndex,
@@ -21,5 +20,9 @@ export default {
     borderColor: '#e0e0e0', //Colors.grey300,
     disabledColor: fade('rgba(0, 0, 0, 0.87)', 0.3), //Colors.darkBlack
     pickerHeaderColor: '#f44336', //Colors.red500,
-  }
+  },
+  appBar: {
+    position: 'fixed',
+    top: 0,
+  },
 };
