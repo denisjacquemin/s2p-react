@@ -108,8 +108,7 @@ var MessageList = React.createClass( {
         position: 'absolute',
         top: '60px',
         width:  '100%',
-        backgroundColor: '#dadada',
-        paddingBottom: '70px'
+        backgroundColor: '#dadada'
       },
       loading: {
         display: 'inline-block',
