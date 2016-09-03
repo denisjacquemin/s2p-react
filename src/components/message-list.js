@@ -67,12 +67,10 @@ var MessageList = React.createClass( {
   handleCodes: function(e) {
     this.props.showCodeList()
     this.setState({open: false});
-    e.preventDefault();
   },
 
   handleMessagesScreen: function(e) {
     this.setState({open: false});
-    e.preventDefault();
   },
 
   handleRefresh: function() {
