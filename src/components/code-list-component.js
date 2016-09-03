@@ -74,7 +74,6 @@ var CodeListComponent = React.createClass( {
   handleMessagesScreen: function(e) {
     this.props.showMessagesScreen()
     this.setState({open: false});
-    e.preventDefault();
   },
 
   getStyles: function() {
