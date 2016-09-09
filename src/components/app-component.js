@@ -10,6 +10,11 @@ var AppComponent = React.createClass( {
 
   componentWillMount: function() {
     this.props.fetchMessages()
+    if (this.props.currentScreen === 'addcode') {
+      // first run of the app, no code yet
+      // needs to reset codes on server side for current uuid
+      this.props.resetCodesOnServer();
+    }
   },
 
   render: function() {

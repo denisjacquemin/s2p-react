@@ -84,7 +84,9 @@ var CodeListComponent = React.createClass( {
       },
       bottomBar: {
         position: 'fixed',
-        bottom: '0'
+        bottom: '0',
+        display: 'block',
+        textAlign: 'center'
       },
       progress: {
         position: 'absolute',

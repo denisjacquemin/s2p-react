@@ -24,7 +24,7 @@ module.exports = function(grunt) {
           overwrite: true,
           replacements: [{
             from: 'HOST_API',                   // string replacement
-            to: 'https://s2p-api-prod.herokuapp.com'
+            to: 'https://s2p-api-demo.herokuapp.com'
           }, {
             from: 'HOST_S3',      // regex replacement ('Fooo' to 'Mooo')
             to: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'

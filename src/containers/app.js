@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { hideSnackbar, fetchMessages, resetIsFetching} from '../actions'
+import { hideSnackbar, fetchMessages, resetIsFetching, resetCodesOnServer} from '../actions'
 import AppComponent from '../components/app-component'
 
 const getVisibleMessages = (messages = [], showOnlyImportant) => {
@@ -9,7 +9,6 @@ const getVisibleMessages = (messages = [], showOnlyImportant) => {
   }
   return messages
 }
-
 
 const mapStateToProps = (state) => {
   return {
@@ -28,6 +27,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(resetIsFetching());
       dispatch(hideSnackbar());
       dispatch(fetchMessages());
+    },
+    resetCodesOnServer: () => {
+      dispatch(resetCodesOnServer(device.uuid));
     }
   };
 };

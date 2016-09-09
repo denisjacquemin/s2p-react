@@ -63,6 +63,32 @@ export const resetIsFetching = () => {
   }
 }
 
+export const resetCodesOnServer = (uuid) => {
+  return function (dispatch, getState) {
+
+    return fetch('HOST_API/resetcodeonserver/?uuid=' + uuid, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {})
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      console.debug('resetCodesOnServer:' + err)
+      dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+      console.log('Pas de connexion (resetCodesOnServer)' + err);
+    })
+  }
+}
+
 export const fetchMessages = () => {
   return function (dispatch, getState) {
     // check if another fetch request is still in progress
