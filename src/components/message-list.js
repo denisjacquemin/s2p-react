@@ -44,14 +44,6 @@ var MessageList = React.createClass( {
       delay: 0,
       smooth: false,
     });
-    try {
-      window.analytics.trackView('Liste des Messages')
-    } catch (e) {
-      console.error(e)
-    }
-  },
-
-  componentWillMount: function() {
   },
 
   handleLeftMenu: function(e) {
@@ -94,6 +86,9 @@ var MessageList = React.createClass( {
         display: 'block',
         textAlign: 'center'
       },
+      bottomBarButton: {
+        width:'50%'
+      },
       iconRefresh: {
         fill: '#ffffff',
         color: '#ffffff'
@@ -108,7 +103,8 @@ var MessageList = React.createClass( {
         position: 'absolute',
         top: '60px',
         width:  '100%',
-        backgroundColor: '#dadada'
+        backgroundColor: '#dadada',
+        paddingBottom: '60px'
       },
       loading: {
         display: 'inline-block',
@@ -182,17 +178,32 @@ var MessageList = React.createClass( {
     let progress
     if (this.props.isFetching) {
       refreshIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
-      progress = <LinearProgress mode="indeterminate" style={styles.progress} color="#f44336" />
+      progress = <LinearProgress id="progress" mode="indeterminate" style={styles.progress} color="#f44336" />
     }
 
     let emptyState
     console.log('this.props.messages.length' + this.props.messages.length)
     if (this.props.messages.length === 0) {
-      emptyState = <div style={styles.emptyState} className="animated fadeIn">
+      emptyState = <div style={styles.emptyState} className="animated fadeIn content">
         <div>
           <MailOutline style={styles.mailOutline} />
           <p>Aucun message</p>
         </div>
+      </div>
+    }
+
+    let messages
+    if (typeof this.props.messages != "undefined" && this.props.messages != null && this.props.messages.length > 0) {
+      messages = <div className="fade-in content" style={styles.content}>
+        {
+          this.props.messages.map(message => {
+            if (message.mtype == 1 ) {
+              return <Alert key={message.id} message={message} />
+            } else {
+              return <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
+            }
+          })
+        }
       </div>
     }
 
@@ -209,18 +220,7 @@ var MessageList = React.createClass( {
             }
           />
           {progress}
-          <div className="fade-in" style={styles.content}>
-            {
-
-              this.props.messages.map(message => {
-                if (message.mtype == 1 ) {
-                  return <Alert key={message.id} message={message} />
-                } else {
-                  return <Message key={message.id} message={message} onMessageClick={this.props.onMessageClick}  />
-                }
-              })
-            }
-          </div>
+          {messages}
           {emptyState}
           <Snackbar
             style={styles.snackbar}
@@ -234,11 +234,13 @@ var MessageList = React.createClass( {
               icon=<MailOutline style={styles.icon} />
               onTouchTap={() => this.handleMessagesScreen()}
               label="Messages"
+              style={styles.bottomBarButton}
             />
             <BottomNavigationItem
               icon=<People style={styles.icon} />
               label="Gestion codes"
               onTouchTap={() => this.handleCodes()}
+              style={styles.bottomBarButton}
             />
           </BottomNavigation>
         </div>

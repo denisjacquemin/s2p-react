@@ -36,11 +36,7 @@ var FullMessageComponent  = React.createClass( {
 
   componentDidMount: function() {
     scroller.scrollTo('top');
-    try {
-      window.analytics.trackView('Message ' + this.props.currentMessage.title)
-    } catch (e) {
-      console.log(e)
-    }
+    this.props.onMessageViewed(this.props.currentMessage.id, this.props.currentMessage.school_id, device.uuid);
   },
 
   componentDidUpdate: function() {
@@ -152,11 +148,11 @@ var FullMessageComponent  = React.createClass( {
     return (
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
-          <AppBar title={message.title}
+          <AppBar id="header" title={message.title}
             style={styles.appBar}
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}          />
           <Element name="top" className="top"></Element>
-          <Card style={styles.fullscreen} className="fade-in">
+          <Card style={styles.fullscreen} className="fade-in content">
               { media }
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />

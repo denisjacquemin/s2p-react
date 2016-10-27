@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { showMessagesScreen, addCode, deleteCode, hideSnackbar, fetchMessages, resetIsFetching, linkCodeToDevice, unlinkCodeToDevice, codeInvalidMessage, codeValid} from '../actions'
+import { showMessagesScreen, addCode, deleteCode, hideSnackbar, fetchMessages, resetIsFetching, linkCodeToDevice, unlinkCodeToDevice, codeInvalidMessage, codeValid, showAddCodeForm} from '../actions'
 
 
 import CodeListComponent from '../components/code-list-component'
@@ -11,7 +11,8 @@ const mapStateToProps = (state) => {
     codes: state.codes,
     snackbar: state.snackbar,
     invalidCodeMessage: state.invalidCodeMessage,
-    validCode: state.validCode
+    validCode: state.validCode,
+    showAddCodeForm: state.showAddCodeForm
   };
 };
 
@@ -19,6 +20,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddCode: (code) => {
       dispatch(addCode(code))
+    },
+    onShowAddCodeForm: (value) => {
+      dispatch(showAddCodeForm(value))
     },
     resetErrorMessage: () => {
       dispatch(codeInvalidMessage(''));

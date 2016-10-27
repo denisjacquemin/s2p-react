@@ -140,13 +140,6 @@ import App from './containers/app'
 //
 // }
 
-function buildUserId(state) {
-  var userId = state.device.uuid
-  for (var c in state.codes) {
-    userId = userId + '-' + state.codes[c].fullname
-  }
-  return userId
-}
 
 var app = {
     // Application Constructor
@@ -241,15 +234,8 @@ var app = {
           .then((newState) => {
             console.log('Loaded state:', newState)
             this.renderApp(store)
-            window.analytics.setUserId(buildUserId(store.getState()))
-            console.log('userId: ' + buildUserId(store.getState()))
           })
           .catch((e) => {console.log('Failed to load previous state: ' + e)});
-      try {
-        window.analytics.startTrackerWithId('UA-79998761-1')
-      } catch(e) {
-        console.error(e);
-      }
     },
 
     renderApp: function(theStore) {

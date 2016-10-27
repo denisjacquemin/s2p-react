@@ -7,10 +7,10 @@
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" />
 		<meta http-equiv="Content-Security-Policy"
 					content="default-src 'self' data: gap: https://ssl.gstatic.com https://ssl.google-analytics.com;
-									 connect-src HOST_API;
+									 connect-src HOST_API HOST_ANALYTICS_API;
 									 style-src 'self' 'unsafe-inline';
 									 script-src 'self' 'unsafe-inline' 'unsafe-eval';
-									 img-src 'self' HOST_S3 data:;
+									 img-src 'self' https://notify.bugsnag.com HOST_S3 data:;
 		">
 		<title>Konecto App</title>
 		<link rel="stylesheet" href="assets/css/fonts.css">
@@ -22,9 +22,12 @@
 		<link rel="stylesheet" href="assets/vendor/slick.css">
 		<link rel="stylesheet" href="assets/css/disable_copypaste.css">
 		<link rel="stylesheet" href="assets/css/animate.min.css">
-
+		<link rel="stylesheet" href="assets/css/overrides.css" />
 		<script src="assets/vendor/zepto.min.js"></script>
 		<script src="cordova.js"></script>
+		<script
+		  src="assets/vendor/bugsnag-3.min.js"
+		  data-apikey="9eeda5d3e61e670deacf852c0962f6d1"></script>
 	</head>
 	<body>
 		<script src="app.js"></script>

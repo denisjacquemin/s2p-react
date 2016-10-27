@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { toggleImportant, showMessagesScreen } from '../actions'
+import { toggleImportant, showMessagesScreen, messageViewedAnalytics } from '../actions'
 import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
@@ -19,7 +19,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     onShowMessagesScreen: () => {
       dispatch(showMessagesScreen())
+    },
+    onMessageViewed: (mid, sid, uuid) => {
+      dispatch(messageViewedAnalytics(mid, sid, uuid))
     }
+
   };
 };
 

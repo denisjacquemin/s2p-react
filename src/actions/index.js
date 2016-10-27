@@ -63,6 +63,29 @@ export const resetIsFetching = () => {
   }
 }
 
+export const messageViewedAnalytics = (mid, sid, uuid) => {
+  return function (dispatch, getState) {
+
+    return fetch('HOST_ANALYTICS_API/v1/messages/mobileview?uuid=' + uuid + '&sid=' + sid + '&mid=' + mid, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {})
+      } else {
+        console.log('fetch response not ok, reset messages.isFetching');
+        // nothing to display to user if request failed, just analytics request
+      }
+    })
+    .catch(function(err) {
+      console.debug('messageViewedAnalytics:' + err)
+    })
+  }
+}
+
 export const resetCodesOnServer = (uuid) => {
   return function (dispatch, getState) {
 
@@ -142,39 +165,46 @@ export const deleteCode = (code) => {
 export const addCode = (code) => {
   return function (dispatch, getState) {
     // https://s2p-api-prod.herokuapp.com
-    return fetch('HOST_API/getfullnamebycode/' + code, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(function(response) {
-      if(response.ok) {
-        console.log('fetch response ok')
-        return response.json().then(function(json) {
-          if (json.fullname == 'notfound') {
-            dispatch(codeValid(false))
-            dispatch(codeInvalidMessage('Code invalide'))
-          } else {
-            dispatch(codeValid(true))
-            dispatch(linkCodeToDevice(code, device.uuid, device.platform))
-            dispatch(receiveFullnameByCode(json))
+    try {
+
+        fetch('HOST_API/getfullnamebycode/' + code, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
           }
-
-
         })
-      } else {
-        console.log('fetch response not ok, reset messages.isFetching');
-        dispatch(codeValid(false))
-        dispatch(handleFetchError())
-      }
-    })
-    .catch(function(err) {
-      dispatch(codeValid(false))
-      dispatch(handleFetchError())
-      dispatch(codeInvalidMessage('Pas de connexion'))
-      console.log('Pas de connexion (addCode)' + err);
-    })
+        .then(function(response) {
+          if(response.ok) {
+            console.log('fetch response ok')
+            response.json().then(function(json) {
+              if (json.fullname == 'notfound') {
+                dispatch(codeValid(false))
+                dispatch(codeInvalidMessage('Code invalide'))
+              } else {
+                dispatch(codeValid(true))
+                dispatch(showAddCodeForm(false))
+                dispatch(linkCodeToDevice(code, device.uuid, device.platform))
+                dispatch(receiveFullnameByCode(json))
+              }
+            }).catch(function(err) {
+              console.log("response.json() error: " + err);
+            });
+          } else {
+            console.log('fetch response not ok, reset messages.isFetching');
+            dispatch(codeValid(false))
+            dispatch(handleFetchError())
+          }
+        })
+        .catch(function(err) {
+          dispatch(codeValid(false))
+          dispatch(handleFetchError())
+          dispatch(codeInvalidMessage('Pas de connexion'))
+          console.log('Pas de connexion (addCode)' + err);
+        })
+
+    } catch(err) {
+      console.log('addCode arror catched' + err);
+    }
   }
 }
 
@@ -182,6 +212,13 @@ export const codeInvalidMessage = (message) => {
   return {
     type: 'CODE_INVALID_MESSAGE',
     message: message
+  }
+}
+
+export const showAddCodeForm = (value) => {
+  return {
+    type: 'SHOW_ADD_CODE_FORM',
+    showAddCodeForm: value
   }
 }
 
@@ -379,4 +416,10 @@ export const unlinkCodeToDevice = (code, uuid) => {
 
     })
   }
+}
+
+function timeout(duration = 0) {
+    return new Promise((resolve, reject) => {
+        setTimeout(reject, duration);
+    })
 }

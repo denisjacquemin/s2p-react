@@ -41,20 +41,14 @@ var CodeListComponent = React.createClass( {
     this.resetErrorMessage();
   },
 
-  componentDidMount: function() {
-    try {
-      window.analytics.trackView('Liste des Codes')
-    } catch(e) {
-      console.error(e);
-    }
-  },
-
-  componentWillReceiveProps: function() {
-    if (this.props.validCode) {
-      this.resetErrorMessage()
-      this.setState({showAddCode: false})
-    }
-  },
+  // componentWillReceiveProps: function() {
+  //   if (this.props.validCode) {
+  //     this.resetErrorMessage()
+  //     this.setState({showAddCode: false})
+  //   } else {
+  //     this.setState({showAddCode: true})
+  //   }
+  // },
 
   handleLeftMenu: function(e) {
     this.setState({open: !this.state.open});
@@ -68,7 +62,6 @@ var CodeListComponent = React.createClass( {
 
   handleCodes: function(e) {
     this.setState({open: false});
-    e.preventDefault();
   },
 
   handleMessagesScreen: function(e) {
@@ -88,6 +81,9 @@ var CodeListComponent = React.createClass( {
         display: 'block',
         textAlign: 'center'
       },
+      bottomBarButton: {
+        width:'50%'
+      },
       progress: {
         position: 'absolute',
         top: '74px',
@@ -100,7 +96,8 @@ var CodeListComponent = React.createClass( {
       content: {
         position: 'absolute',
         top: '70px',
-        width: '100%'
+        width: '100%',
+        paddingBottom: '60px'
       },
       add: {
         position: 'absolute',
@@ -167,13 +164,13 @@ var CodeListComponent = React.createClass( {
     e.preventDefault()
   },
   handleShowAddCodeForm: function(e) {
-    this.setState({showAddCode: true})
+    this.props.onShowAddCodeForm(true)
     e.preventDefault()
   },
 
   handleShowCodeListScreen: function(e) {
     this.resetErrorMessage()
-    this.setState({showAddCode: false})
+    this.props.onShowAddCodeForm(false)
     e.preventDefault()
   },
 
@@ -186,11 +183,11 @@ var CodeListComponent = React.createClass( {
     const styles = this.getStyles();
     return (
       <div>
-        <AppBar title="Ajouter un code"
+        <AppBar id="header" title="Ajouter un code"
           style={styles.appBar}
           iconElementLeft={<IconButton onTouchTap={this.handleShowCodeListScreen}><NavigationClose /></IconButton>}
         />
-        <div className="fade-in" style={styles.content}>
+        <div className="fade-in content" style={styles.content}>
           <div style={styles.form}>
             <TextField hintText="Code" style={styles.formElem} autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange} onFocus={this.handleOnFocus}/>
             <div style={styles.errorMessage}>{this.props.invalidCodeMessage}</div>
@@ -206,14 +203,14 @@ var CodeListComponent = React.createClass( {
 
     let content
     if (this.props.codes.length === 0) {
-      content = <div style={styles.emptyState} className="animated fadeIn">
+      content = <div style={styles.emptyState} className="animated fadeIn content">
                   <div>
                     <People style={styles.people} />
                     <p>Aucun code</p>
                   </div>
                 </div>
     } else {
-      content = <div className="fade-in" style={styles.content}>
+      content = <div className="fade-in content" style={styles.content}>
                   <List>
                     {
                       this.props.codes.map(c =>
@@ -254,11 +251,13 @@ var CodeListComponent = React.createClass( {
             icon=<MailOutline style={styles.icon} />
             onTouchTap={() => this.handleMessagesScreen()}
             label="Messages"
+            style={styles.bottomBarButton}
           />
           <BottomNavigationItem
             icon=<People style={styles.icon} />
             label="Gestion codes"
             onTouchTap={() => this.handleCodes()}
+            style={styles.bottomBarButton}
           />
         </BottomNavigation>
       </div>
@@ -270,7 +269,8 @@ var CodeListComponent = React.createClass( {
 
 
     let body = this.getCodeList()
-    if (this.state.showAddCode) {
+    console.log("this.props.showAddCodeForm: " + this.props.showAddCodeForm)
+    if (this.props.showAddCodeForm) {
       body = this.getAddCodeForm()
     }
 

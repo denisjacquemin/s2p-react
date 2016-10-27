@@ -10,10 +10,7 @@ import device from './device'
 import currentScrollPositionY from './scroll'
 import invalidCodeMessage from './invalidCodeMessage'
 import validCode from './validCode'
-
-
-
-
+import showAddCodeForm from './showAddCodeForm'
 
 const messageApp = combineReducers({
   messages,
@@ -25,7 +22,8 @@ const messageApp = combineReducers({
   device,
   currentScrollPositionY,
   invalidCodeMessage,
-  validCode
+  validCode,
+  showAddCodeForm
 })
 
 export default messageApp

@@ -52,7 +52,7 @@ var Alert = React.createClass( {
     const message = this.props.message
     const styles = this.getStyles();
     let student_names = ""
-    if (message.student != undefined) {
+    if (message.student_names != undefined) {
       student_names = message.student_names.join(' - ');
     }
 
