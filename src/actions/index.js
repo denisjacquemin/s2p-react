@@ -234,6 +234,7 @@ export const receiveFullnameByCode = (json) => {
     type: 'ADD_CODE',
     fullname: json.fullname,
     code: json.code,
+    schoolname: json.schoolname,
     receivedAt: moment().utc().format('YYYY-MM-DD [[]HH:mm:ss[]]') // now(UTC) yyyy-mm-dd [hh:mm:ss]
   }
 }

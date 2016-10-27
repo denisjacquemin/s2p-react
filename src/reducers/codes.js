@@ -16,6 +16,7 @@ const code = (state = codeInitialState, action) => {
       return {
           code: action.code,
           fullname: action.fullname,
+          schoolname: action.schoolname,
           receivedAt: action.receivedAt
       };
       default:

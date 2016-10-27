@@ -219,7 +219,7 @@ var CodeListComponent = React.createClass( {
                           primaryText={c.fullname}
                           secondaryText={
                             <p>
-                              <span>{c.code}</span>
+                              <span>{c.code} - {c.schoolname}</span>
                             </p>
                           }
                           rightIconButton={<IconButton onTouchTap={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
