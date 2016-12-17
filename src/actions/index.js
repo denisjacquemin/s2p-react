@@ -112,6 +112,42 @@ export const resetCodesOnServer = (uuid) => {
   }
 }
 
+export const syncCodesFromDevice = (uuid, codes) => {
+  return function (dispatch, getState) {
+    // var params = "uuid=" + device.uuid
+    // for(let c of codes) {
+    //   params += '&codes[]=' + c.code
+    // }
+
+    let params = "?uuid=" + uuid
+    for(let code of codes) {
+      params += '&codes[]=' + code
+    }
+
+    return fetch('HOST_API/synccodesfromdevice' + params, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      if(response.ok) {
+        console.log('syncCodesFromDevice fetch response ok')
+        return response.json().then(function(json) {
+          // dispatch(receiveSyncCodes(json))
+        })
+      } else {
+        console.log('syncCodesFromDevice fetch response not ok');
+      }
+    })
+    .catch(function(err) {
+      console.log('syncCodesFromDevice - pas de connexion (fetchMessages)' + err);
+    })
+
+    console.log('In syncCodesFromDevice');
+  }
+}
+
 export const fetchMessages = () => {
   return function (dispatch, getState) {
     // check if another fetch request is still in progress
@@ -284,6 +320,40 @@ export const saveRegistrationId = (registrationId, uuid) => {
     uuid: uuid
   }
 }
+
+export const saveDeviceStateToServer = (registrationId, uuid, platform, codes) => {
+  return function (dispatch, getState) {
+    const { device } = getState()
+
+    let params = '?rid=' + registrationId + '&uuid=' + uuid + '&platform=' + platform;
+    for(let code of codes) {
+      params += '&codes[]=' + code
+    }
+
+    return fetch('HOST_API/savedevicestatetoserver' + params, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response) {
+      if(response.ok) {
+        console.log('fetch response ok')
+        return response.json().then(function(json) {
+        })
+      } else {
+        console.log('saveDeviceStateToServer fetch response not ok');
+        dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      console.debug('saveDeviceStateToServer:' + err)
+      //dispatch(handleFetchError())
+      //dispatch(showSnackbar('Pas de connexion'))
+      console.log('Pas de connexion (saveDeviceStateToServer)' + err);
+    })
+  }
+}
+
 
 export const saveRegistrationIdToServer = (registrationId, uuid, platform) => {
   return function (dispatch, getState) {

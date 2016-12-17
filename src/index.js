@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification } from './actions'
+import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification, saveDeviceStateToServer } from './actions'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -185,8 +185,26 @@ var app = {
 
             console.log('data.registrationId: ' + data.registrationId)
             store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
-            store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
-            store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+            //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+            //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+
+            var state = store.getState();
+
+            // send each code to the server
+            // if code exist
+            //   then write it to Device.codes array
+            // returns full details for each code
+            // mobile save details into state.codes
+            var codesToSync = []
+            if (state.codes) { // if codes.any?
+              codesToSync = state.codes.map(function(c) {
+                return c.code
+              });
+
+              console.debug('Codes to sync with server: ' + codesToSync);
+              //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
+            }
+            store.dispatch(saveDeviceStateToServer(data.registrationId, device.uuid, device.platform, codesToSync));
             console.log('notification enabled on server');
         });
 

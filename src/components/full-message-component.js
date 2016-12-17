@@ -18,6 +18,7 @@ import Signature from './signature'
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Group from 'material-ui/svg-icons/social/group';
@@ -56,7 +57,8 @@ var FullMessageComponent  = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        top: '0'
+        top: '0',
+        paddingLeft: '15px'
       },
       content: {
         position: 'fixed',
@@ -150,7 +152,7 @@ var FullMessageComponent  = React.createClass( {
         <div>
           <AppBar id="header" title={message.title}
             style={styles.appBar}
-            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ChevronLeft /></IconButton>}          />
+            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ArrowBack /></IconButton>}          />
           <Element name="top" className="top"></Element>
           <Card style={styles.fullscreen} className="fade-in content">
               { media }

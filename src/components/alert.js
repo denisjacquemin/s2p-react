@@ -16,8 +16,9 @@ var Alert = React.createClass( {
   getStyles: function() {
     const styles = {
       card: {
-        margin: '12px 8px',
-        background: '#3E4EB8'
+        margin: '12px auto',
+        background: '#3E4EB8',
+        maxWidth: '600px'
       },
       cardText: {
         fontSize: '24px',

@@ -73,13 +73,17 @@ var CodeListComponent = React.createClass( {
     const styles = {
       appBar: {
         position: 'fixed',
-        top: '0'
+        top: '0',
+        paddingLeft: '15px'
       },
       bottomBar: {
         position: 'fixed',
         bottom: '0',
         display: 'block',
-        textAlign: 'center'
+        textAlign: 'center',
+        webkitBoxShadow: '0 -7px 6px -6px #999',
+        mozBoxShadow: '0 -7px 6px -6px #999',
+        boxShadow: '0 -7px 6px -6px #999'
       },
       bottomBarButton: {
         width:'50%'

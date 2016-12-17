@@ -84,7 +84,10 @@ var MessageList = React.createClass( {
         position: 'fixed',
         bottom: '0',
         display: 'block',
-        textAlign: 'center'
+        textAlign: 'center',
+        webkitBoxShadow: '0 -7px 6px -6px #999',
+        mozBoxShadow: '0 -7px 6px -6px #999',
+        boxShadow: '0 -7px 6px -6px #999'
       },
       bottomBarButton: {
         width:'50%'
