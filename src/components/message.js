@@ -43,6 +43,18 @@ var Message = React.createClass( {
     return <img src="assets/img/placeholder-470x352.jpg" />;
   },
 
+  url_parser: function(text) {
+    var regExp = /"(https?:[^\s]+)"/;
+    var url = text.match(regExp);
+    return url && url[1];
+  },
+
+  youtube_parser: function(url) {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+  },
+
   render: function() {
 
     const message = this.props.message
@@ -51,6 +63,16 @@ var Message = React.createClass( {
     let media
     if (message.mfiles != undefined && message.mfiles.length > 0) {
       media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+    }
+    else {
+      // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
+      if (message.content.indexOf('youtube')) {
+        var url = this.url_parser(message.content);
+        if (url) {
+          var youtube_id = this.youtube_parser(url);
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+        }
+      }
     }
 
     let publish_date = moment(message.publish_date).format('Do MMMM YYYY HH:mm');

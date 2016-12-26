@@ -160,6 +160,89 @@ var app = {
         app.startApp();
       }
     },
+
+    initPush: function(store) {
+
+      var push = PushNotification.init({
+          android: {
+              senderID: "441581989301",
+              clearBadge: "true",
+              vibrate: "true",
+              iconColor: "#FFFFFF"
+          },
+          ios: {
+              alert: "true",
+              badge: "false",
+              clearBadge: "true",
+              sound: "true"
+          }
+      });
+
+      push.on('registration', function(data) {
+          console.debug('push.on(registration) data.registrationId: '+ data.registrationId);
+
+          store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
+          //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+          //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+
+          var state = store.getState();
+
+          // send each code to the server
+          // if code exist
+          //   then write it to Device.codes array
+          // returns full details for each code
+          // mobile save details into state.codes
+          var codesToSync = []
+          if (state.codes) { // if codes.any?
+            codesToSync = state.codes.map(function(c) {
+              return c.code
+            });
+
+            console.debug('push.on(registration) codesToSync: ' + codesToSync);
+            //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
+          }
+          store.dispatch(saveDeviceStateToServer(data.registrationId, device.uuid, device.platform, codesToSync));
+          console.debug('push.on(registration) saveDeviceStateToServer');
+      });
+
+      push.on('notification', function(data) {
+          console.debug('push.on(notification)');
+
+          console.debug('push.on(notification) data.message: ' + data.message)
+          console.debug('push.on(notification) data.title: ' + data.title)
+          console.debug('push.on(notification) data.count: ' + data.count)
+          console.debug('push.on(notification) data.sound: ' + data.sound)
+          console.debug('push.on(notification) data.image: ' + data.image)
+          console.debug('push.on(notification) data.additionalData: ' + data.additionalData)
+          if (!data.additionalData.foreground) {
+            console.debug('push.on(notification) App in background');
+            store.dispatch(hideSnackbar());
+            store.dispatch(fetchMessages()).then(
+              function() {
+                store.dispatch(showFullMessage(data.additionalData.message_id))
+              }
+            );
+
+            push.setApplicationIconBadgeNumber(function() {
+                console.debug('push.on(notification) setApplicationIconBadgeNumber success');
+            }, function() {
+                console.debug('push.on(notification) setApplicationIconBadgeNumber error');
+            }, data.count);
+          } else {
+            console.debug('push.on(notification) App in foreground');
+            // if app in foreground
+            store.dispatch(showSnackbar('Un nouveau message est arrivé'));
+            store.dispatch(fetchMessages());
+          }
+      });
+
+      push.on('error', function(e) {
+          console.debug('push.on(error): ' + e.message);
+      });
+
+      return push;
+
+    },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
@@ -168,74 +251,6 @@ var app = {
         console.log('onDeviceReady');
         app.startApp();
 
-        var push = PushNotification.init({
-            android: {
-                senderID: "441581989301"
-            },
-            ios: {
-                alert: "true",
-                badge: "false",
-                clearBadge: "true",
-                sound: "true"
-            }
-        });
-
-        push.on('registration', function(data) {
-            console.log('####### push.on(registration')
-
-            console.log('data.registrationId: ' + data.registrationId)
-            store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
-            //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
-            //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
-
-            var state = store.getState();
-
-            // send each code to the server
-            // if code exist
-            //   then write it to Device.codes array
-            // returns full details for each code
-            // mobile save details into state.codes
-            var codesToSync = []
-            if (state.codes) { // if codes.any?
-              codesToSync = state.codes.map(function(c) {
-                return c.code
-              });
-
-              console.debug('Codes to sync with server: ' + codesToSync);
-              //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
-            }
-            store.dispatch(saveDeviceStateToServer(data.registrationId, device.uuid, device.platform, codesToSync));
-            console.log('notification enabled on server');
-        });
-
-        push.on('notification', function(data) {
-            console.log('####### push.on(notification');
-
-            console.log(data.message)
-            console.log(data.title)
-            console.log(data.count)
-            console.log(data.sound)
-            console.log(data.image)
-            console.log(data.additionalData)
-            if (!data.additionalData.foreground) {
-              console.debug('App in background');
-              store.dispatch(hideSnackbar());
-              store.dispatch(fetchMessages()).then(
-                function() {
-                  store.dispatch(showFullMessage(data.additionalData.message_id))
-                });
-            } else {
-              console.debug('App in foreground');
-              // if app in foreground
-              store.dispatch(showSnackbar(data.message));
-              store.dispatch(fetchMessages());
-            }
-        });
-
-        push.on('error', function(e) {
-            console.log('####### push.on(error');
-            console.log(e.message)
-        });
 
         // push.unregister(function() {
         //     console.log('####### push.unregister');
@@ -251,7 +266,8 @@ var app = {
       load(store)
           .then((newState) => {
             console.log('Loaded state:', newState)
-            this.renderApp(store)
+            app.initPush(store);
+            app.renderApp(store);
           })
           .catch((e) => {console.log('Failed to load previous state: ' + e)});
     },

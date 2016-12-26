@@ -16,9 +16,7 @@ var Alert = React.createClass( {
   getStyles: function() {
     const styles = {
       card: {
-        margin: '12px auto',
         background: '#3E4EB8',
-        maxWidth: '600px'
       },
       cardText: {
         fontSize: '24px',
@@ -58,7 +56,7 @@ var Alert = React.createClass( {
     }
 
     return (
-      <Card style={styles.card}>
+      <Card className="aMessage" style={styles.card}>
         <CardText style={styles.cardText}>
           {message.title}
           <br/>{message.when}<br/>

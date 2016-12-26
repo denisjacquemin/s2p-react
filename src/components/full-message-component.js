@@ -28,6 +28,8 @@ import FlatButton from 'material-ui/FlatButton';
 
 import Spacing from 'material-ui/styles/spacing'
 
+import {PhotoSwipe} from 'react-photoswipe';
+
 
 import ImageLoader from 'react-imageloader';
 
@@ -114,6 +116,18 @@ var FullMessageComponent  = React.createClass( {
     return <img src="assets/img/placeholder-470x352.jpg" />;
   },
 
+  url_parser: function(text) {
+    var regExp = /"(https?:[^\s]+)"/;
+    var url = text.match(regExp);
+    return url && url[1];
+  },
+
+  youtube_parser: function(url) {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+  },
+
   render: function() {
     console.debug('render')
     const styles = this.getStyles();
@@ -140,7 +154,18 @@ var FullMessageComponent  = React.createClass( {
       } else {
         media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><img src={'https:' + message.mfiles[0].file_url} /></CardMedia></div>
         }
+    } else {
+      // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
+      if (message.content.indexOf('youtube')) {
+        var url = this.url_parser(message.content);
+        if (url) {
+          var youtube_id = this.youtube_parser(url);
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+        }
+      }
     }
+
+
     let student_names = ""
     if (message.student_names != undefined) {
       student_names = ' - ' + message.student_names.join(' - ');
@@ -163,7 +188,6 @@ var FullMessageComponent  = React.createClass( {
           </Card>
         </div>
       </MuiThemeProvider>
-
     )
   }
 });
