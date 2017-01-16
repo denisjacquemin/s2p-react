@@ -5,17 +5,20 @@ module.exports = function(grunt) {
           dev : {
             NODE_ENV : 'development',
             HOST_API: 'https://s2p-api-demo.herokuapp.com',
-            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com',
+            CLOUD_CLOUDINARY: 'hgslafjx4'
           },
           demo : {
             NODE_ENV : 'development',
             HOST_API: 'https://s2p-api-demo.herokuapp.com',
-            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com',
+            CLOUD_CLOUDINARY: 'hgslafjx4'
           },
           prod : {
             NODE_ENV : 'production',
             HOST_API: 'https://s2p-api-prod.herokuapp.com',
-            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
+            HOST_S3: 'https://s2p-demo.s3-eu-west-1.amazonaws.com',
+            CLOUD_CLOUDINARY: 'hcmohfpxd'
           }
       },
       replace: {
@@ -31,6 +34,9 @@ module.exports = function(grunt) {
           }, {
             from: 'HOST_ANALYTICS_API',
             to: 'https://s2p-analytics-api-prod.herokuapp.com'
+          }, {
+            from: 'CLOUD_CLOUDINARY',
+            to: 'hcmohfpxd'
           }]
         }
       },

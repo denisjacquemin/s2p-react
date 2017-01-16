@@ -30,12 +30,42 @@ import Spacing from 'material-ui/styles/spacing'
 
 import {PhotoSwipe} from 'react-photoswipe';
 
-
 import ImageLoader from 'react-imageloader';
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var FullMessageComponent  = React.createClass( {
+
+  getInitialState: function() {
+    const items = [];
+    const message = this.props.currentMessage;
+    if (message.photos != undefined && message.photos.length > 0) {
+      for (let i in message.photos) {
+        const src = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
+        const thumbnail = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
+        const w = message.photos[i].width
+        const h = message.photos[i].height
+
+        items.push({src: src, thumbnail: thumbnail, w: w, h: h })
+      }
+    }
+    const options = {
+      closeOnScroll: false,
+      captionEl: false,
+      fullscreenEl: false,
+      zoomEl: false,
+      shareEl: true,
+      shareButtons: [
+          // {id:'download', label:"Sauver l'image", url:'{{raw_image_url}}', download:true},
+          {id:'facebook', label:'Partager sur Facebook', url:'https://www.facebook.com/sharer/sharer.php?u={{image_url}}'},
+          {id:'twitter', label:'Partager sur Twitter', url:'https://twitter.com/intent/tweet?text={{text}}&url={{image_url}}'},
+          {id:'pinterest', label:'Pin it', url:'http://www.pinterest.com/pin/create/button/?url={{url}}&media={{image_url}}&description={{text}}'}
+      ],
+      clickToCloseNonZoomable: false,
+    }
+
+    return { isPSOpen: false, PSItems: items, PSOptions: options };
+  },
 
   componentDidMount: function() {
     scroller.scrollTo('top');
@@ -128,6 +158,34 @@ var FullMessageComponent  = React.createClass( {
     return (match&&match[7].length==11)? match[7] : false;
   },
 
+  getPSThumbnailContent: function(item) {
+    const styles = this.getStyles();
+    return (
+      <CardMedia
+        style={styles.cardMedia}
+        className="mediaImg">
+          <ImageLoader
+            src={item.thumbnail}
+            wrapper={React.DOM.div}
+            preloader={this.preloader}>
+          </ImageLoader>
+      </CardMedia>
+    );
+  },
+
+  openPhotoSwipe: function(e)  {
+    e.preventDefault();
+    this.setState({
+      isPSOpen: true
+    });
+  },
+
+  closePhotoSwipe: function() {
+    this.setState({
+      isPSOpen: false
+    });
+  },
+
   render: function() {
     console.debug('render')
     const styles = this.getStyles();
@@ -140,11 +198,16 @@ var FullMessageComponent  = React.createClass( {
     }
 
     let media
-    if (message.mfiles != undefined && message.mfiles.length > 0) {
-      if (message.mfiles.length > 1) {
+    if (message.photos != undefined && message.photos.length > 0) {
+      if (message.photos.length > 1) {
         let slides = []
-        for (let i in message.mfiles) {
-          slides.push(<div key={message.mfiles[i].id} style={styles.cardMediaSlider}><ImageLoader src={'https:' + message.mfiles[i].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></div>)
+        for (let i in message.photos) {
+          slides.push(<div key={message.photos[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
+            <ImageLoader
+              src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.' + message.photos[i].format}
+              wrapper={React.DOM.div}
+              preloader={this.preloader}></ImageLoader>
+          </div>)
         }
         media = <CardMedia>
           <Slider {...settings}>
@@ -152,15 +215,21 @@ var FullMessageComponent  = React.createClass( {
           </Slider>
         </CardMedia>
       } else {
-        media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><img src={'https:' + message.mfiles[0].file_url} /></CardMedia></div>
+        media = <div className="stretchyWrapper">
+            <CardMedia style={styles.cardMedia} className="mediaImg">
+              <img
+                onTouchTap={(e) => this.openPhotoSwipe(e)}
+                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.' + message.photos[0].format} />
+            </CardMedia>
+          </div>
         }
     } else {
       // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
-      if (message.content.indexOf('youtube')) {
+      if (message.content.indexOf('youtube') != -1) {
         var url = this.url_parser(message.content);
         if (url) {
           var youtube_id = this.youtube_parser(url);
-          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
         }
       }
     }
@@ -180,12 +249,18 @@ var FullMessageComponent  = React.createClass( {
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ArrowBack /></IconButton>}          />
           <Element name="top" className="top"></Element>
           <Card style={styles.fullscreen} className="fade-in content">
-              { media }
+              {media}
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
               <Signature signature={message.signature}>
               </Signature>
           </Card>
+          <PhotoSwipe
+            isOpen={this.state.isPSOpen}
+            onClose={this.closePhotoSwipe}
+            items={this.state.PSItems}
+            options={this.state.PSOptions}
+            thumbnailContent={this.getPSThumbnailContent} />
         </div>
       </MuiThemeProvider>
     )

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification, saveDeviceStateToServer } from './actions'
 
+
 //Needed for onTouchTap
 //Can go away when react 1.0 release
 //Check this repo:
@@ -214,6 +215,7 @@ var app = {
           console.debug('push.on(notification) data.sound: ' + data.sound)
           console.debug('push.on(notification) data.image: ' + data.image)
           console.debug('push.on(notification) data.additionalData: ' + data.additionalData)
+          console.debug('push.on(notification) data.additionalData.notId' + data.additionalData.notId)
           if (!data.additionalData.foreground) {
             console.debug('push.on(notification) App in background');
             store.dispatch(hideSnackbar());
@@ -234,6 +236,11 @@ var app = {
             store.dispatch(showSnackbar('Un nouveau message est arrivé'));
             store.dispatch(fetchMessages());
           }
+          push.finish(function() {
+                console.log("processing of push data is finished");
+            }, function() {
+            console.log("something went wrong with push.finish for ID = " + data.additionalData.notId)
+          }, data.additionalData.notId);
       });
 
       push.on('error', function(e) {
@@ -266,7 +273,9 @@ var app = {
       load(store)
           .then((newState) => {
             console.log('Loaded state:', newState)
-            app.initPush(store);
+            if (typeof PushNotification !== "undefined") {
+              app.initPush(store);
+            }
             app.renderApp(store);
           })
           .catch((e) => {console.log('Failed to load previous state: ' + e)});
