@@ -14,6 +14,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
 
 import Signature from './signature'
+import Form from './form'
 
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
@@ -25,6 +26,8 @@ import Group from 'material-ui/svg-icons/social/group';
 import Star from 'material-ui/svg-icons/toggle/star';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
+
 
 import Spacing from 'material-ui/styles/spacing'
 
@@ -116,6 +119,10 @@ var FullMessageComponent  = React.createClass( {
       cardText: {
         fontSize: '16px',
         wordWrap: 'break-word'
+      },
+      snackbar: {
+        fontFamily: 'Roboto, sans-serif',
+        WebkitFontSmoothing: 'antialiased'
       }
     };
     return styles;
@@ -252,9 +259,17 @@ var FullMessageComponent  = React.createClass( {
               {media}
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
+              <Form muuid={message.muuid} formjson={message.formdata} onSubmitForm={this.props.onSubmitForm} showSnackbar={this.props.showSnackbar}/>
               <Signature signature={message.signature}>
               </Signature>
           </Card>
+          <Snackbar
+            style={styles.snackbar}
+            open={this.props.snackbar.show}
+            message={this.props.snackbar.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
           <PhotoSwipe
             isOpen={this.state.isPSOpen}
             onClose={this.closePhotoSwipe}

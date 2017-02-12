@@ -112,6 +112,68 @@ export const resetCodesOnServer = (uuid) => {
   }
 }
 
+export const submitForm = (state, muuid) => {
+
+  console.log('In actions.submitform');
+  var formdata = []
+  for (var key in state) {
+    if (state.hasOwnProperty(key)) {
+      if (Array.isArray(state[key])) {
+        for (var i=0; i<state[key].length; i++) {
+          formdata.push({
+            name: key + '[]',
+            value: state[key][i]['value'],
+            label: state[key][i]['label']
+          })
+        }
+      } else {
+        formdata.push({
+          name: key,
+          value: state[key]['value'],
+          label: state[key]['label']
+        })
+      }
+    }
+  }
+  console.log('formdata: ' + JSON.stringify(formdata));
+
+  return function (dispatch, getState) {
+    // check if another fetch request is still in progress
+
+    var data = new FormData()
+    data.append('formdata', JSON.stringify(formdata))
+    data.append('muuid', muuid)
+    return fetch('HOST_API/saveform', {
+      method: 'POST',
+      body: data
+    })
+    .then(function(response) {
+      if(response.ok) {
+        console.log('save form ok')
+        return response.json().then(function(json) {
+          setTimeout(
+            function(){ dispatch(showSnackbar('Le formulaire a bien été enregistré')) },
+            2000
+          )
+
+        })
+      } else {
+        dispatch(showSnackbar("Le formulaire n'a pu être enregistré"))
+        //dispatch(handleFetchError())
+      }
+    })
+    .catch(function(err) {
+      //dispatch(handleFetchError())
+      dispatch(showSnackbar('Pas de connexion'))
+      console.log('Pas de connexion (fetchMessages)' + err);
+    })
+
+  }
+
+
+
+}
+
 export const syncCodesFromDevice = (uuid, codes) => {
   return function (dispatch, getState) {
     // var params = "uuid=" + device.uuid

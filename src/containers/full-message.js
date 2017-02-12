@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { toggleImportant, showMessagesScreen, messageViewedAnalytics } from '../actions'
+import { toggleImportant, showMessagesScreen, messageViewedAnalytics, submitForm, showSnackbar } from '../actions'
 import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
     return m.id === state.currentMessage.id
   })
   return {
-    currentMessage: message
+    currentMessage: message,
+    snackbar: state.snackbar
   };
 };
 
@@ -22,8 +23,13 @@ const mapDispatchToProps = (dispatch) => {
     },
     onMessageViewed: (mid, sid, uuid) => {
       dispatch(messageViewedAnalytics(mid, sid, uuid))
+    },
+    onSubmitForm: (state, muuid) => {
+      dispatch(submitForm(state, muuid))
+    },
+    showSnackbar: (message) => {
+      dispatch(showSnackbar(message))
     }
-
   };
 };
 
