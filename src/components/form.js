@@ -37,20 +37,20 @@ var Form = React.createClass( {
 
     var formdata = []
     for (var key in this.state.form) {
-      if (this.state.hasOwnProperty(key)) {
-        if (Array.isArray(this.state[key])) {
-          for (var i=0; i<this.state[key].length; i++) {
+      if (this.state.form.hasOwnProperty(key)) {
+        if (Array.isArray(this.state.form[key])) {
+          for (var i=0; i<this.state.form[key].length; i++) {
             formdata.push({
               name: key + '[]',
-              value: this.state[key][i]['value'],
-              label: this.state[key][i]['label']
+              value: this.state.form[key][i]['value'],
+              label: this.state.form[key][i]['label']
             })
           }
         } else {
           formdata.push({
             name: key,
-            value: this.state[key]['value'],
-            label: this.state[key]['label']
+            value: this.state.form[key]['value'],
+            label: this.state.form[key]['label']
           })
         }
       }
@@ -105,6 +105,7 @@ var Form = React.createClass( {
     console.log('e.target.value: ' + e.target.value + ' for ' + e.target.name + ' value is: ' + isInputChecked)
     this.setState({
       form: {
+        ...this.state.form,
         [e.target.name]: {
           value: e.target.value,
           label: e.target.dataset['label']
@@ -117,8 +118,8 @@ var Form = React.createClass( {
   handleCheckboxGroupChange: function(e, isInputChecked) {
     console.log('e.target.value: ' + e.target.value + ' for ' + e.target.name + ' value is: ' + isInputChecked)
     let listOfCheckbox = []
-    if (this.state[e.target.name] != undefined) {
-      listOfCheckbox = this.state[e.target.name]
+    if (this.state.form != undefined && this.state.form[e.target.name] != undefined) {
+      listOfCheckbox = this.state.form[e.target.name]
     }
     if (isInputChecked) {
       listOfCheckbox.push({
@@ -140,6 +141,7 @@ var Form = React.createClass( {
     }
     this.setState({
       form: {
+          ...this.state.form,
           [e.target.name]: listOfCheckbox
       }
     });
@@ -150,6 +152,7 @@ var Form = React.createClass( {
     console.log('Value changed for text ' + e.target.name + ' to ' + value)
     this.setState({
       form: {
+        ...this.state.form,
         [e.target.name]: {
           value: value,
           label: e.target.dataset['label']
@@ -209,6 +212,19 @@ var Form = React.createClass( {
       const formjson = JSON.parse(this.props.formjson);
       for (let i in formjson) {
          switch (formjson[i].type) {
+           case 'text': {
+             formElements.push(<TextField
+                hintText=""
+                floatingLabelText={formjson[i].label}
+                floatingLabelFixed={true}
+                style={styles.text}
+                name={formjson[i].name}
+                onChange={this.handleTextChange}
+                data-label={formjson[i].label}
+                fullWidth={true}
+              />);
+             break;
+           }
            case 'textarea': {
              formElements.push(<TextField
                 hintText=""
@@ -231,19 +247,6 @@ var Form = React.createClass( {
                 onCheck={this.handleCheckboxChange}
                 data-label={formjson[i].label}
                 data-value={formjson[i].value}
-              />);
-             break;
-           }
-           case 'text': {
-             formElements.push(<TextField
-                hintText=""
-                floatingLabelText={formjson[i].label}
-                floatingLabelFixed={true}
-                style={styles.text}
-                name={formjson[i].name}
-                onChange={this.handleTextChange}
-                data-label={formjson[i].label}
-                fullWidth={true}
               />);
              break;
            }
