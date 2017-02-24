@@ -27,7 +27,7 @@ var AppComponent = React.createClass( {
         break;
       case 'full_message':
         let message = this.props.messages.find((m) => {
-          return m.id === this.props.currentMessage
+          return m.id === parseInt(this.props.currentMessage);
         })
         if (message === undefined) {
           screenToShow = <VisibleMessageList />;

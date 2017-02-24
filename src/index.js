@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, showFullMessage, enableDeviceNotification, disableDeviceNotification, saveDeviceStateToServer } from './actions'
+import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnackbar, fetchMessages, fetchMessagesAndShowFullMessage, showFullMessage, enableDeviceNotification, disableDeviceNotification, saveDeviceStateToServer } from './actions'
 
 
 //Needed for onTouchTap
@@ -219,11 +219,8 @@ var app = {
           if (!data.additionalData.foreground) {
             console.debug('push.on(notification) App in background');
             store.dispatch(hideSnackbar());
-            store.dispatch(fetchMessages()).then(
-              function() {
-                store.dispatch(showFullMessage(data.additionalData.message_id))
-              }
-            );
+            store.dispatch(fetchMessagesAndShowFullMessage(data.additionalData.message_id));
+            //store.dispatch(fetchMessages(data.additionalData.message_id));
 
             push.setApplicationIconBadgeNumber(function() {
                 console.debug('push.on(notification) setApplicationIconBadgeNumber success');

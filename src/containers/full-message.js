@@ -5,7 +5,7 @@ import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
   let message = state.messages.items.find((m) => {
-    return m.id === state.currentMessage.id
+    return m.id === parseInt(state.currentMessage.id)
   })
   return {
     currentMessage: message,

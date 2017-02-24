@@ -210,6 +210,14 @@ export const syncCodesFromDevice = (uuid, codes) => {
   }
 }
 
+export const fetchMessagesAndShowFullMessage = (showFullMessageId = 0) => {
+  return function (dispatch, getState) {
+    dispatch(fetchMessages()).then(() => {
+      dispatch(showFullMessage(showFullMessageId));
+    });
+  }
+}
+
 export const fetchMessages = () => {
   return function (dispatch, getState) {
     // check if another fetch request is still in progress

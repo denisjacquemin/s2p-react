@@ -90,11 +90,6 @@ var FullMessageComponent  = React.createClass( {
 
   getStyles: function() {
     const styles = {
-      appBar: {
-        position: 'fixed',
-        top: '0',
-        paddingLeft: '15px'
-      },
       content: {
         position: 'fixed',
         top: Spacing.desktopGutter
@@ -252,7 +247,7 @@ var FullMessageComponent  = React.createClass( {
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
           <AppBar id="header" title={message.title}
-            style={styles.appBar}
+            className="appbar"
             iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ArrowBack /></IconButton>}          />
           <Element name="top" className="top"></Element>
           <Card style={styles.fullscreen} className="fade-in content">

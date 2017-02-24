@@ -75,11 +75,6 @@ var MessageList = React.createClass( {
 
   getStyles: function() {
     const styles = {
-      appBar: {
-        position: 'fixed',
-        paddingTop: '0px',
-        top: '0'
-      },
       bottomBar: {
         position: 'fixed',
         bottom: '0',
@@ -214,7 +209,7 @@ var MessageList = React.createClass( {
       <MuiThemeProvider muiTheme={s2pMuiTheme}>
         <div>
           <AppBar id="header" title="Messages"
-            style={styles.appBar}
+            className="appbar"
             showMenuIconButton={false}
             iconElementRight={
               <div >

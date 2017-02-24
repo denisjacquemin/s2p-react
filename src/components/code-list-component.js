@@ -71,11 +71,6 @@ var CodeListComponent = React.createClass( {
 
   getStyles: function() {
     const styles = {
-      appBar: {
-        position: 'fixed',
-        top: '0',
-        paddingLeft: '15px'
-      },
       bottomBar: {
         position: 'fixed',
         bottom: '0',
@@ -188,7 +183,7 @@ var CodeListComponent = React.createClass( {
     return (
       <div>
         <AppBar id="header" title="Ajouter un code"
-          style={styles.appBar}
+          className="appbar"
           iconElementLeft={<IconButton onTouchTap={this.handleShowCodeListScreen}><NavigationClose /></IconButton>}
         />
         <div className="fade-in content" style={styles.content}>
@@ -236,7 +231,7 @@ var CodeListComponent = React.createClass( {
     return(
       <div>
         <AppBar id="header" title="Gestion des codes"
-          style={styles.appBar}
+          className="appbar"
           showMenuIconButton={false}
         />
         {content}
