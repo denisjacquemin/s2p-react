@@ -44,7 +44,7 @@ var FullMessageComponent  = React.createClass( {
     const message = this.props.currentMessage;
     if (message.photos != undefined && message.photos.length > 0) {
       for (let i in message.photos) {
-        const src = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
+        const src = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/w_1024,c_limit/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
         const thumbnail = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
         const w = message.photos[i].width
         const h = message.photos[i].height
@@ -259,6 +259,7 @@ var FullMessageComponent  = React.createClass( {
               </Signature>
           </Card>
           <Snackbar
+            className="snackbar"
             style={styles.snackbar}
             open={this.props.snackbar.show}
             message={this.props.snackbar.message}

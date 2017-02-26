@@ -239,6 +239,7 @@ var CodeListComponent = React.createClass( {
           <ContentAdd />
         </FloatingActionButton>
         <Snackbar
+          className="snackbar"
           style={styles.snackbar}
           open={this.props.snackbar.show}
           message={this.props.snackbar.message}
