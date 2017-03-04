@@ -254,7 +254,7 @@ var FullMessageComponent  = React.createClass( {
               {media}
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
-              <Form muuid={message.muuid} formjson={message.formdata} onSubmitForm={this.props.onSubmitForm} showSnackbar={this.props.showSnackbar}/>
+              <Form muuid={message.muuid} forms={message.forms} formjson={message.formdata} fetchMessages={this.props.fetchMessages} showSnackbar={this.props.showSnackbar}/>
               <Signature signature={message.signature}>
               </Signature>
           </Card>

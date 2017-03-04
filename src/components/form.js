@@ -6,6 +6,8 @@ import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import ActionDone from 'material-ui/svg-icons/action/done';
+import {List, ListItem} from 'material-ui/List';
 
 
 var Form = React.createClass( {
@@ -34,6 +36,7 @@ var Form = React.createClass( {
 
     const showSnackbar = this.props.showSnackbar
     const updateSubmitPlaceHolder = this.updateSubmitPlaceHolder
+    const fetchMessages = this.props.fetchMessages
 
     var formdata = []
     for (var key in this.state.form) {
@@ -59,6 +62,7 @@ var Form = React.createClass( {
     let data = new FormData()
     data.append('formdata', JSON.stringify(formdata))
     data.append('muuid', this.props.muuid)
+    data.append('uuid', device.uuid)
     return fetch('HOST_API/saveform', {
       method: 'POST',
       body: data
@@ -71,6 +75,7 @@ var Form = React.createClass( {
             function(){
               showSnackbar('Le formulaire a bien été envoyé.')
               updateSubmitPlaceHolder('button')
+              fetchMessages()
             },
             2000
           )
@@ -96,9 +101,6 @@ var Form = React.createClass( {
       )
       console.log('Pas de connexion' + err);
     })
-
-
-
   },
 
   handleCheckboxChange: function(e, isInputChecked) {
@@ -207,8 +209,28 @@ var Form = React.createClass( {
 
 
     let formRendered;
-    if (this.props.formjson != undefined) {
+    if (this.props.formjson != undefined && this.props.formjson != "[]") {
       let formElements = []
+      let formSubmitted = []
+
+
+      let formSubmittedList
+      if (this.props.forms != undefined && this.props.forms.length > 0) {
+        let formsSubmittedMessages = this.props.forms
+        for (let i in formsSubmittedMessages) {
+          formSubmitted.push(<ListItem primaryText="Formulaire envoyé" secondaryText={formsSubmittedMessages[i]} leftIcon={<ActionDone />} />)
+        }
+
+
+        if (formSubmitted != []) {
+          formSubmittedList = <List>
+            {formSubmitted}
+          </List>
+        }
+      }
+
+
+
       const formjson = JSON.parse(this.props.formjson);
       for (let i in formjson) {
          switch (formjson[i].type) {
@@ -283,6 +305,7 @@ var Form = React.createClass( {
 
       formRendered = <form id="theForm">
         {formElements}
+        {formSubmittedList}
         <div style={styles.submitPlaceholderContainer}>{submitPlaceholder}</div>
       </form>
     }

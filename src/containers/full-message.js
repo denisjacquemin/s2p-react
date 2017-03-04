@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { toggleImportant, showMessagesScreen, messageViewedAnalytics, submitForm, showSnackbar } from '../actions'
+import { toggleImportant, showMessagesScreen, fetchMessages, messageViewedAnalytics, submitForm, showSnackbar } from '../actions'
 import FullMessageComponent from '../components/full-message-component'
 
 const mapStateToProps = (state) => {
@@ -29,6 +29,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     showSnackbar: (message) => {
       dispatch(showSnackbar(message))
+    },
+    fetchMessages: () => {
+      dispatch(fetchMessages());
     }
   };
 };
