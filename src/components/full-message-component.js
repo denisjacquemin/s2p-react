@@ -22,6 +22,7 @@ import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import Pdf from 'material-ui/svg-icons/image/picture-as-pdf';
 import Group from 'material-ui/svg-icons/social/group';
 import Star from 'material-ui/svg-icons/toggle/star';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
@@ -90,6 +91,36 @@ var FullMessageComponent  = React.createClass( {
 
   getStyles: function() {
     const styles = {
+      pdfLinks: {
+        margin: '30px 20px'
+      },
+      pdfIcon: {
+        position: 'relative',
+        top: '5px',
+        left: '17px',
+        zIndex: '1'
+      },
+      publicId: {
+        position: 'absolute',
+        top: '3px',
+        left: '40px'
+      },
+      pdfLinkAnchor: {
+        display: 'block',
+        overflow: 'hidden',
+        backgroundColor: '#ddd',
+        position: 'relative',
+        margin: '7px 0',
+        height: '50px',
+        lineHeight: '50px',
+        borderRadius: '3px',
+        paddingRight: '10px'
+      },
+      pdfImage:{
+        position: 'absolute',
+        top: '0',
+        left: '0'
+      },
       content: {
         position: 'fixed',
         top: Spacing.desktopGutter
@@ -189,52 +220,140 @@ var FullMessageComponent  = React.createClass( {
   },
 
   render: function() {
-    console.debug('render')
     const styles = this.getStyles();
     const message = this.props.currentMessage;
     const settings = this.getSlickSettings();
 
-    let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><StarBorder/></IconButton>
-    if (message.important) {
-      starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
-    }
+    // let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><StarBorder/></IconButton>
+    // if (message.important) {
+    //   starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
+    // }
 
     let media
+    let pdfLinksContainer
     if (message.photos != undefined && message.photos.length > 0) {
-      if (message.photos.length > 1) {
-        let slides = []
-        for (let i in message.photos) {
-          slides.push(<div key={message.photos[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
-            <ImageLoader
-              src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.' + message.photos[i].format}
-              wrapper={React.DOM.div}
-              preloader={this.preloader}></ImageLoader>
+      let pdfList = []
+      let imageList = []
+
+      for (let i in message.photos) {
+        if (message.photos[i].format === 'pdf') {
+          pdfList.push(message.photos[i])
+        } else {
+          imageList.push(message.photos[i])
+        }
+      }
+
+      if (pdfList.length > 0) {
+        let pdfLinks = []
+        for (let i in pdfList) {
+          // pdfLinks.push(<div key={pdfList[i].id} style={{ backgroundRepeat: 'no-repeat', backgroundImage:  'url(' + 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + pdfList[i].resource_type  + '/upload/c_fill,h_70,g_auto/' + pdfList[i].public_id + '.png' + ')', height: '70px' }}><span><Pdf style={styles.pdfIcon}/></span><a href={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + pdfList[i].resource_type + '/upload/' + pdfList[i].public_id + '.pdf'} target="_blank">{pdfList[i].public_id}</a></div>)
+          pdfLinks.push(<div key={pdfList[i].id}>
+            <a style={styles.pdfLinkAnchor} target="_blank" href={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + pdfList[i].resource_type + '/upload/' + pdfList[i].public_id + '.pdf'}>
+              <img src="assets/img/pdf.png" style={styles.pdfIcon}/>
+              <span style={styles.publicId}>{pdfList[i].public_id}</span>
+            </a>
           </div>)
         }
-        media = <CardMedia>
-          <Slider {...settings}>
-            {slides}
-          </Slider>
-        </CardMedia>
-      } else {
-        media = <div className="stretchyWrapper">
+
+        pdfLinksContainer = <div style={styles.pdfLinks}>{pdfLinks}</div>
+      }
+
+      if (imageList.length > 0) {
+        if (imageList.length > 1) {
+          let slides = []
+          for (let i in imageList) {
+            let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[i].public_id + '.png'
+            slides.push(<div key={imageList[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
+              <ImageLoader
+                wrapper={React.DOM.div}
+                src={imgUrl}
+                preloader={this.preloader}
+                >
+              </ImageLoader>
+            </div>)
+          }
+          media = <CardMedia>
+            <Slider {...settings}>
+              {slides}
+            </Slider>
+          </CardMedia>
+        } else {
+          media = <div className="stretchyWrapper">
             <CardMedia style={styles.cardMedia} className="mediaImg">
               <img
-                onTouchTap={(e) => this.openPhotoSwipe(e)}
-                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.' + message.photos[0].format} />
+                onTouchTap={ (e) => { this.openPhotoSwipe(e) } }
+                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[0].public_id + '.png'} />
             </CardMedia>
           </div>
         }
-    } else {
-      // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
-      if (message.content.indexOf('youtube') != -1) {
-        var url = this.url_parser(message.content);
-        if (url) {
-          var youtube_id = this.youtube_parser(url);
-          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+      } else {
+        // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
+        if (message.content.indexOf('youtube') != -1) {
+          var url = this.url_parser(message.content);
+          if (url) {
+            var youtube_id = this.youtube_parser(url);
+            media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          }
         }
       }
     }
+
+
+
+
+
+    // let media
+    // if (message.photos != undefined && message.photos.length > 0) {
+    //   if (message.photos.length > 1) {
+    //     let slides = []
+    //     for (let i in message.photos) {
+    //       if (message.photos[i].format === 'pdf') {
+    //         pdfList.push(<div class="pdf"><a href={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/' + message.photos[i].public_id + '.pdf'} target="_blank">{ message.photos[i].public_id }</a></div>)
+    //       } else {
+    //         slides.push(<div key={message.photos[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
+    //           <ImageLoader
+    //             src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.png'}
+    //             wrapper={React.DOM.div}
+    //             preloader={this.preloader}></ImageLoader>
+    //         </div>)
+    //       }
+    //     }
+    //     media = <CardMedia>
+    //       <Slider {...settings}>
+    //         {slides}
+    //       </Slider>
+    //     </CardMedia>
+    //   } else {
+    //     if (message.photos[0].format === 'pdf') {
+    //       pdfList.push(<div class="pdf"><a href={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/' + message.photos[0].public_id + '.pdf'} target="_blank">{ message.photos[0].public_id }</a></div>)
+    //     } else {
+    //       media = <div className="stretchyWrapper">
+    //           <CardMedia style={styles.cardMedia} className="mediaImg">
+    //             <img
+    //               onTouchTap={ (e) => {
+    //                   // if (message.photos[0].format === 'pdf') {
+    //                   //   this.openPdf("{'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/' + message.photos[0].public_id}")
+    //                   //   <PdfViewer url= />
+    //                   // } else {
+    //                     this.openPhotoSwipe(e)
+    //                   // }
+    //                 }
+    //               }
+    //               src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.png'} />
+    //           </CardMedia>
+    //         </div>
+    //       }
+    //     }
+    // } else {
+    //   // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
+    //   if (message.content.indexOf('youtube') != -1) {
+    //     var url = this.url_parser(message.content);
+    //     if (url) {
+    //       var youtube_id = this.youtube_parser(url);
+    //       media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg"><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+    //     }
+    //   }
+    // }
 
 
     let student_names = ""
@@ -254,6 +373,7 @@ var FullMessageComponent  = React.createClass( {
               {media}
               <CardTitle title={message.title} subtitle={subtitle} />
               <CardText style={styles.cardText} className="card-text" dangerouslySetInnerHTML={this.getContent(message.content)} />
+              {pdfLinksContainer}
               <Form muuid={message.muuid} forms={message.forms} formjson={message.formdata} fetchMessages={this.props.fetchMessages} showSnackbar={this.props.showSnackbar}/>
               <Signature signature={message.signature}>
               </Signature>
