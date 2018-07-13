@@ -63,7 +63,7 @@ var Message = React.createClass( {
     let media
     if (message.photos != undefined && message.photos.length > 0) {
       //media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
-      media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.' + message.photos[0].format} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+      media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.png'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
     }
     else {
       // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
