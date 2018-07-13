@@ -4,9 +4,12 @@ import fetch from 'isomorphic-fetch'
 
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import ActionDone from 'material-ui/svg-icons/action/done';
+import Warning from 'material-ui/svg-icons/alert/warning'
 import {List, ListItem} from 'material-ui/List';
 
 
@@ -14,7 +17,8 @@ var Form = React.createClass( {
 
   getInitialState: function() {
       return {
-        submitPlaceholder: 'button'
+        submitPlaceholder: 'button',
+        select: {}
       }
   },
 
@@ -22,11 +26,73 @@ var Form = React.createClass( {
     this.setState({submitPlaceholder: status})
   },
 
+  missingRequiredFields: function() {
+    let missingField = false
+    let requireds  = $('[data-required]');
+
+    for (var i = 0; i < requireds.length; i++) {
+      switch ($(requireds[i]).data('type')) {
+        case 'checkbox-group':
+          if ($(requireds[i]).find('input:checked').length == 0) {
+            if ($(requireds[i]).find('.warning').length == 0) {
+              $(requireds[i]).prepend('<div style="color:red;"class="warning">Ce champ est requis</div>')
+            }
+            missingField = true
+          } else {
+            $(requireds[i]).find('.warning').remove();
+          }
+          break;
+        case 'text':
+          if ($(requireds[i]).find('input').val() == undefined || $(requireds[i]).find('input').val() == "") {
+            if ($(requireds[i]).find('.warning').length == 0) {
+              $(requireds[i]).prepend('<div style="color:red;"class="warning">Ce champ est requis</div>')
+            }
+            missingField = true
+          } else {
+            $(requireds[i]).find('.warning').remove();
+          }
+          break;
+        case 'textarea':
+          if (this.state.form[$(requireds[i]).data('name')] == undefined || this.state.form[$(requireds[i]).data('name')].value == "") {
+            if ($(requireds[i]).find('.warning').length == 0) {
+              $(requireds[i]).prepend('<div style="color:red;"class="warning">Ce champ est requis</div>')
+            }
+            missingField = true
+          } else {
+            $(requireds[i]).find('.warning').remove();
+          }
+          break;
+        case 'select':
+          if (this.state.form[$(requireds[i]).data('name')] == undefined || this.state.form[$(requireds[i]).data('name')].value == null) {
+            if ($(requireds[i]).find('.warning').length == 0) {
+              $(requireds[i]).prepend('<div style="color:red;"class="warning">Ce champ est requis</div>')
+            }
+            missingField = true
+          } else {
+            $(requireds[i]).find('.warning').remove();
+          }
+          break;
+      }
+    }
+
+    // if (this.state.form.hasOwnProperty(inputs))
+    return missingField;
+  },
+
   handleSubmitForm: function(e) {
     e.preventDefault();
     if (this.state.form == undefined) {
-        this.props.showSnackbar("Le formulaire n'est pas rempli.");
-        return;
+      $('#sendForm').addClass('animated shake');
+      this.props.showSnackbar("Le formulaire n'est pas rempli.");
+      setTimeout(function(){ $('#sendForm').removeClass('animated shake'); }, 3000);
+      return;
+    }
+
+    if (this.missingRequiredFields()) {
+      $('#sendForm').addClass('animated shake');
+      this.props.showSnackbar("Un champ requis manquant");
+      setTimeout(function(){ $('#sendForm').removeClass('animated shake'); }, 3000);
+      return;
     }
 
 
@@ -163,13 +229,43 @@ var Form = React.createClass( {
     });
   },
 
-  render: function() {
+  handleSelectChange: function(name, e, index, value) {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [name]: {
+          value: value,
+          label: $('#' + name).text()
+        }
+      }
+    });
 
+    this.setState({
+      select: {
+        ...this.state.select,
+        [name]: value
+      }
+    });
+  },
+
+  getStyles: function() {
     const styles = {
       form: {
         margin: '0 20px',
       },
+      h4: {
+        marginTop: '0',
+      },
+      label: {
+        fontWeight: 'bold'
+      },
       text: {
+        marginBottom: 17,
+        paddingLeft: 10,
+        width: '96%',
+        borderLeft: '2px solid #006bb8',
+      },
+      select: {
         marginBottom: 17,
         paddingLeft: 10,
         width: '96%',
@@ -206,8 +302,13 @@ var Form = React.createClass( {
         textAlign: 'center',
       },
     };
+    return styles;
+  },
 
+  render: function() {
+    const styles = this.getStyles();
 
+    // render form
     let formRendered;
     if (this.props.formjson != undefined && this.props.formjson != "[]") {
       let formElements = []
@@ -229,65 +330,101 @@ var Form = React.createClass( {
         }
       }
 
-
-
       const formjson = JSON.parse(this.props.formjson);
       for (let i in formjson) {
          switch (formjson[i].type) {
+           case 'select': {
+             let label = formjson[i].label;
+             if (formjson[i].required) {
+               label += ' *';
+             }
+             let options = [];
+             options.push(<MenuItem value={null} primaryText="" />)
+             for (let j = 0; j < formjson[i].values.length; j++) {
+                options.push(<MenuItem value={formjson[i].values[j].value} primaryText={formjson[i].values[j].label} />)
+             }
+             formElements.push(<div style={styles.select} data-name={formjson[i].name} data-required={formjson[i].required} data-type="select">
+               <label id={formjson[i].name} style={styles.label}>{label}</label>
+                 <SelectField
+                    value={this.state['select'][formjson[i].name]}
+                    fullWidth={true}
+                    maxHeight={150}
+                    onChange={this.handleSelectChange.bind(this, formjson[i].name)}
+                    className="select-field"
+                    >
+                    {options}
+                 </SelectField>
+             </div>);
+             break;
+           }
            case 'text': {
-             formElements.push(<TextField
-                hintText=""
-                floatingLabelText={formjson[i].label}
-                floatingLabelFixed={true}
-                style={styles.text}
-                name={formjson[i].name}
-                onChange={this.handleTextChange}
-                data-label={formjson[i].label}
-                fullWidth={true}
-              />);
+             let label = formjson[i].label;
+             if (formjson[i].required) {
+               label += ' *';
+             }
+             formElements.push(<div style={styles.text} data-label={formjson[i].label} data-required={formjson[i].required} data-type="text">
+               <label style={styles.label}>{label}</label>
+               <TextField
+                  hintText=""
+                  name={formjson[i].name}
+                  onChange={this.handleTextChange}
+                  data-label={formjson[i].label}
+                  fullWidth={true}
+                />
+             </div>);
              break;
            }
            case 'textarea': {
-             formElements.push(<TextField
-                hintText=""
-                floatingLabelText={formjson[i].label}
-                floatingLabelFixed={true}
-                multiLine={false}
-                rows={2}
-                style={styles.textarea}
-                name={formjson[i].name}
-                onChange={this.handleTextChange}
-                data-label={formjson[i].label}
-              />);
+             let label = formjson[i].label;
+             if (formjson[i].required) {
+               label += ' *';
+             }
+             formElements.push(
+               <div style={styles.text} data-name={formjson[i].name} data-required={formjson[i].required} data-type="textarea">
+                 <label style={styles.label}>{label}</label>
+                   <TextField
+                    hintText=""
+                    multiLine={false} // false for ios true for android
+                    rows={1} // 2 for android 1 for ios
+                    name={formjson[i].name}
+                    data-label={formjson[i].label}
+                    onChange={this.handleTextChange}
+                  />
+               </div>);
              break;
            }
            case 'checkbox': {
+             let label = formjson[i].label;
              formElements.push(<Checkbox
-                label={formjson[i].label}
+                label={label}
                 style={styles.checkbox}
                 name={formjson[i].name}
                 onCheck={this.handleCheckboxChange}
-                data-label={formjson[i].label}
+                data-label={label}
                 data-value={formjson[i].value}
               />);
              break;
            }
            case 'checkbox-group': {
-            let checkboxGroup = []
-            checkboxGroup.push(<h4>{formjson[i].label}</h4>)
-            const options = formjson[i].values
-            for (let j in options) {
-              checkboxGroup.push(<Checkbox
-                 label={options[j].label}
-                 style={styles.checkboxgroup}
-                 name={formjson[i].name}
-                 onCheck={this.handleCheckboxGroupChange}
-                 data-label={formjson[i].label}
-                 data-value={options[j].value}
-               />);
-            }
-            formElements.push(<div style={styles.checkboxgroupcontainer}>{checkboxGroup}</div>);
-            break;
+              let label = formjson[i].label;
+              if (formjson[i].required) {
+                label += ' *';
+              }
+              let checkboxGroup = []
+              checkboxGroup.push(<h4 style={styles.h4}>{label}</h4>)
+              const options = formjson[i].values
+              for (let j in options) {
+                checkboxGroup.push(<Checkbox
+                   label={options[j].label}
+                   style={styles.checkboxgroup}
+                   name={formjson[i].name}
+                   onCheck={this.handleCheckboxGroupChange}
+                   data-label={formjson[i].label}
+                   data-value={options[j].value}
+                 />);
+              }
+              formElements.push(<div style={styles.checkboxgroupcontainer} data-required={formjson[i].required} data-name={formjson[i].name} data-type="checkbox-group">{checkboxGroup}</div>);
+              break;
            }
            case 'paragraph': {
              formElements.push(<p style={styles.paragraph}>{formjson[i].label}</p>);
@@ -300,7 +437,7 @@ var Form = React.createClass( {
       if (this.state.submitPlaceholder == 'progress') {
         submitPlaceholder = <CircularProgress />
       } else {
-        submitPlaceholder = <RaisedButton label="Envoyer" primary={true} style={styles.button} onTouchTap={this.handleSubmitForm}/>
+        submitPlaceholder = <RaisedButton id="sendForm" label="Envoyer" primary={true} style={styles.button} onTouchTap={this.handleSubmitForm}/>
       }
 
       formRendered = <form id="theForm">
@@ -309,6 +446,7 @@ var Form = React.createClass( {
         <div style={styles.submitPlaceholderContainer}>{submitPlaceholder}</div>
       </form>
     }
+    // end render form
 
     return (
       <div style={styles.form}>
