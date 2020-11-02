@@ -262,7 +262,7 @@ var FullMessageComponent  = React.createClass( {
         if (imageList.length > 1) {
           let slides = []
           for (let i in imageList) {
-            let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[i].public_id + '.png'
+            let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[i].public_id + '.jpg'
             slides.push(<div key={imageList[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
               <ImageLoader
                 wrapper={React.DOM.div}
@@ -282,7 +282,7 @@ var FullMessageComponent  = React.createClass( {
             <CardMedia style={styles.cardMedia} className="mediaImg">
               <img
                 onTouchTap={ (e) => { this.openPhotoSwipe(e) } }
-                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[0].public_id + '.png'} />
+                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[0].public_id + '.jpg'} />
             </CardMedia>
           </div>
         }
