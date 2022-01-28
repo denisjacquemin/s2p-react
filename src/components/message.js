@@ -61,9 +61,22 @@ var Message = React.createClass( {
     const styles = this.getStyles();
 
     let media
+
     if (message.photos != undefined && message.photos.length > 0) {
-      //media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
-      media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[0].public_id + '.png'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+        let pdfList = []
+        let imageList = []
+  
+        for (let i in message.photos) {
+          if (message.photos[i].format === 'pdf') {
+            pdfList.push(message.photos[i])
+          } else {
+            imageList.push(message.photos[i])
+          }
+        }
+        if (imageList.length > 0) {
+          //media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[0].public_id + '.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+        }
     }
     else {
       // find youtube url in content then use the thumbnail http://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
