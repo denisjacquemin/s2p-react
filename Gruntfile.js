@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                     to: 'https://s2p-api-prod.herokuapp.com'
                 }, {
                     from: 'HOST_S3', // regex replacement ('Fooo' to 'Mooo')
-                    to: 'https://s2p-prod.s3-eu-west-1.amazonaws.com'
+                    to: 'https://s2p-demo.s3-eu-west-1.amazonaws.com'
                 }, {
                     from: 'HOST_ANALYTICS_API',
                     to: 'https://s2p-analytics-api-prod.herokuapp.com'
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
             },
             cordova: {
                 files: [
-                    { expand: true, cwd: './dist/public/', src: ['**'], dest: '../../konecto-cordova/www', filter: 'isFile' }
+                    { expand: true, cwd: './dist/public/', src: ['**'], dest: '../konecto-cordova/www', filter: 'isFile' }
                 ]
             }
         }
