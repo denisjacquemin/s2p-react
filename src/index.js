@@ -13,7 +13,7 @@ import { saveRegistrationId, saveRegistrationIdToServer, hideSnackbar, showSnack
 injectTapEventPlugin();
 
 
-import {store, load} from './store'
+import { store, load } from './store'
 import App from './containers/app'
 
 // function renderApp(theStore) {
@@ -152,99 +152,98 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-      var url = document.URL;
-      var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
-      if( isSmart ){
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-      }
-      else{
-        app.startApp();
-      }
+        var url = document.URL;
+        var isSmart = (url.indexOf("http://") === -1 && url.indexOf("https://") === -1);
+        if (isSmart) {
+            document.addEventListener('deviceready', this.onDeviceReady, false);
+        } else {
+            app.startApp();
+        }
     },
 
     initPush: function(store) {
 
-      var push = PushNotification.init({
-          android: {
-              senderID: "441581989301",
-              clearBadge: "true",
-              vibrate: "true",
-              iconColor: "#FFFFFF"
-          },
-          ios: {
-              alert: "true",
-              badge: "false",
-              clearBadge: "true",
-              sound: "true"
-          }
-      });
+        var push = PushNotification.init({
+            android: {
+                // senderID: "441581989301",
+                clearBadge: "true",
+                vibrate: "true",
+                iconColor: "#FFFFFF"
+            },
+            ios: {
+                alert: "true",
+                badge: "false",
+                clearBadge: "true",
+                sound: "true"
+            }
+        });
 
-      push.on('registration', function(data) {
-          console.debug('push.on(registration) data.registrationId: '+ data.registrationId);
+        push.on('registration', function(data) {
+            console.info('push.on(registration) data.registrationId: ' + data.registrationId);
 
-          store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
-          //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
-          //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+            store.dispatch(saveRegistrationId(data.registrationId, device.uuid)); // save to state the registrationid with uuid
+            //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+            //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
 
-          var state = store.getState();
+            var state = store.getState();
 
-          // send each code to the server
-          // if code exist
-          //   then write it to Device.codes array
-          // returns full details for each code
-          // mobile save details into state.codes
-          var codesToSync = []
-          if (state.codes) { // if codes.any?
-            codesToSync = state.codes.map(function(c) {
-              return c.code
-            });
+            // send each code to the server
+            // if code exist
+            //   then write it to Device.codes array
+            // returns full details for each code
+            // mobile save details into state.codes
+            var codesToSync = []
+            if (state.codes) { // if codes.any?
+                codesToSync = state.codes.map(function(c) {
+                    return c.code
+                });
 
-            console.debug('push.on(registration) codesToSync: ' + codesToSync);
-            //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
-          }
-          store.dispatch(saveDeviceStateToServer(data.registrationId, device.uuid, device.platform, codesToSync));
-          console.debug('push.on(registration) saveDeviceStateToServer');
-      });
+                console.debug('push.on(registration) codesToSync: ' + codesToSync);
+                //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
+            }
+            store.dispatch(saveDeviceStateToServer(data.registrationId, device.uuid, device.platform, codesToSync));
+            console.debug('push.on(registration) saveDeviceStateToServer');
+        });
 
-      push.on('notification', function(data) {
-          console.debug('push.on(notification)');
+        push.on('notification', function(data) {
+            console.info('push.on(notification)');
 
-          console.debug('push.on(notification) data.message: ' + data.message)
-          console.debug('push.on(notification) data.title: ' + data.title)
-          console.debug('push.on(notification) data.count: ' + data.count)
-          console.debug('push.on(notification) data.sound: ' + data.sound)
-          console.debug('push.on(notification) data.image: ' + data.image)
-          console.debug('push.on(notification) data.additionalData: ' + data.additionalData)
-          console.debug('push.on(notification) data.additionalData.notId' + data.additionalData.notId)
-          if (!data.additionalData.foreground) {
-            console.debug('push.on(notification) App in background');
-            store.dispatch(hideSnackbar());
-            store.dispatch(fetchMessagesAndShowFullMessage(data.additionalData.message_id));
-            //store.dispatch(fetchMessages(data.additionalData.message_id));
+            console.info('push.on(notification) data.message: ' + data.message)
+            console.debug('push.on(notification) data.title: ' + data.title)
+            console.debug('push.on(notification) data.count: ' + data.count)
+            console.debug('push.on(notification) data.sound: ' + data.sound)
+            console.debug('push.on(notification) data.image: ' + data.image)
+            console.debug('push.on(notification) data.additionalData: ' + data.additionalData)
+            console.debug('push.on(notification) data.additionalData.notId' + data.additionalData.notId)
+            if (!data.additionalData.foreground) {
+                console.debug('push.on(notification) App in background');
+                store.dispatch(hideSnackbar());
+                store.dispatch(fetchMessagesAndShowFullMessage(data.additionalData.message_id));
+                //store.dispatch(fetchMessages(data.additionalData.message_id));
 
-            push.setApplicationIconBadgeNumber(function() {
-                console.debug('push.on(notification) setApplicationIconBadgeNumber success');
-            }, function() {
-                console.debug('push.on(notification) setApplicationIconBadgeNumber error');
-            }, data.count);
-          } else {
-            console.debug('push.on(notification) App in foreground');
-            // if app in foreground
-            store.dispatch(showSnackbar('Un nouveau message est arrivé'));
-            store.dispatch(fetchMessages());
-          }
-          push.finish(function() {
+                push.setApplicationIconBadgeNumber(function() {
+                    console.debug('push.on(notification) setApplicationIconBadgeNumber success');
+                }, function() {
+                    console.debug('push.on(notification) setApplicationIconBadgeNumber error');
+                }, data.count);
+            } else {
+                console.debug('push.on(notification) App in foreground');
+                // if app in foreground
+                store.dispatch(showSnackbar('Un nouveau message est arrivé'));
+                store.dispatch(fetchMessages());
+            }
+            push.finish(function() {
                 console.log("processing of push data is finished");
             }, function() {
-            console.log("something went wrong with push.finish for ID = " + data.additionalData.notId)
-          }, data.additionalData.notId);
-      });
+                console.log("something went wrong with push.finish for ID = " + data.additionalData.notId)
+            }, data.additionalData.notId);
+        });
 
-      push.on('error', function(e) {
-          console.debug('push.on(error): ' + e.message);
-      });
+        push.on('error', function(e) {
+            console.debug('push.on(error): ' + e.message);
+        });
 
-      return push;
+        return push;
 
     },
     // deviceready Event Handler
@@ -255,6 +254,10 @@ var app = {
         console.log('onDeviceReady');
         app.startApp();
 
+        // https://cordova.apache.org/docs/en/4.0.0/cordova/events/events.backbutton.html
+        // handle android's back button
+        // document.addEventListener("backbutton", onBackKeyDown, false);
+
 
         // push.unregister(function() {
         //     console.log('####### push.unregister');
@@ -264,29 +267,38 @@ var app = {
         //     console.log('unregister: ' + e.message)
         // });
     },
+
+    // onBackKeyDown: function() {
+    //     console.log('backbutton hit... do something');
+    // },
+
     // Update DOM on a Received Event
     startApp: function() {
-      console.log('loading store')
-      load(store)
-          .then((newState) => {
-            console.log('Loaded state:', newState)
-            if (typeof PushNotification !== "undefined") {
-              app.initPush(store);
-            }
-            app.renderApp(store);
-          })
-          .catch((e) => {console.log('Failed to load previous state: ' + e)});
+        console.log('loading store')
+        load(store)
+            .then((newState) => {
+                console.log('Loaded state:', newState)
+                console.log('Init PushNotification?')
+                console.log(typeof PushNotification !== "undefined")
+                if (typeof PushNotification !== "undefined") {
+                    app.initPush(store);
+                }
+                console.log('device.platform:' + device.platform)
+                app.renderApp(store);
+            })
+            .catch((e) => { console.log('Failed to load previous state: ' + e) });
     },
 
     renderApp: function(theStore) {
-      const root = document.createElement('div');
-      document.body.appendChild(root);
-      ReactDOM.render(
-        <Provider store={theStore}>
-          <App />
-        </Provider>,
-        root
-      );
+        console.log('renderApp!!')
+        const root = document.createElement('div');
+        document.body.appendChild(root);
+        ReactDOM.render( 
+            <Provider store={theStore}>
+                <App />
+            </Provider>,
+            root
+        );
     }
 };
 
