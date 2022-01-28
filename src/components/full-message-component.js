@@ -45,12 +45,14 @@ var FullMessageComponent  = React.createClass( {
     const message = this.props.currentMessage;
     if (message.photos != undefined && message.photos.length > 0) {
       for (let i in message.photos) {
-        const src = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/w_1024,c_limit/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
-        const thumbnail = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
-        const w = message.photos[i].width
-        const h = message.photos[i].height
+        if (message.photos[i].format !== 'pdf') {
+          const src = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/w_1024,c_limit/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
+          const thumbnail = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + message.photos[i].public_id + '.jpg' //+ message.photos[i].format
+          const w = message.photos[i].width
+          const h = message.photos[i].height          
 
-        items.push({src: src, thumbnail: thumbnail, w: w, h: h })
+          items.push({src: src, thumbnail: thumbnail, w: w, h: h })
+        }
       }
     }
     const options = {
@@ -58,7 +60,7 @@ var FullMessageComponent  = React.createClass( {
       captionEl: false,
       fullscreenEl: false,
       zoomEl: false,
-      shareEl: true,
+      shareEl: false,
       shareButtons: [
           // {id:'download', label:"Sauver l'image", url:'{{raw_image_url}}', download:true},
           {id:'facebook', label:'Partager sur Facebook', url:'https://www.facebook.com/sharer/sharer.php?u={{image_url}}'},
@@ -262,7 +264,7 @@ var FullMessageComponent  = React.createClass( {
         if (imageList.length > 1) {
           let slides = []
           for (let i in imageList) {
-            let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[i].public_id + '.jpg'
+            let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[i].public_id + '.jpg'
             slides.push(<div key={imageList[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
               <ImageLoader
                 wrapper={React.DOM.div}
@@ -282,7 +284,7 @@ var FullMessageComponent  = React.createClass( {
             <CardMedia style={styles.cardMedia} className="mediaImg">
               <img
                 onTouchTap={ (e) => { this.openPhotoSwipe(e) } }
-                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + imageList[0].public_id + '.jpg'} />
+                src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[0].public_id + '.jpg'} />
             </CardMedia>
           </div>
         }
