@@ -1,1 +1,17 @@
 python -m SimpleHTTPServer
+
+## build project to public dir
+grunt prod
+
+## Sync your web app with your native project
+npx cap sync
+
+## Run your Project (iphone 13 mini simulator)
+npx cap run ios
+
+## List capacitor plugins
+
+npx cap ls
+
+## open Xcode manually by running
+open ios/App/App.xcworkspace

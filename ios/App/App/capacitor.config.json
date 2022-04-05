@@ -1,0 +1,6 @@
+{
+	"appId": "com.dsjn.s2p",
+	"appName": "Konecto App",
+	"webDir": "dist/public",
+	"bundledWebRuntime": false
+}

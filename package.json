@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@capacitor/core": "^3.4.3",
+    "@capacitor/device": "^1.1.2",
+    "@capacitor/ios": "^3.4.0",
     "babel-polyfill": "^6.7.2",
     "babelify": "^6.1.0",
     "grunt": "^0.4.5",
@@ -33,5 +36,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@capacitor/cli": "^3.4.3"
+  }
 }
