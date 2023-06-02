@@ -211,6 +211,7 @@ var app = {
     });
 
     await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+      console.log('Push notification action performed', notification);
       store.dispatch(fetchMessagesAndShowFullMessage(notification.notification.data.message_id));
     });
 

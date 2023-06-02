@@ -21,6 +21,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
+import { App } from '@capacitor/app';
+
+
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
 var CodeListComponent = React.createClass( {
@@ -31,6 +34,21 @@ var CodeListComponent = React.createClass( {
 
   componentWillMount: function() {
     this.resetErrorMessage();
+  },
+
+  componentDidMount: function() {
+    App.addListener('backButton', (data) => {
+      if (this.props.showAddCodeForm) {
+        this.props.onShowAddCodeForm(false)
+      } else {
+      this.handleMessagesScreen();
+      }
+    });
+    
+  },
+
+  componentWillUnmount: function() {
+    App.removeAllListeners();
   },
 
   resetErrorMessage: function() {

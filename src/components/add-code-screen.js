@@ -7,6 +7,8 @@ import School from 'material-ui/svg-icons/social/school';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import s2pTheme from '../theme';
+import { App } from '@capacitor/app';
+
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 

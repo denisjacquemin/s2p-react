@@ -30,12 +30,13 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 
-
 import Spacing from 'material-ui/styles/spacing'
 
 import {PhotoSwipe} from 'react-photoswipe';
 
 import ImageLoader from 'react-imageloader';
+
+import { App } from '@capacitor/app';
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
 
@@ -79,7 +80,15 @@ var FullMessageComponent  = React.createClass( {
     Device.getId().then((deviceId) => {
       this.props.onMessageViewed(this.props.currentMessage.id, this.props.currentMessage.school_id, deviceId.identifier);
     });
+
+    App.addListener('backButton', (data) => {
+      this.handleShowMessagesScreen();
+    });
     
+  },
+
+  componentWillUnmount: function() {
+    App.removeAllListeners();
   },
 
   componentDidUpdate: function() {

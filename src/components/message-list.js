@@ -28,6 +28,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import { App } from '@capacitor/app';
 
 
 const s2pMuiTheme = getMuiTheme(s2pTheme);
@@ -44,6 +45,15 @@ var MessageList = React.createClass( {
       delay: 0,
       smooth: false,
     });
+
+    App.addListener('backButton', (data) => {
+      App.exitApp();
+    });
+    
+  },
+
+  componentWillUnmount: function() {
+    App.removeAllListeners();
   },
 
   handleLeftMenu: function(e) {
