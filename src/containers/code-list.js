@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { showMessagesScreen, addCode, deleteCode, hideSnackbar, fetchMessages, resetIsFetching, linkCodeToDevice, unlinkCodeToDevice, codeInvalidMessage, codeValid, showAddCodeForm} from '../actions'
+import { Device } from "@capacitor/device";
 
 
 import CodeListComponent from '../components/code-list-component'
@@ -38,7 +39,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     onDeleteCode: (code) => {
       dispatch(deleteCode(code));
-      dispatch(unlinkCodeToDevice(code, device.uuid))
+
+      Device.getId().then((deviceId) => {
+        dispatch(unlinkCodeToDevice(code, deviceId.identifier))
+      });
+
+      
     }
   };
 };

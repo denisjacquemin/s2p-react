@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Konecto App</string>
+    <string name="title_activity_main">Konecto App</string>
+    <string name="package_name">com.dsjn.s2p</string>
+    <string name="custom_url_scheme">com.dsjn.s2p</string>
+</resources>

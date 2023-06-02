@@ -4,7 +4,14 @@ const config: CapacitorConfig = {
   appId: 'com.dsjn.s2p',
   appName: 'Konecto App',
   webDir: 'dist/public',
-  bundledWebRuntime: false
+  server: {
+    androidScheme: 'https'
+  },
+  plugins: {
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
+    },
+  },
 };
 
 export default config;

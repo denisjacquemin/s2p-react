@@ -1,0 +1,40 @@
+{
+    "project_info": {
+      "project_number": "349356007955",
+      "firebase_url": "https://s2p-prod.firebaseio.com",
+      "project_id": "s2p-prod",
+      "storage_bucket": "s2p-prod.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:349356007955:android:931e1461e599feb0",
+          "android_client_info": {
+            "package_name": "com.dsjn.s2p"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "349356007955-4cj7drttp86cva1q201cf37gmp55qedu.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCUqs__D1J1CHuVd1wLkyR7q_HvZma5HSs"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "349356007955-4cj7drttp86cva1q201cf37gmp55qedu.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

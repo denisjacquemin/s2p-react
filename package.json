@@ -1,36 +1,36 @@
 {
   "name": "s2p-react-app",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@capacitor/core": "^3.4.3",
-    "@capacitor/device": "^1.1.2",
-    "@capacitor/ios": "^3.4.0",
+    "@capacitor/android": "^5.0.4",
+    "@capacitor/core": "^5.0.3",
+    "@capacitor/device": "^5.0.2",
+    "@capacitor/push-notifications": "^5.0.2",
     "babel-polyfill": "^6.7.2",
-    "babelify": "^6.1.0",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.8.0",
+    "babelify": "^10.0.0",
+    "grunt": "^1.6.1",
+    "grunt-browserify": "^6.0.0",
     "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-env": "^0.4.4",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-env": "^1.0.1",
     "grunt-text-replace": "^0.4.0",
-    "isomorphic-fetch": "^2.2.1",
-    "material-ui": "^0.17.0",
+    "isomorphic-fetch": "2.2.1",
+    "material-ui": "0.17.0",
     "moment": "^2.12.0",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
     "react-imageloader": "^2.1.0",
     "react-photoswipe": "^1.2.0",
     "react-redux": "^4.4.5",
     "react-scroll": "^1.0.17",
-    "react-slick": "^0.12.2",
-    "react-tap-event-plugin": "^2.0.0",
+    "react-slick": "0.12.2",
     "redux": "^3.3.1",
     "redux-logger": "^2.6.1",
     "redux-storage": "^4.0.0",
     "redux-storage-engine-localstorage": "^1.0.1",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "2.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -38,6 +38,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@capacitor/cli": "^3.4.3"
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-react": "^7.18.6",
+    "@capacitor/cli": "^5.0.3"
   }
 }

@@ -74,8 +74,8 @@ var Message = React.createClass( {
           }
         }
         if (imageList.length > 0) {
-          //media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
-          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[0].public_id + '.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          //media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onClick={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https:' + message.mfiles[0].file_url} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onClick={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[0].public_id + '.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
         }
     }
     else {
@@ -84,7 +84,7 @@ var Message = React.createClass( {
         var url = this.url_parser(message.content);
         if (url) {
           var youtube_id = this.youtube_parser(url);
-          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onTouchTap={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
+          media = <div className="stretchyWrapper"><CardMedia style={styles.cardMedia} className="mediaImg" onClick={() => this.props.onMessageClick(message.id)}><ImageLoader src={'https://img.youtube.com/vi/' + youtube_id + '/hqdefault.jpg'} wrapper={React.DOM.div} preloader={this.preloader}></ImageLoader></CardMedia></div>
         }
       }
     }
@@ -94,10 +94,10 @@ var Message = React.createClass( {
     return (
       <Card key={message.id} className="aMessage">
         {media}
-        <CardTitle title={message.title} subtitle={publish_date} onTouchTap={() => this.props.onMessageClick(message.id)} />
-        <CardText onTouchTap={() => this.props.onMessageClick(message.id)}>{ this.stripHTML(this.truncate(message.content)) }</CardText>
+        <CardTitle title={message.title} subtitle={publish_date} onClick={() => this.props.onMessageClick(message.id)} />
+        <CardText onClick={() => this.props.onMessageClick(message.id)}>{ this.stripHTML(this.truncate(message.content)) }</CardText>
         <CardActions style={styles.cardActions}>
-          <FlatButton label="LA SUITE" onTouchTap={() => this.props.onMessageClick(message.id)}/>
+          <FlatButton label="LA SUITE" onClick={() => this.props.onMessageClick(message.id)}/>
         </CardActions>
       </Card>
     )

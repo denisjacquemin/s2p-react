@@ -167,15 +167,15 @@ var MessageList = React.createClass( {
 
     const styles = this.getStyles();
 
-    let starIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.toggleShowImportant}><StarBorder/></IconButton>
+    let starIcon = <IconButton iconStyle={styles.iconRefresh} onClick={this.toggleShowImportant}><StarBorder/></IconButton>
     if (this.props.showImportant) {
-      starIcon = <IconButton  iconStyle={styles.iconRefresh} onTouchTap={this.toggleShowImportant}><Star/></IconButton>
+      starIcon = <IconButton  iconStyle={styles.iconRefresh} onClick={this.toggleShowImportant}><Star/></IconButton>
     }
 
-    let refreshIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+    let refreshIcon = <IconButton iconStyle={styles.iconRefresh} onClick={this.handleRefresh}><NavigationRefresh /></IconButton>
     let progress
     if (this.props.isFetching) {
-      refreshIcon = <IconButton iconStyle={styles.iconRefresh} onTouchTap={this.handleRefresh}><NavigationRefresh /></IconButton>
+      refreshIcon = <IconButton iconStyle={styles.iconRefresh} onClick={this.handleRefresh}><NavigationRefresh /></IconButton>
       progress = <LinearProgress id="progress" mode="indeterminate" style={styles.progress} color="#f44336" />
     }
 
@@ -231,14 +231,14 @@ var MessageList = React.createClass( {
           <BottomNavigation selectedIndex={0} style={styles.bottomBar}>
             <BottomNavigationItem
               icon=<MailOutline style={styles.icon} />
-              onTouchTap={() => this.handleMessagesScreen()}
+              onClick={() => this.handleMessagesScreen()}
               label="Messages"
               style={styles.bottomBarButton}
             />
             <BottomNavigationItem
               icon=<People style={styles.icon} />
               label="Gestion codes"
-              onTouchTap={() => this.handleCodes()}
+              onClick={() => this.handleCodes()}
               style={styles.bottomBarButton}
             />
           </BottomNavigation>
@@ -261,8 +261,8 @@ var MessageList = React.createClass( {
 //     <img src="assets/img/logo_text.png" width="35%"/>
 //   </div>
 //   <Menu>
-//     <MenuItem onTouchTap={this.handleMessagesScreen} leftIcon={<MailOutline />}>Messages</MenuItem>
-//     <MenuItem onTouchTap={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
+//     <MenuItem onClick={this.handleMessagesScreen} leftIcon={<MailOutline />}>Messages</MenuItem>
+//     <MenuItem onClick={this.handleCodes} leftIcon={<People/>}>Gestion codes</MenuItem>
 //   </Menu>
 // </Drawer>
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import fetch from 'isomorphic-fetch'
+import { Device } from "@capacitor/device";
+
 
 
 import Checkbox from 'material-ui/Checkbox';
@@ -128,7 +130,11 @@ var Form = React.createClass( {
     let data = new FormData()
     data.append('formdata', JSON.stringify(formdata))
     data.append('muuid', this.props.muuid)
-    data.append('uuid', device.uuid)
+
+    Device.getId().then((deviceId) => {
+      data.append('uuid', deviceId.identifier)
+    });
+
     return fetch('HOST_API/saveform', {
       method: 'POST',
       body: data
@@ -437,7 +443,7 @@ var Form = React.createClass( {
       if (this.state.submitPlaceholder == 'progress') {
         submitPlaceholder = <CircularProgress />
       } else {
-        submitPlaceholder = <RaisedButton id="sendForm" label="Envoyer" primary={true} style={styles.button} onTouchTap={this.handleSubmitForm}/>
+        submitPlaceholder = <RaisedButton id="sendForm" label="Envoyer" primary={true} style={styles.button} onClick={this.handleSubmitForm}/>
       }
 
       formRendered = <form id="theForm">

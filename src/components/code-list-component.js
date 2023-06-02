@@ -184,13 +184,13 @@ var CodeListComponent = React.createClass( {
       <div>
         <AppBar id="header" title="Ajouter un code"
           className="appbar"
-          iconElementLeft={<IconButton onTouchTap={this.handleShowCodeListScreen}><NavigationClose /></IconButton>}
+          iconElementLeft={<IconButton onClick={this.handleShowCodeListScreen}><NavigationClose /></IconButton>}
         />
         <div className="fade-in content" style={styles.content}>
           <div style={styles.form}>
             <TextField hintText="Code" style={styles.formElem} autoCapitalize="none" autoCorrect="none" onChange={this.handleNewCodeChange} onFocus={this.handleOnFocus}/>
             <div style={styles.errorMessage}>{this.props.invalidCodeMessage}</div>
-            <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onTouchTap={this.handleAddCode} />
+            <RaisedButton label="Enregistrer" style={styles.formElem} secondary={true}  onClick={this.handleAddCode} />
           </div>
         </div>
       </div>
@@ -221,7 +221,7 @@ var CodeListComponent = React.createClass( {
                               <span>{c.code} - {c.schoolname}</span>
                             </p>
                           }
-                          rightIconButton={<IconButton onTouchTap={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
+                          rightIconButton={<IconButton onClick={(e) => this.handleDeleteCode(c.code, e)}><Delete /></IconButton>}
                         />
                     )}
                   </List>
@@ -249,14 +249,14 @@ var CodeListComponent = React.createClass( {
         <BottomNavigation selectedIndex={1} style={styles.bottomBar}>
           <BottomNavigationItem
             icon=<MailOutline style={styles.icon} />
-            onTouchTap={() => this.handleMessagesScreen()}
+            onClick={() => this.handleMessagesScreen()}
             label="Messages"
             style={styles.bottomBarButton}
           />
           <BottomNavigationItem
             icon=<People style={styles.icon} />
             label="Gestion codes"
-            onTouchTap={() => this.handleCodes()}
+            onClick={() => this.handleCodes()}
             style={styles.bottomBarButton}
           />
         </BottomNavigation>

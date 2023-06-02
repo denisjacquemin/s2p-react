@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { Device } from "@capacitor/device";
 
 
 var Scroll    = require('react-scroll');
@@ -75,7 +76,10 @@ var FullMessageComponent  = React.createClass( {
 
   componentDidMount: function() {
     scroller.scrollTo('top');
-    this.props.onMessageViewed(this.props.currentMessage.id, this.props.currentMessage.school_id, device.uuid);
+    Device.getId().then((deviceId) => {
+      this.props.onMessageViewed(this.props.currentMessage.id, this.props.currentMessage.school_id, deviceId.identifier);
+    });
+    
   },
 
   componentDidUpdate: function() {
@@ -226,9 +230,9 @@ var FullMessageComponent  = React.createClass( {
     const message = this.props.currentMessage;
     const settings = this.getSlickSettings();
 
-    // let starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><StarBorder/></IconButton>
+    // let starIcon = <IconButton iconStyle={styles.icon} onClick={this.toggleImportant}><StarBorder/></IconButton>
     // if (message.important) {
-    //   starIcon = <IconButton iconStyle={styles.icon} onTouchTap={this.toggleImportant}><Star/></IconButton>
+    //   starIcon = <IconButton iconStyle={styles.icon} onClick={this.toggleImportant}><Star/></IconButton>
     // }
 
     let media
@@ -265,7 +269,7 @@ var FullMessageComponent  = React.createClass( {
           let slides = []
           for (let i in imageList) {
             let imgUrl = 'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[i].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[i].public_id + '.jpg'
-            slides.push(<div key={imageList[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
+            slides.push(<div key={imageList[i].id} style={styles.cardMediaSlider} onClick={(e) => this.openPhotoSwipe(e)}>
               <ImageLoader
                 wrapper={React.DOM.div}
                 src={imgUrl}
@@ -283,7 +287,7 @@ var FullMessageComponent  = React.createClass( {
           media = <div className="stretchyWrapper">
             <CardMedia style={styles.cardMedia} className="mediaImg">
               <img
-                onTouchTap={ (e) => { this.openPhotoSwipe(e) } }
+                onClick={ (e) => { this.openPhotoSwipe(e) } }
                 src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + imageList[0].resource_type  + '/upload/ar_16:9,c_fill,h_250,g_auto/' + imageList[0].public_id + '.jpg'} />
             </CardMedia>
           </div>
@@ -312,7 +316,7 @@ var FullMessageComponent  = React.createClass( {
     //       if (message.photos[i].format === 'pdf') {
     //         pdfList.push(<div class="pdf"><a href={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/' + message.photos[i].public_id + '.pdf'} target="_blank">{ message.photos[i].public_id }</a></div>)
     //       } else {
-    //         slides.push(<div key={message.photos[i].id} style={styles.cardMediaSlider} onTouchTap={(e) => this.openPhotoSwipe(e)}>
+    //         slides.push(<div key={message.photos[i].id} style={styles.cardMediaSlider} onClick={(e) => this.openPhotoSwipe(e)}>
     //           <ImageLoader
     //             src={'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[i].resource_type  + '/upload/ar_16:9,c_fill,h_300,g_auto/' + message.photos[i].public_id + '.png'}
     //             wrapper={React.DOM.div}
@@ -332,7 +336,7 @@ var FullMessageComponent  = React.createClass( {
     //       media = <div className="stretchyWrapper">
     //           <CardMedia style={styles.cardMedia} className="mediaImg">
     //             <img
-    //               onTouchTap={ (e) => {
+    //               onClick={ (e) => {
     //                   // if (message.photos[0].format === 'pdf') {
     //                   //   this.openPdf("{'https://res.cloudinary.com/CLOUD_CLOUDINARY/' + message.photos[0].resource_type  + '/upload/' + message.photos[0].public_id}")
     //                   //   <PdfViewer url= />
@@ -369,7 +373,7 @@ var FullMessageComponent  = React.createClass( {
         <div>
           <AppBar id="header" title={message.title}
             className="appbar"
-            iconElementLeft={<IconButton onTouchTap={this.handleShowMessagesScreen}><ArrowBack /></IconButton>}          />
+            iconElementLeft={<IconButton onClick={this.handleShowMessagesScreen}><ArrowBack /></IconButton>}          />
           <Element name="top" className="top"></Element>
           <Card style={styles.fullscreen} className="fade-in content">
               {media}

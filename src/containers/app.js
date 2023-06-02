@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { hideSnackbar, fetchMessages, resetIsFetching, resetCodesOnServer} from '../actions'
 import AppComponent from '../components/app-component'
+import { Device } from "@capacitor/device";
+
+
 
 const getVisibleMessages = (messages = [], showOnlyImportant) => {
   if (showOnlyImportant) {
@@ -29,7 +32,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchMessages());
     },
     resetCodesOnServer: () => {
-      dispatch(resetCodesOnServer(device.uuid));
+      Device.getId().then((deviceId) => {
+        dispatch(resetCodesOnServer(deviceId.identifier));
+      });
+
+      
     }
   };
 };

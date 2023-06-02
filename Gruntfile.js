@@ -45,7 +45,7 @@ module.exports = function(grunt) {
                 options: {
                     transform: [
                         ["babelify", {
-                            loose: "all"
+                            presets: ["@babel/preset-env", "@babel/preset-react"]
                         }]
                     ]
                 },

@@ -225,6 +225,7 @@ export const syncCodesFromDevice = (uuid, codes) => {
 };
 
 export const fetchMessagesAndShowFullMessage = (showFullMessageId = 0) => {
+  console.log("In fetchMessagesAndShowFullMessage", showFullMessageId);
   return function (dispatch, getState) {
     dispatch(fetchMessages()).then(() => {
       dispatch(showFullMessage(showFullMessageId));
@@ -233,7 +234,7 @@ export const fetchMessagesAndShowFullMessage = (showFullMessageId = 0) => {
 };
 
 export const fetchMessages = () => {
-  return function (dispatch, getState) {
+  return async function (dispatch, getState) {
     // check if another fetch request is still in progress
     const { codes, messages } = getState();
     if (!messages.isFetching) {
@@ -243,37 +244,34 @@ export const fetchMessages = () => {
       if (lastUpdate === undefined) {
         lastUpdate = moment().utc().format("YYYY-MM-DD [[]HH:mm:ss[]]"); // now(UTC) yyyy-mm-dd [hh:mm:ss]
       }
-      Device.getId().then((deviceId) => {
+      try {
+        const deviceId = await Device.getId();
         console.log("In FetchMessages before deviceId");
-        console.log("deviceId.uuid: " + deviceId.uuid);
-        let params = "?uuid=" + deviceId.uuid;
+        console.log("deviceId.identifier: " + deviceId.identifier);
+        let params = "?uuid=" + deviceId.identifier;
         for (let c of codes) {
           params += "&codes[]=" + c.code;
         }
 
-        return fetch("HOST_API/messages" + params, {
+        const response = await fetch("HOST_API/messages" + params, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-        })
-          .then(function (response) {
-            if (response.ok) {
-              console.log("fetch response ok");
-              return response.json().then(function (json) {
-                dispatch(receiveMessages(json));
-              });
-            } else {
-              console.log("fetch response not ok, reset messages.isFetching");
-              dispatch(handleFetchError());
-            }
-          })
-          .catch(function (err) {
-            dispatch(handleFetchError());
-            dispatch(showSnackbar("Pas de connexion"));
-            console.log("Pas de connexion (fetchMessages)" + err);
-          });
-      });
+        });
+        if (response.ok) {
+          console.log("fetch response ok");
+          const json = await response.json();
+          dispatch(receiveMessages(json));
+        } else {
+          console.log("fetch response not ok, reset messages.isFetching");
+          dispatch(handleFetchError());
+        }
+      } catch (err) {
+        dispatch(handleFetchError());
+        dispatch(showSnackbar("Pas de connexion"));
+        console.log("Pas de connexion (fetchMessages)" + err);
+      }
     }
   };
 };
@@ -312,7 +310,7 @@ export const addCode = (code) => {
                       dispatch(
                         linkCodeToDevice(
                           code,
-                          deviceId.uuid,
+                          deviceId.identifier,
                           deviceInfo.platform
                         )
                       );

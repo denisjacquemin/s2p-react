@@ -40,8 +40,8 @@ var AddCodeScreen = React.createClass( {
           Avez-vous un autre code à rentrer?
         </CardText>>
         <CardActions style={actionsStyle}>
-          <RaisedButton style={buttonYesStyle}  label="Oui" onTouchTap={this.handleShowCodeForm} />
-          <RaisedButton style={buttonNoStyle} label="Non" onTouchTap={this.handleShowMessagesScreen} secondary={true}/>
+          <RaisedButton style={buttonYesStyle}  label="Oui" onClick={this.handleShowCodeForm} />
+          <RaisedButton style={buttonNoStyle} label="Non" onClick={this.handleShowMessagesScreen} secondary={true}/>
         </CardActions>
       </Card>
     )
@@ -104,7 +104,7 @@ var AddCodeScreen = React.createClass( {
           <div style={formStyle}>
             <TextField hintText="Code" style={fieldStyle} autoCapitalize="none" autoCorrect="none" onFocus={this.handleOnFocus} onChange={this.handleNewCodeChange}/>
             <div style={errorMessage}>{this.props.invalidCodeMessage}</div>
-            <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onTouchTap={this.handleAddCode} />
+            <RaisedButton label="Enregistrer" secondary={true} style={buttonStyle} onClick={this.handleAddCode} />
           </div>
         </Card>
       </div>
@@ -124,6 +124,7 @@ var AddCodeScreen = React.createClass( {
   },
 
   handleAddCode: function(code) {
+    console.log('handleAddCode: ' + this.state.newCode);
     this.resetErrorMessage();
     this.props.onAddCode(this.state.newCode);
     //this.setState({ showCodeSaved: true })

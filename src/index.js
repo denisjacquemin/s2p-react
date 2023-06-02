@@ -2,7 +2,7 @@ import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import injectTapEventPlugin from "react-tap-event-plugin";
+//import injectTapEventPlugin from "react-tap-event-plugin";
 import {
   saveRegistrationId,
   saveRegistrationIdToServer,
@@ -17,12 +17,13 @@ import {
 } from "./actions";
 
 import { Device } from "@capacitor/device";
+import { PushNotifications } from '@capacitor/push-notifications';
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
 //Check this repo:
 //https://github.com/zilverline/react-tap-event-plugin
-injectTapEventPlugin();
+//injectTapEventPlugin();
 
 import { store, load } from "./store";
 import App from "./containers/app";
@@ -173,120 +174,190 @@ var app = {
     }
   },
 
-  initPush: function (store, deviceInfo, deviceId) {
-    var push = PushNotification.init({
-      android: {
-        // senderID: "441581989301",
-        clearBadge: "true",
-        vibrate: "true",
-        iconColor: "#FFFFFF",
-      },
-      ios: {
-        alert: "true",
-        badge: "false",
-        clearBadge: "true",
-        sound: "true",
-      },
-    });
+  initPush: async function (store, deviceInfo, deviceId) {
 
-    push.on("registration", function (data) {
-      console.info(
-        "push.on(registration) data.registrationId: " + data.registrationId
-      );
+    const { receive } = await PushNotifications.checkPermissions();
+    console.debug('receive: ' + receive);
 
-      store.dispatch(saveRegistrationId(data.registrationId, deviceId.uuid)); // save to state the registrationid with uuid
-      //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
-      //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+    if (receive !== 'granted') {
+      await PushNotifications.requestPermissions();
+    }
+
+    await PushNotifications.addListener('registration', token => {
+      store.dispatch(saveRegistrationId(token.value, deviceId)); // save to state the registrationid with uuid
 
       var state = store.getState();
-
-      // send each code to the server
-      // if code exist
-      //   then write it to Device.codes array
-      // returns full details for each code
-      // mobile save details into state.codes
       var codesToSync = [];
       if (state.codes) {
         // if codes.any?
         codesToSync = state.codes.map(function (c) {
           return c.code;
         });
-
-        console.debug("push.on(registration) codesToSync: " + codesToSync);
-        //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
       }
+
       store.dispatch(
-        saveDeviceStateToServer(
-          data.registrationId,
-          deviceId.uuid,
-          deviceInfo.platform,
-          codesToSync
-        )
-      );
+          saveDeviceStateToServer(
+            token.value,
+            deviceId,
+            deviceInfo.platform,
+            codesToSync
+          )
+        );
       console.debug("push.on(registration) saveDeviceStateToServer");
     });
 
-    push.on("notification", function (data) {
-      console.info("push.on(notification)");
-
-      console.info("push.on(notification) data.message: " + data.message);
-      console.debug("push.on(notification) data.title: " + data.title);
-      console.debug("push.on(notification) data.count: " + data.count);
-      console.debug("push.on(notification) data.sound: " + data.sound);
-      console.debug("push.on(notification) data.image: " + data.image);
-      console.debug(
-        "push.on(notification) data.additionalData: " + data.additionalData
-      );
-      console.debug(
-        "push.on(notification) data.additionalData.notId" +
-          data.additionalData.notId
-      );
-      if (!data.additionalData.foreground) {
-        console.debug("push.on(notification) App in background");
-        store.dispatch(hideSnackbar());
-        store.dispatch(
-          fetchMessagesAndShowFullMessage(data.additionalData.message_id)
-        );
-        //store.dispatch(fetchMessages(data.additionalData.message_id));
-
-        push.setApplicationIconBadgeNumber(
-          function () {
-            console.debug(
-              "push.on(notification) setApplicationIconBadgeNumber success"
-            );
-          },
-          function () {
-            console.debug(
-              "push.on(notification) setApplicationIconBadgeNumber error"
-            );
-          },
-          data.count
-        );
-      } else {
-        console.debug("push.on(notification) App in foreground");
-        // if app in foreground
-        store.dispatch(showSnackbar("Un nouveau message est arrivé"));
-        store.dispatch(fetchMessages());
-      }
-      push.finish(
-        function () {
-          console.log("processing of push data is finished");
-        },
-        function () {
-          console.log(
-            "something went wrong with push.finish for ID = " +
-              data.additionalData.notId
-          );
-        },
-        data.additionalData.notId
-      );
+    await PushNotifications.addListener('pushNotificationReceived', async notification => {
+      console.log('Push notification received: ', notification);
     });
 
-    push.on("error", function (e) {
-      console.debug("push.on(error): " + e.message);
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+      store.dispatch(fetchMessagesAndShowFullMessage(notification.notification.data.message_id));
     });
 
-    return push;
+    await PushNotifications.addListener('registrationError', token => {
+         console.error('Registration error: ', err.error);
+    });
+
+    await PushNotifications.register();
+
+    
+
+
+    // const addListeners = async () => {
+    //   await PushNotifications.addListener('registration', token => {
+    //     console.info('Registration token: ', token.value);
+    //   });
+    
+    //   await PushNotifications.addListener('registrationError', err => {
+    //     console.error('Registration error: ', err.error);
+    //   });
+    
+    //   await PushNotifications.addListener('pushNotificationReceived', notification => {
+    //     console.log('Push notification received: ', notification);
+    //   });
+    
+    //   await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+    //     console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    //   });
+    // }
+
+
+    // const registerNotifications = async () => {
+    //   console.log('registerNotifications');
+    //   let permStatus = await PushNotifications.checkPermissions();
+    //   console.log('permStatus: ', permStatus);
+    
+    //   if (permStatus.receive === 'prompt') {
+    //     permStatus = await PushNotifications.requestPermissions();
+    //   }
+    
+    //   if (permStatus.receive !== 'granted') {
+    //     throw new Error('User denied permissions!');
+    //   }
+      
+    //   console.log('registering for push');
+    //   await PushNotifications.register(); // trigger the 'registration' event with the push token or 'registrationError' if there was a problem. It does not prompt the user for notification permissions, use requestPermissions() first.
+    // }
+
+    
+  //   push.on("registration", function (data) {
+  //     console.info(
+  //       "push.on(registration) data.registrationId: " + data.registrationId
+  //     );
+
+  //     store.dispatch(saveRegistrationId(data.registrationId, deviceId.getId)); // save to state the registrationid with uuid
+  //     //store.dispatch(saveRegistrationIdToServer(data.registrationId, device.uuid, device.platform));
+  //     //store.dispatch(enableDeviceNotification(device.uuid, device.platform));
+
+  //     var state = store.getState();
+
+  //     // send each code to the server
+  //     // if code exist
+  //     //   then write it to Device.codes array
+  //     // returns full details for each code
+  //     // mobile save details into state.codes
+  //     var codesToSync = [];
+  //     if (state.codes) {
+  //       // if codes.any?
+  //       codesToSync = state.codes.map(function (c) {
+  //         return c.code;
+  //       });
+
+  //       console.debug("push.on(registration) codesToSync: " + codesToSync);
+  //       //store.dispatch(syncCodesFromDevice(device.uuid, codesToSync))
+  //     }
+  //     store.dispatch(
+  //       saveDeviceStateToServer(
+  //         data.registrationId,
+  //         deviceId.uuid,
+  //         deviceInfo.platform,
+  //         codesToSync
+  //       )
+  //     );
+  //     console.debug("push.on(registration) saveDeviceStateToServer");
+  //   });
+
+  //   push.on("notification", function (data) {
+  //     console.info("push.on(notification)");
+
+  //     console.info("push.on(notification) data.message: " + data.message);
+  //     console.debug("push.on(notification) data.title: " + data.title);
+  //     console.debug("push.on(notification) data.count: " + data.count);
+  //     console.debug("push.on(notification) data.sound: " + data.sound);
+  //     console.debug("push.on(notification) data.image: " + data.image);
+  //     console.debug(
+  //       "push.on(notification) data.additionalData: " + data.additionalData
+  //     );
+  //     console.debug(
+  //       "push.on(notification) data.additionalData.notId" +
+  //         data.additionalData.notId
+  //     );
+  //     if (!data.additionalData.foreground) {
+  //       console.debug("push.on(notification) App in background");
+  //       store.dispatch(hideSnackbar());
+  //       store.dispatch(
+  //         fetchMessagesAndShowFullMessage(data.additionalData.message_id)
+  //       );
+  //       //store.dispatch(fetchMessages(data.additionalData.message_id));
+
+  //       push.setApplicationIconBadgeNumber(
+  //         function () {
+  //           console.debug(
+  //             "push.on(notification) setApplicationIconBadgeNumber success"
+  //           );
+  //         },
+  //         function () {
+  //           console.debug(
+  //             "push.on(notification) setApplicationIconBadgeNumber error"
+  //           );
+  //         },
+  //         data.count
+  //       );
+  //     } else {
+  //       console.debug("push.on(notification) App in foreground");
+  //       // if app in foreground
+  //       store.dispatch(showSnackbar("Un nouveau message est arrivé"));
+  //       store.dispatch(fetchMessages());
+  //     }
+  //     push.finish(
+  //       function () {
+  //         console.log("processing of push data is finished");
+  //       },
+  //       function () {
+  //         console.log(
+  //           "something went wrong with push.finish for ID = " +
+  //             data.additionalData.notId
+  //         );
+  //       },
+  //       data.additionalData.notId
+  //     );
+  //   });
+
+  //   push.on("error", function (e) {
+  //     console.debug("push.on(error): " + e.message);
+  //   });
+
+  //   return push;
   },
   // deviceready Event Handler
   //
@@ -319,14 +390,14 @@ var app = {
     load(store)
       .then((newState) => {
         Device.getInfo().then((deviceInfo) => {
-          Device.getId().then((deviceId) => {
-            console.log("Device info:", deviceInfo.platform);
+          console.log("Device: ", deviceInfo)
 
+          Device.getId().then((deviceId) => {
             console.log("Loaded state:", newState);
             console.log("Init PushNotification?");
-            console.log(typeof PushNotification !== "undefined");
-            if (typeof PushNotification !== "undefined") {
-              app.initPush(store, deviceInfo, deviceId);
+            console.log(typeof PushNotifications !== "undefined");
+            if (typeof PushNotifications !== "undefined") {
+              app.initPush(store, deviceInfo, deviceId.identifier);
             }
             app.renderApp(store);
           });
